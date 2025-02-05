@@ -1,0 +1,103 @@
+.mat-sidenav-container {
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+.sidenav {
+  width: 240px;
+  background-color: var(--secondary-color-1);
+  margin-top: 64px; // Para que empiece debajo de la barra superior
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+
+  .mat-nav-list {
+    padding-top: 16px;
+
+    a {
+      color: white;
+      height: 48px;
+      margin: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+
+      mat-icon {
+        color: white;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      &.active-link {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 64px;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    margin-right: 24px;
+    
+    mat-icon {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  button {
+    color: white;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+main {
+  margin-top: 64px; // Espacio para la barra superior fija
+  padding: 24px;
+  min-height: calc(100vh - 64px);
+}
+
+@media (max-width: 959px) {
+  .sidenav {
+    margin-top: 56px; // Altura diferente en móvil
+    width: 280px;
+  }
+
+  .toolbar {
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  main {
+    margin-top: 56px;
+    padding: 16px;
+  }
+}
+
+:host ::ng-deep {
+  .mat-sidenav-content,
+  main {
+    color: #3b3b3b;
+  }
+}

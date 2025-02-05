@@ -32,24 +32,31 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     }
   }
 
-  // Colores principales
-$primary-color: #4CAF50; // Verde moneda
-$secondary-color: #8BC34A; // Verde secundario
-$background-color: #F5F5F6; // Fondo general
-$text-color: #333333; // Color de texto principal
+// Paleta de colores
+$primary-color: #3B8386;
+$secondary-color-1: #2e6769;
+$secondary-color-2: #2a5a5c;
+$complement-color: #DE6461;
+$background-color: #F5F5F6;
+$text-color: #2D2D2D;
 
-// Aplicar tema
 :root {
   --primary-color: #{$primary-color};
-  --secondary-color: #{$secondary-color};
+  --secondary-color-1: #{$secondary-color-1};
+  --secondary-color-2: #{$secondary-color-2};
+  --complement-color: #{$complement-color};
+  --background-color: #{$background-color};
+  --text-color: #{$text-color};
 }
 
+// Estilos globales
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: $background-color;
-  color: $text-color;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
+
 
 // Estilos comunes para formularios
 .auth-container {
@@ -103,4 +110,14 @@ body {
       width: 100%;
     }
   }
+}
+
+
+// En styles.scss
+.mat-sidenav {
+  transition: transform 0.3s ease-in-out !important;
+}
+
+.mat-list-item {
+  transition: background-color 0.2s ease;
 }

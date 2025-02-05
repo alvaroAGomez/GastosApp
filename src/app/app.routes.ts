@@ -1,36 +1,30 @@
-import { Routes } from '@angular/router';
+import { Routes } from "@angular/router";
+import { LoginComponent } from "./features/auth/login/login.component";
+import { RegisterComponent } from "./features/auth/register/register.component";
+import { CreditCardFormComponent } from "./features/cards/credit-card-form/credit-card-form.component";
+import { DebitCardFormComponent } from "./features/cards/debit-card-form/debit-card-form.component";
+import { CategoriesComponent } from "./features/categories/categories.component";
+import { DashboardComponent } from "./features/dashboard/dashboard.component";
+import { UpcomingExpensesComponent } from "./features/expenses/upcoming-expenses/upcoming-expenses.component";
+import { ReportsComponent } from "./features/reports/reports.component";
+import { authGuard } from "./guards/auth.guard";
+import { MainLayoutComponent } from "./layouts/main-layout/main-layout.component";
 
 export const routes: Routes = [
   { 
     path: '',
-    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) 
+    component: MainLayoutComponent,
+    //canActivate: [authGuard],
+    children: [
+      { path: '', component: DashboardComponent },
+      { path: 'credit-cards', component: CreditCardFormComponent },
+      { path: 'debit-cards', component: DebitCardFormComponent },
+      { path: 'reports', component: ReportsComponent },
+      { path: 'categories', component: CategoriesComponent },
+      { path: 'upcoming-expenses', component: UpcomingExpensesComponent }
+    ]
   },
-  {
-    path: 'login',
-    loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
-  },
-  {
-    path: 'register',
-    loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
-  },
-  {
-    path: 'credit-cards',
-    loadComponent: () => import('./features/cards/credit-card-form/credit-card-form.component').then(m => m.CreditCardFormComponent)
-  },
-  {
-    path: 'debit-cards',
-    loadComponent: () => import('./features/cards/debit-card-form/debit-card-form.component').then(m => m.DebitCardFormComponent)
-  },
-  {
-    path: 'reports/:cardId',
-    loadComponent: () => import('./features/reports/reports.component').then(m => m.ReportsComponent)
-  },
-  {
-    path: 'categories',
-    loadComponent: () => import('./features/categories/categories.component').then(m => m.CategoriesComponent)
-  },
-  {
-    path: 'upcoming-expenses',
-    loadComponent: () => import('./features/expenses/upcoming-expenses/upcoming-expenses.component').then(m => m.UpcomingExpensesComponent)
-  }
+  // Rutas de autenticación
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent }
 ];

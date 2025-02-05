@@ -2,6 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, tap } from 'rxjs';
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
@@ -9,6 +14,9 @@ export class AuthService {
   
   public isAuthenticated = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticated.asObservable();
+
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
     this.checkAuthStatus();
@@ -32,10 +40,20 @@ export class AuthService {
     this.isAuthenticated.next(false);
   }
 
-  private checkAuthStatus() {
+/*   private checkAuthStatus() {
     const token = localStorage.getItem('token');
     this.isAuthenticated.next(!!token);
-  }
+  } */
 
+    // Agregar método para cargar usuario al iniciar
+    private checkAuthStatus() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.http.get<User>(`${this.apiUrl}/me`).subscribe({
+          next: user => this.currentUserSubject.next(user),
+          error: () => this.logout()
+        });
+      }
+    }
   
 }

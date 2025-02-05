@@ -3,12 +3,13 @@ import { CardService } from '../../services/card.service';
 import { ApexChart, ApexNonAxisChartSeries } from 'ng-apexcharts';
 import { Card } from '../../models/card.model';
 import { NgApexchartsModule } from 'ng-apexcharts';
-
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgApexchartsModule],
+  imports: [NgApexchartsModule, MatCardModule, CommonModule],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
