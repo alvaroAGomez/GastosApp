@@ -1,0 +1,30 @@
+
+  <div class="cards-container">
+
+
+
+  <mat-card *ngFor="let card of creditCards" class="card">
+    <mat-card-header>
+      <mat-card-title>{{ card.name || 'Cargando...' }}</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="price-container">
+        <div class="price-item">
+          <span>Gasto Acumulado</span>
+          <span class="price">
+            {{ (card.amount | currency:'$ ':'symbol':'1.2-2') || 'N/A' }}
+          </span>
+        </div>
+
+      </div>
+    </mat-card-content>
+
+<!--     <mat-card-footer *ngIf="!loading && currency?.actualizado">
+      <div class="update-time">
+        Actualizado: {{ currency.actualizado | date:'shortTime' }}
+      </div>
+    </mat-card-footer> -->
+  </mat-card>
+
+</div>

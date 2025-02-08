@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Card, CreateCardDTO } from '../models/card.model';
+import { Card, CreateCardDTO, CreditCard } from '../models/card.model';
 import { Expense } from '../models/expense.model';
+import { Observable, of } from 'rxjs';
 
 
 @Injectable({ providedIn: 'root' })
@@ -10,8 +11,9 @@ export class CardService {
 
   constructor(private http: HttpClient) {}
 
-  getCards() {
-    return this.http.get<Card[]>(this.apiUrl);
+  getCards() : Observable<CreditCard[]>{
+    return of(this.cards);
+    // return this.http.get<Card[]>(this.apiUrl);
   }
 
   createCreditCard(card: CreateCardDTO) {
@@ -26,4 +28,17 @@ export class CardService {
     return this.http.post<Card>(`${this.apiUrl}/${cardId}/expenses`, expense);
   }
   
+
+
+  private cards: CreditCard[] = [
+    { id: 1, name: 'Visa Platinum', amount: 2500.50 },
+    { id: 2, name: 'Mastercard Gold', amount: 3200.75 },
+    { id: 3, name: 'American Express', amount: 4100.00 },
+
+
+
+    
+  ];
+
+
 }

@@ -4,7 +4,7 @@ import { Expense } from "./expense.model";
 export type CardType = 'credit' | 'debit';
 
 export interface Card {
-  id: string;
+  id: number;
   name: string;
   type: CardType;
   balance: number;
@@ -18,3 +18,9 @@ export interface Card {
 export type CreateCardDTO = Omit<Card, 'id'> & {
   expenses?: Expense[];
 };
+
+export interface CreditCard {
+  id: number;
+  name: string;
+  amount: number;
+}

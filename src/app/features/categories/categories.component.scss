@@ -1,0 +1,23 @@
+/* categories.component.scss */
+.category-form {
+    margin-bottom: 20px;
+    width: 50%;
+  }
+  
+  .form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el input y el botón */
+  }
+  
+  .category-input {
+    flex-grow: 1;
+    width: 50%;
+  }
+
+  button{
+    margin-top: 0; 
+    background-color: var(--secondary-color-1) !important;
+    color: white !important;
+    border-radius: 25px;
+  }

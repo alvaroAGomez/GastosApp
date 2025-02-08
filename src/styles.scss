@@ -17,6 +17,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     button[type="submit"] {
       width: 100%;
       margin-top: 1rem;
+      background-color: red;
     }
     
     p {
@@ -38,7 +39,7 @@ $secondary-color-1: #2e6769;
 $secondary-color-2: #2a5a5c;
 $complement-color: #DE6461;
 $background-color: #F5F5F6;
-$text-color: #2D2D2D;
+$text-color: #242424;
 
 :root {
   --primary-color: #{$primary-color};
@@ -65,7 +66,7 @@ body {
   
   .image-section {
     flex: 1;
-    background: linear-gradient(rgba(59, 175, 75, 0.8), rgba(16, 105, 19, 0.9)),
+    background: linear-gradient(rgba(59, 131, 134, 0.8), rgba(16, 105, 19, 0.9)),
                 url('./app/assets/images/x.jpg') center/cover;
     display: flex;
     align-items: center;
@@ -121,3 +122,7 @@ body {
 .mat-list-item {
   transition: background-color 0.2s ease;
 }
+
+
+/* html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */

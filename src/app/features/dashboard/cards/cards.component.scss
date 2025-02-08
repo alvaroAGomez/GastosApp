@@ -1,0 +1,70 @@
+/* currency-card.component.scss */
+mat-card {
+    transition: all 0.3s ease;
+    min-height: 180px;
+    background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    
+    &.loading {
+      opacity: 0.6;
+    }
+  
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+  }
+  
+  mat-card-header {
+    mat-card-title {
+      color: #2d3436;
+      font-weight: 600;
+      font-size: 1.2em;
+    }
+  }
+  
+  .price-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+  
+  .price-item {
+    text-align: center;
+    
+    span {
+      display: block;
+      
+      &:first-child {
+        color: #6c757d;
+        font-size: 0.9em;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+    }
+  }
+  
+  .price {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #28a745; /* Verde financiero */
+    letter-spacing: -0.5px;
+  }
+  
+  .update-time {
+    padding: 16px;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.85em;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 0 0 4px 4px;
+  }
+
+  
+
+  .cards-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+

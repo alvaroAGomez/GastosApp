@@ -1,14 +1,26 @@
 .mat-sidenav-container {
   background-color: var(--background-color);
-  min-height: 100vh;
+  height: 100vh;
+  position: relative;
 }
 
 .sidenav {
   width: 240px;
+  position: fixed;
+  top: 64px; // Altura de la barra superior
+  bottom: 0;
+  z-index: 2;
   background-color: var(--secondary-color-1);
-  margin-top: 64px; // Para que empiece debajo de la barra superior
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   border-radius: 0;
+  overflow-y: auto;
+
+  .mat-sidenav-content {
+    margin-left: 240px; // Ancho del menú lateral
+    overflow: auto;
+    height: calc(100vh - 64px); // Altura total menos la barra superior
+    margin-top: 64px; // Altura de la barra superior
+  }
 
   .mat-nav-list {
     padding-top: 16px;
@@ -78,6 +90,12 @@ main {
   min-height: calc(100vh - 64px);
 }
 
+main {
+  margin-top: 64px; // Espacio para la barra superior fija
+  padding: 24px;
+  min-height: calc(100vh - 64px);
+}
+
 @media (max-width: 959px) {
   .sidenav {
     margin-top: 56px; // Altura diferente en móvil
@@ -93,6 +111,9 @@ main {
     margin-top: 56px;
     padding: 16px;
   }
+}
+.textColor{
+  color: aliceblue;
 }
 
 :host ::ng-deep {
