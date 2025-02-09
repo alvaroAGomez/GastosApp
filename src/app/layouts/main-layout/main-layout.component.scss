@@ -1,52 +1,38 @@
 .mat-sidenav-container {
   background-color: var(--background-color);
-  height: 100vh;
+  margin-top: 64px;
+  height: calc(100vh - 64px);
   position: relative;
 }
 
 .sidenav {
   width: 240px;
-  position: fixed;
-  top: 64px; // Altura de la barra superior
-  bottom: 0;
-  z-index: 2;
   background-color: var(--secondary-color-1);
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-  border-radius: 0;
+  box-shadow: 2px 0 8px rgba(224, 0, 0, 0.1);
   overflow-y: auto;
+  border-radius: 0 !important;
+}
 
-  .mat-sidenav-content {
-    margin-left: 240px; // Ancho del menú lateral
-    overflow: auto;
-    height: calc(100vh - 64px); // Altura total menos la barra superior
-    margin-top: 64px; // Altura de la barra superior
-  }
+mat-nav-list {
+  padding: 16px 0;
+}
 
-  .mat-nav-list {
-    padding-top: 16px;
+span {
+  color: white !important;
+}
 
-    a {
-      color: white;
-      height: 48px;
-      margin: 4px 8px;
-      border-radius: 4px;
-      transition: all 0.3s ease;
+mat-icon {
+  color: white;
+  padding-right: 5px;
+}
 
-      mat-icon {
-        color: white;
-      }
+mat-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-
-      &.active-link {
-        background-color: var(--primary-color);
-        color: white;
-        font-weight: 500;
-      }
-    }
-  }
+.mat-sidenav-content.with-sidenav {
+  margin-left: 240px;
+  overflow: auto;
 }
 
 .toolbar {
@@ -63,11 +49,19 @@
   padding: 0 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
+  .logo {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
   .user-info {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-left: auto;
     margin-right: 24px;
     
     mat-icon {
@@ -77,7 +71,6 @@
 
   button {
     color: white;
-    
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
@@ -85,21 +78,14 @@
 }
 
 main {
-  margin-top: 64px; // Espacio para la barra superior fija
   padding: 24px;
-  min-height: calc(100vh - 64px);
-}
-
-main {
-  margin-top: 64px; // Espacio para la barra superior fija
-  padding: 24px;
-  min-height: calc(100vh - 64px);
+  min-height: 100%;
 }
 
 @media (max-width: 959px) {
-  .sidenav {
-    margin-top: 56px; // Altura diferente en móvil
-    width: 280px;
+  .mat-sidenav-container {
+    margin-top: 56px; 
+    height: calc(100vh - 56px);
   }
 
   .toolbar {
@@ -108,17 +94,9 @@ main {
   }
 
   main {
-    margin-top: 56px;
     padding: 16px;
   }
-}
-.textColor{
-  color: aliceblue;
-}
-
-:host ::ng-deep {
-  .mat-sidenav-content,
-  main {
-    color: #3b3b3b;
+  .mat-sidenav-content.with-sidenav {
+    margin-left: 0;
   }
 }

@@ -1,0 +1,22 @@
+.credit-cards-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  
+    button {
+      align-self: flex-start;
+    }
+  
+    .summary-section,
+    .details-section {
+      margin-top: 20px;
+    }
+  
+    @media (max-width: 768px) {
+      .summary-section,
+      .details-section {
+        margin-top: 16px;
+      }
+    }
+  }

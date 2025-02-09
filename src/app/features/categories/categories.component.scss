@@ -1,23 +1,40 @@
-/* categories.component.scss */
+/* Estilos para el formulario de categoría */
 .category-form {
-    margin-bottom: 20px;
-    width: 50%;
-  }
-  
-  .form-group {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Espacio entre el input y el botón */
-  }
-  
-  .category-input {
-    flex-grow: 1;
-    width: 50%;
-  }
+  margin-bottom: 20px;
+}
 
-  button{
-    margin-top: 0; 
-    background-color: var(--secondary-color-1) !important;
-    color: white !important;
-    border-radius: 25px;
+.form-group {
+  display: flex;
+  flex-wrap: wrap; /* Permite apilar elementos en pantallas pequeñas */
+  align-items: center;
+  gap: 10px; /* Espacio entre el input y el botón */
+}
+
+.category-input {
+  flex: 1;
+  min-width: 200px; /* Ancho mínimo para legibilidad */
+}
+
+/* Ajuste para el botón: se alinea junto al input */
+button[type="submit"] {
+  margin-top: 0; /* Quita el margen superior para alinear con el input */
+  background-color: #3B8386;
+  color: #F5F5F6 !important;
+}
+
+/* Estilos para la tabla */
+.category-list {
+  overflow-x: auto; /* Habilita scroll horizontal en pantallas pequeñas */
+}
+
+table {
+  width: 100%;
+}
+
+/* Media query para dispositivos pequeños */
+@media (max-width: 600px) {
+  .form-group {
+    flex-direction: column;
+    align-items: stretch;
   }
+}

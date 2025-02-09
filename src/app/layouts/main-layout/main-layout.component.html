@@ -1,59 +1,51 @@
 <mat-toolbar color="primary" class="toolbar">
-  
   <button mat-icon-button (click)="toggleMenu()">
     <mat-icon>{{ menuIcon }}</mat-icon>
   </button>
   <span class="logo">GASTOSAPP</span>
-
   <span class="spacer"></span>
-
   <div class="user-info">
     <mat-icon>person</mat-icon>
     <span>{{ (authService.currentUser$ | async)?.name }}</span>
   </div>
-
   <button mat-icon-button (click)="authService.logout()" matTooltip="Cerrar sesión">
     <mat-icon>logout</mat-icon>
   </button>
 </mat-toolbar>
 
-<mat-sidenav-container class="sidenav-container textColor">
-  <mat-sidenav 
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
     [(opened)]="isMenuOpen"
     [mode]="(isMobile | async) ? 'over' : 'side'"
     [fixedInViewport]="(isMobile | async)"
-    fixedTopGap="64"  
+    [fixedTopGap]="(isMobile | async) ? 56 : 64"
     class="sidenav">
-
     <mat-nav-list>
-      <a mat-list-item routerLink="/" routerLinkActive="active-link">
+      <a class="menuItem" mat-list-item routerLink="/" routerLinkActive="active-link">
         <mat-icon>dashboard</mat-icon>
-        <span class="menu-label"> Dashboard</span>
+        <span class="menu-label">Dashboard</span>
       </a>
-
       <a mat-list-item routerLink="/credit-cards" routerLinkActive="active-link">
         <mat-icon>credit_card</mat-icon>
-        <span class="menu-label"> Tarjetas de Crédito</span>
+        <span class="menu-label">Tarjetas de Crédito</span>
       </a>
-
       <a mat-list-item routerLink="/debit-cards" routerLinkActive="active-link">
         <mat-icon>account_balance</mat-icon>
-        <span class="menu-label"> Tarjetas de Débito</span>
+        <span class="menu-label">Tarjetas de Débito</span>
       </a>
-
       <a mat-list-item routerLink="/reports" routerLinkActive="active-link">
         <mat-icon>bar_chart</mat-icon>
-        <span class="menu-label"> Reportes</span>
+        <span class="menu-label">Reportes</span>
       </a>
-
       <a mat-list-item routerLink="/categories" routerLinkActive="active-link">
         <mat-icon>category</mat-icon>
-        <span class="menu-label"> Categorías</span>
+        <span class="menu-label">Categorías</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <!-- Se aplica la clase "with-sidenav" solo si estamos en escritorio y el menú está abierto -->
+  <mat-sidenav-content [class.with-sidenav]="isMenuOpen && !(isMobile | async)">
     <main>
       <router-outlet></router-outlet>
     </main>

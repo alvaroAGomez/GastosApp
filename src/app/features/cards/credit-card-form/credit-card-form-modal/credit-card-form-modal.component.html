@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>{{ 'Nueva' }} Tarjeta </h2>
+<form [formGroup]="cardForm" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="type" required>
+        <mat-option value="1">Credito</mat-option>
+        <mat-option value="2">Debito</mat-option>
+        <!-- Agregar más opciones según los tipos de tarjeta -->
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Límite de Crédito</mat-label>
+      <input matInput formControlName="creditLimit" type="number">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Día de Cierre</mat-label>
+      <input matInput formControlName="closingDay" type="number">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Día de Vencimiento</mat-label>
+      <input matInput formControlName="dueDay" type="number">
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button (click)="dialogRef.close()">Cancelar</button>
+    <button mat-button type="submit" [disabled]="cardForm.invalid">Guardar</button>
+  </mat-dialog-actions>
+</form>

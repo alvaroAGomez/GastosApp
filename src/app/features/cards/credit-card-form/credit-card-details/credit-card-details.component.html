@@ -1,0 +1,16 @@
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let card of cardDetails">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ card.name }}</mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <div *ngFor="let expense of card.expenses">
+        <p>{{ expense.month }}: {{ expense.amount | currency }}</p>
+      </div>
+  
+      <div class="total">
+        <strong>Total: {{ card.Total| currency }}</strong>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+  

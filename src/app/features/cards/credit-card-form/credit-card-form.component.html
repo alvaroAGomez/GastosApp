@@ -1,1 +1,12 @@
-<p>credit-card-form works!</p>
+<div class="credit-cards-container">
+    <button mat-raised-button color="primary" (click)="openNewCardDialog()">Nueva Tarjeta</button>
+  
+    <div class="summary-section">
+      <app-credit-card-summary [expensesSummary]="expensesSummary"></app-credit-card-summary>
+    </div>
+  
+    <div class="details-section">
+      <app-credit-card-details [cardDetails]="cardDetails"></app-credit-card-details>
+    </div>
+  </div>
+  

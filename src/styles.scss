@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .auth-form {
     max-width: 400px;
@@ -17,7 +16,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     button[type="submit"] {
       width: 100%;
       margin-top: 1rem;
-      background-color: red;
+      background-color: #3B8386;
+      color: #F5F5F6 !important;
     }
     
     p {
@@ -117,6 +117,7 @@ body {
 // En styles.scss
 .mat-sidenav {
   transition: transform 0.3s ease-in-out !important;
+  color: #F5F5F6 !important;
 }
 
 .mat-list-item {
@@ -124,5 +125,10 @@ body {
 }
 
 
-/* html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #F5F5F6  !important;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}

@@ -1,14 +1,41 @@
 .grid-container {
     width: 100%;
     margin-top: 20px;
+    padding: 16px; 
   }
   
+
+/* Contenedor del buscador y el botón */
+.header {
+  display: flex;
+  align-items: center; /* Alinea verticalmente los elementos */
+  justify-content: flex-start; /* Alinea horizontalmente sin espacios innecesarios */
+  gap: 10px; /* Espaciado entre input y botón */
+  margin-bottom: 16px;
+
+  /* Para que el campo de búsqueda y el botón estén alineados */
   mat-form-field {
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 10px;
+    flex-grow: 1; /* Hace que el input ocupe el espacio disponible */
+    min-width: 250px;
   }
-  
-  ::ng-deep .mat-select-value {
-    border: 1px solid red!important;
+
+  button {
+    //height: 56px; /* Misma altura del input */
+    white-space: nowrap; /* Evita que el texto del botón se corte */
+    background-color: #3B8386 !important;
+    color: #F5F5F6 !important;
   }
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
