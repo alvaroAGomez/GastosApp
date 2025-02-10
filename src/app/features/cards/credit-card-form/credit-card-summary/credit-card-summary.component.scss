@@ -15,18 +15,14 @@ mat-header-cell, mat-cell, mat-footer-cell {
 }
 
 mat-header-cell {
-  background-color: #f1f1f1;
   font-weight: bold;
+  
 }
 
 mat-footer-cell {
-  background-color: #f9f9f9;
   font-weight: bold;
 }
 
-mat-row, mat-footer-row {
-  background-color: #fff;
-}
 
 mat-footer-row {
   font-size: 1.2rem;

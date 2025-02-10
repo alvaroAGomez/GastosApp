@@ -9,6 +9,7 @@ import { UpcomingExpensesComponent } from "./features/expenses/upcoming-expenses
 import { ReportsComponent } from "./features/reports/reports.component";
 import { authGuard } from "./guards/auth.guard";
 import { MainLayoutComponent } from "./layouts/main-layout/main-layout.component";
+import { DetailsComponent } from "./features/cards/credit-card-form/credit-card-details/details/details.component";
 
 export const routes: Routes = [
   { 
@@ -18,6 +19,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: DashboardComponent },
       { path: 'credit-cards', component: CreditCardFormComponent },
+      { path: 'credit-cards/:id', component: DetailsComponent },
       { path: 'debit-cards', component: DebitCardFormComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'categories', component: CategoriesComponent },

@@ -1,12 +1,3 @@
-<div class="year-selector">
-  <mat-label>Selecciona el Año:</mat-label>
-  <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange($event)">
-    <mat-option *ngFor="let year of availableYears" [value]="year">
-      {{ year }}
-    </mat-option>
-  </mat-select>
-</div>
-
 <div class="summary-grid" >
     <mat-table [dataSource]="allExpenses">
       <ng-container matColumnDef="month">
@@ -30,3 +21,4 @@
     </div>
   </div>
   
+

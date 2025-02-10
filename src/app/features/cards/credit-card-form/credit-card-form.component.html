@@ -1,12 +1,32 @@
-<div class="credit-cards-container">
-    <button mat-raised-button color="primary" (click)="openNewCardDialog()">Nueva Tarjeta</button>
+
+   <div class="header">
+     <button mat-raised-button color="primary" (click)="openNewCardDialog()">Nueva Tarjeta</button>
+   </div>
+
+
+   <div class="year-selector">
+    <mat-label>Selecciona el Año:</mat-label>
+    <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange($event)">
+      <mat-option *ngFor="let year of availableYears" [value]="year">
+        {{ year }}
+      </mat-option>
+    </mat-select>
+  </div>
   
-    <div class="summary-section">
-      <app-credit-card-summary [expensesSummary]="expensesSummary"></app-credit-card-summary>
-    </div>
+
+  <div class="credit-cards-container">
+    <mat-expansion-panel expanded class="summary-section">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Resumen de Gastos Anuales
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div >
+        <app-credit-card-summary [expensesSummary]="expensesSummary"></app-credit-card-summary>
+      </div>
+    </mat-expansion-panel>
   
     <div class="details-section">
       <app-credit-card-details [cardDetails]="cardDetails"></app-credit-card-details>
     </div>
   </div>
-  

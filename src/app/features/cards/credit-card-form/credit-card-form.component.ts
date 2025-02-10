@@ -10,6 +10,9 @@ import { CreditCardSummaryComponent } from './credit-card-summary/credit-card-su
 import { CreditCardDetailsComponent } from './credit-card-details/credit-card-details.component';
 import { CreditCardFormModalComponent } from './credit-card-form-modal/credit-card-form-modal.component';
 import { CreditCardSummary } from './interfaces';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -19,75 +22,141 @@ import { CreditCardSummary } from './interfaces';
   imports: [MatButtonModule,
     MatCardModule,
     MatExpansionModule,
+    MatSelectModule, 
+    MatOptionModule,
     CreditCardSummaryComponent,
-    CreditCardDetailsComponent // Asegúrate de incluir los componentes necesarios
+    CreditCardDetailsComponent,
+    CommonModule
 ],
     providers: [MatDialog],
-  templateUrl: './credit-card-form.component.html'
+  templateUrl: './credit-card-form.component.html',
+  styleUrl: './credit-card-form.component.scss'
+
+
 })
 export class CreditCardFormComponent implements OnInit {
   creditCards: Card[] = [];
   expensesSummary!: CreditCardSummary;
-  cardDetails: { name: string, expenses: { month: string, amount: number }[] }[] = [];
+  cardDetails: CreditCardSummary[] =[];
+  selectedYear: number = new Date().getFullYear();
+  availableYears: number[] = [];
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) {
+    const currentYear = new Date().getFullYear();
+    this.availableYears = Array.from({ length: 5 }, (_, index) => currentYear - index);
+
+  }
 
   ngOnInit() {
     // Simulando respuesta del backend
     const response: CreditCardSummary[] = [
-      {
+      {"Id":1,
         "CreditCard": "ALL",
         "Months": {
-          "January": 4515,
-          "February": 56000,
-          "March": 415864,
-          "April": 10000,
-          "May": 4515,
-          "June": 56000,
-          "July": 415864,
-          "August": 10000,
-          "September": 4515,
-          "October": 56000,
-          "November": 415864,
-          "December": 10000
+          "Enero": 4515,
+          "Febrero": 56000,
+          "Marzo": 415864,
+          "Abril": 10000,
+          "Mayo": 4515,
+          "Junio": 56000,
+          "Julio": 415864,
+          "Agosto": 10000,
+          "Septiembre": 4515,
+          "Octubre": 56000,
+          "Noviembre": 415864,
+          "Diciembre": 10000
         },
-        "Total": 100000000
+        "Total": 10000000
       },
-      {
+      {"Id":2,
         "CreditCard": "VISA",
         "Months": {
-          "January": 4515,
-          "February": 56000,
-          "March": 415864,
-          "April": 10000,
-          "May": 4515,
-          "June": 56000,
-          "July": 415864,
-          "August": 10000,
-          "September": 4515,
-          "October": 56000,
-          "November": 415864,
-          "December": 10000
+          "Enero": 4515,
+          "Febrero": 56000,
+          "Marzo": 415864,
+          "Abril": 10000,
+          "Mayo": 4515,
+          "Junio": 56000,
+          "Julio": 415864,
+          "Agosto": 10000,
+          "Septiembre": 4515,
+          "Octubre": 56000,
+          "Noviembre": 415864,
+          "Diciembre": 10000
         },
-        "Total": 100000000
+        "Total": 200000
       },
-      {
+      {"Id":3,
+        "CreditCard": "MASTER",
+        "Months": {
+          "Enero": 4515,
+          "Febrero": 56000,
+          "Marzo": 415864,
+          "Abril": 10000,
+          "Mayo": 4515,
+          "Junio": 56000,
+          "Julio": 415864,
+          "Agosto": 10000,
+          "Septiembre": 4515,
+          "Octubre": 56000,
+          "Noviembre": 415864,
+          "Diciembre": 10000
+        },
+        "Total": 4156419
+      },
+      {"Id":4,
+        "CreditCard": "NARANJA",
+        "Months": {
+          "Enero": 4515,
+          "Febrero": 56000,
+          "Marzo": 415864,
+          "Abril": 10000,
+          "Mayo": 4515,
+          "Junio": 56000,
+          "Julio": 415864,
+          "Agosto": 10000,
+          "Septiembre": 4515,
+          "Octubre": 56000,
+          "Noviembre": 415864,
+          "Diciembre": 10000
+        },
+        "Total": 6785678
+      },
+      {"Id":5,
         "CreditCard": "YOY",
         "Months": {
-          "January": 4515,
-          "February": 56000,
-          "March": 415864,
-          "April": 10000,
-          "May": 4515,
-          "June": 56000,
-          "July": 415864,
-          "August": 10000,
-          "September": 4515,
-          "October": 56000,
-          "November": 415864,
-          "December": 10000
+          "Enero": 4515,
+          "Febrero": 56000,
+          "Marzo": 415864,
+          "Abril": 10000,
+          "Mayo": 4515,
+          "Junio": 56000,
+          "Julio": 415864,
+          "Agosto": 10000,
+          "Septiembre": 4515,
+          "Octubre": 56000,
+          "Noviembre": 415864,
+          "Diciembre": 10000
         },
-        "Total": 100000000
+        "Total": 123123213
+      },
+      {"Id":6,
+        "CreditCard": "UALA",
+        "Months": {
+          "Enero": 4515,
+          "Febrero": 56000,
+          "Marzo": 415864,
+          "Abril": 10000,
+          "Mayo": 4515,
+          "Junio": 56000,
+          "Julio": 415864,
+          "Agosto": 10000,
+          "Septiembre": 4515,
+          "Octubre": 56000,
+          "Noviembre": 415864,
+          "Diciembre": 10000
+        },
+        "Total": 66666666
       }]
       
       
@@ -100,15 +169,14 @@ export class CreditCardFormComponent implements OnInit {
       this.expensesSummary = data[0];
     }
     const months = Object.keys(data[0].Months);
-/*     this.expensesSummary = months.map(month => ({
-      month,
-      total: data.reduce((sum, card) => sum + (card.Months[month] || 0), 0)
-    })); */
 
-    this.cardDetails = data.map(card => ({
+    const cardDetail = data.slice(1);
+    
+/*     this.cardDetails = data.map(card => ({
       name: card.CreditCard,
       expenses: Object.entries(card.Months).map(([month, amount]) => ({ month, amount }))
-    }));
+    })); */
+    this.cardDetails = cardDetail
   }
 
   openNewCardDialog() {
@@ -122,5 +190,10 @@ export class CreditCardFormComponent implements OnInit {
         this.creditCards.push(result);
       }
     });
+  }
+
+  onYearChange(event: any) {
+    this.selectedYear = event.value;
+    //this.loadExpensesData();
   }
 }
