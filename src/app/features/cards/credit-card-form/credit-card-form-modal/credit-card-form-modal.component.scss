@@ -1,22 +1,37 @@
 .credit-cards-container {
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  
-    button {
-      align-self: flex-start;
-    }
-  
-    .summary-section,
-    .details-section {
-      margin-top: 20px;
-    }
-  
-    @media (max-width: 768px) {
-      .summary-section,
-      .details-section {
-        margin-top: 16px;
-      }
-    }
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px;
+}
+
+/* button[mat-button] {
+  font-weight: 600;
+}
+
+button[mat-button][disabled] {
+  color: rgba(0, 0, 0, 0.26);
+} */
+
+.form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    grid-template-columns: 1fr;
   }
+}

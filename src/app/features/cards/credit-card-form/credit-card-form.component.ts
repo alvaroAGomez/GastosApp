@@ -181,8 +181,11 @@ export class CreditCardFormComponent implements OnInit {
 
   openNewCardDialog() {
     const dialogRef = this.dialog.open(CreditCardFormModalComponent, {
-      width: '400px',
-      data: {}
+      width: '600px',       // Ajusta a tu gusto
+      maxWidth: '90vw',     // Para que no exceda el 90% del ancho de la ventana
+      height: 'auto',
+      disableClose: false,
+      data:{}
     });
 
     dialogRef.afterClosed().subscribe(result => {

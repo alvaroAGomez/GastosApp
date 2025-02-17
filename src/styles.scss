@@ -1,4 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+// Paleta de colores
+$primary-color: #3B8386;
+$secondary-color-1: #2e6769;
+$secondary-color-2: #2a5a5c;
+$complement-color: #DE6461;
+$background-color: #F5F5F6;
+$text-color: #242424;
+
+:root {
+  --primary-color: #{$primary-color};
+  --secondary-color-1: #{$secondary-color-1};
+  --secondary-color-2: #{$secondary-color-2};
+  --complement-color: #{$complement-color};
+  --background-color: #{$background-color};
+  --text-color: #{$text-color};
+}
 
 html, body { height: 100%; }
 
@@ -16,7 +32,7 @@ html, body { height: 100%; }
     button[type="submit"] {
       width: 100%;
       margin-top: 1rem;
-      background-color: #3B8386;
+      background-color: $primary-color;
       color: #F5F5F6 !important;
     }
     
@@ -33,22 +49,7 @@ html, body { height: 100%; }
     }
   }
 
-// Paleta de colores
-$primary-color: #3B8386;
-$secondary-color-1: #2e6769;
-$secondary-color-2: #2a5a5c;
-$complement-color: #DE6461;
-$background-color: #F5F5F6;
-$text-color: #242424;
 
-:root {
-  --primary-color: #{$primary-color};
-  --secondary-color-1: #{$secondary-color-1};
-  --secondary-color-2: #{$secondary-color-2};
-  --complement-color: #{$complement-color};
-  --background-color: #{$background-color};
-  --text-color: #{$text-color};
-}
 
 // Estilos globales
 body {
@@ -129,4 +130,33 @@ body {
 
 .mat-mdc-form-field-focus-overlay {
   background-color: transparent !important;
+}
+
+button.mat-raised-button {
+  white-space: nowrap; /* Evita que el texto del botón se corte */
+  background-color: $primary-color !important;
+  color: #F5F5F6 !important;
+}
+
+button.mat-raised-button[disabled],
+button.mat-raised-button:disabled,
+button.mat-raised-button.mat-button-disabled {
+  background-color: #ccc !important; /* Fondo gris */
+  color: #666 !important;           /* Texto gris más oscuro */
+  cursor: not-allowed !important;   /* Cursor de "no permitido" */
+  opacity: 0.7 !important;
+}
+
+
+.custom-button {
+  white-space: nowrap; /* Evita que el texto del botón se corte */
+  background-color: $primary-color !important;
+  color: #F5F5F6 !important;
+}
+
+.custom-button[disabled] {
+  background-color: #ccc !important; 
+  color: #666 !important;           
+  cursor: not-allowed !important;   
+  opacity: 0.7;                     
 }

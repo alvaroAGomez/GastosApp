@@ -1,37 +1,54 @@
-<h2 mat-dialog-title>{{ 'Nueva' }} Tarjeta </h2>
+<h2 mat-dialog-title>Nueva Tarjeta</h2>
 <form [formGroup]="cardForm" (ngSubmit)="save()">
-  <mat-dialog-content>
-    <mat-form-field appearance="fill">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="name" required>
-    </mat-form-field>
+  <mat-dialog-content class="dialog-content">
+    <!-- Fila 1 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" required>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Tipo</mat-label>
-      <mat-select formControlName="type" required>
-        <mat-option value="1">Credito</mat-option>
-        <mat-option value="2">Debito</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <!-- Fila 2 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="type" required>
+          <mat-option value="1">Crédito</mat-option>
+          <mat-option value="2">Débito</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Límite de Crédito</mat-label>
-      <input matInput formControlName="creditLimit" type="number">
-    </mat-form-field>
+    <!-- Fila 3 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Límite de Crédito</mat-label>
+        
+        <input matInput formControlName="creditLimit" currencyMask 
+        [options]="{ prefix: '$ ', thousands: ',', decimal: '.', align: 'left', allowNegative: false }">
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Día de Cierre</mat-label>
-      <input matInput formControlName="closingDay" type="number">
-    </mat-form-field>
+    <!-- Fila 4 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Día de Cierre</mat-label>
+        <input matInput formControlName="closingDay" type="date">
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Día de Vencimiento</mat-label>
-      <input matInput formControlName="dueDay" type="number">
-    </mat-form-field>
+    <!-- Fila 5 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Día de Vencimiento</mat-label>
+        <input matInput formControlName="dueDay" type="date">
+      </mat-form-field>
+    </div>
   </mat-dialog-content>
 
-  <mat-dialog-actions>
-    <button mat-button (click)="dialogRef.close()">Cancelar</button>
-    <button mat-button type="submit" [disabled]="cardForm.invalid">Guardar</button>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" class="custom-button" (click)="dialogRef.close()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" class="custom-button" [disabled]="cardForm.invalid">Guardar</button>
   </mat-dialog-actions>
 </form>

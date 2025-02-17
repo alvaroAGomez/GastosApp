@@ -1,3 +1,4 @@
+import { NgxCurrencyDirective } from 'ngx-currency';
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -7,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+
 
 @Component({
   selector: 'app-credit-card-form-modal',
@@ -18,7 +20,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatButtonModule,
     MatSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxCurrencyDirective    
   ],
   templateUrl: './credit-card-form-modal.component.html',
   styleUrl: './credit-card-form-modal.component.scss'

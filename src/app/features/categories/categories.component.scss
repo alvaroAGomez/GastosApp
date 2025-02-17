@@ -15,14 +15,7 @@
   min-width: 200px; /* Ancho mínimo para legibilidad */
 }
 
-/* Ajuste para el botón: se alinea junto al input */
-button[type="submit"] {
-  margin-top: 0; /* Quita el margen superior para alinear con el input */
-  background-color: #3B8386;
-  color: #F5F5F6 !important;
-}
 
-/* Estilos para la tabla */
 .category-list {
   overflow-x: auto; /* Habilita scroll horizontal en pantallas pequeñas */
 }
