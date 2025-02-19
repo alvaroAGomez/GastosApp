@@ -1,0 +1,25 @@
+.dynamic-charts-container {
+    padding: 16px;
+  }
+  
+  .filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  
+  .chart-item {
+    flex: 1 1 300px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  

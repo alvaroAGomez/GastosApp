@@ -1,0 +1,85 @@
+
+  
+  
+  .search-section {
+    width: 300px; /* Ancho fijo opcional para el buscador */
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  mat-table {
+    width: 100%;
+  }
+  
+  /* Ajustes al paginator */
+  mat-paginator {
+    margin-top: 16px;
+  }
+
+  .card-details-header {
+    width: 100%;
+    background-color: #e0e0e0;  /* Color de fondo ligeramente más oscuro */
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .card-limits {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+  }
+  
+  .limit-item {
+    flex: 1;
+    /* Para que cada uno tenga un poco de separación lateral */
+    padding: 0 8px;
+  }
+  
+  .limit-label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 4px;
+  }
+  
+  .limit-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+  }
+
+  @media (max-width: 600px) {
+    .card-name {
+      font-size: 22px;
+    }
+    
+    .card-limits {
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .limit-item {
+      padding: 0;
+      width: 100%;
+    }
+    
+    .limit-label {
+      font-size: 13px;
+    }
+    
+    .limit-value {
+      font-size: 18px;
+    }
+  }

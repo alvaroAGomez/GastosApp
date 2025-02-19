@@ -1,7 +1,98 @@
-<div class="card-details">
-  <h2>Detalles de la tarjeta {{ this.cardDetails.CreditCard }}</h2>
-  <div class="chart-container">
-    <!-- Aquí iría el gráfico, por ejemplo, usando ng2-charts -->
-
+<div class="card-details-container">
+  <!-- CABECERA CON DATOS DE LA TARJETA -->
+  <div class="card-details-header">
+    <!-- Fila 1: Nombre de la tarjeta en grande y centrado -->
+    <h1 class="card-name">{{ cardName }}</h1>
+  
+    <!-- Fila 2: Tres columnas con información de límites -->
+    <div class="card-limits">
+      <div class="limit-item">
+        <span class="limit-label">Límite Total</span>
+        <span class="limit-value">{{ cardLimit | currency }}</span>
+      </div>
+      <div class="limit-item">
+        <span class="limit-label">Gasto Actual</span>
+        <span class="limit-value">{{ currentExpense | currency }}</span>
+      </div>
+      <div class="limit-item">
+        <span class="limit-label">Límite Disponible</span>
+        <span class="limit-value">{{ (cardLimit - currentExpense) | currency }}</span>
+      </div>
+    </div>
   </div>
+  
+
+  <!-- BUSCADOR PARA FILTRAR GASTOS -->
+  <div class=" headerBuscador">
+    <mat-form-field>
+      <mat-label>Buscar gastos</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar gasto">
+    </mat-form-field>
+  </div>
+
+
+  <!-- TABLA DE GASTOS -->
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <!-- FECHA -->
+    <ng-container matColumnDef="date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+      <mat-cell *matCellDef="let expense">
+        {{ expense.date | date: 'shortDate' }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- DESCRIPCIÓN -->
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</mat-header-cell>
+      <mat-cell *matCellDef="let expense">
+        {{ expense.description }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- CATEGORÍA -->
+    <ng-container matColumnDef="category">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Categoría</mat-header-cell>
+      <mat-cell *matCellDef="let expense">
+        {{ expense.category }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- MONTO -->
+    <ng-container matColumnDef="amount">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Monto</mat-header-cell>
+      <mat-cell *matCellDef="let expense">
+        {{ expense.amount | currency }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- CUOTAS -->
+    <ng-container matColumnDef="installments">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Cuotas</mat-header-cell>
+      <mat-cell *matCellDef="let expense">
+        {{ expense.installments }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- RESTANTES -->
+    <ng-container matColumnDef="remainingInstallments">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Restantes</mat-header-cell>
+      <mat-cell *matCellDef="let expense">
+        {{ expense.remainingInstallments }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- FILAS DE ENCABEZADO Y DE DATOS -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <!-- PAGINACIÓN -->
+  <mat-paginator
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 20]"
+  ></mat-paginator>
 </div>
+
+<br>
+<app-dynamic-charts></app-dynamic-charts>
