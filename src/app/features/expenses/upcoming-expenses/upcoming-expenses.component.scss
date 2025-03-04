@@ -1,0 +1,38 @@
+.modal-title {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  .expense-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .form-row mat-form-field {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+  
+  @media (max-width: 600px) {
+    .form-row mat-form-field {
+      flex: 1 1 100%;
+    }
+  }
+  

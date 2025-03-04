@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { UpcomingExpensesComponent } from '../../expenses/upcoming-expenses/upcoming-expenses.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-grid',
@@ -34,7 +36,9 @@ export class GridComponent implements  AfterViewInit  {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(private expenseService: ExpenseService,
+              private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit(): void {
     const expenses = this.expenseService.getExpenses();
@@ -65,5 +69,22 @@ export class GridComponent implements  AfterViewInit  {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  NewExpense(){
+        const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
+         // width: '600px',       // Ajusta a tu gusto
+         // maxWidth: '90vw',     // Para que no exceda el 90% del ancho de la ventana
+          //height: 'auto',
+          disableClose: false,
+          data:{}
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            console.log(result);
+            
+          }
+        });
   }
 }

@@ -1,6 +1,4 @@
 import { Category } from "./category.model";
-
-// expense.model.ts
 export interface Expense {
     id: number;
     amount: number;

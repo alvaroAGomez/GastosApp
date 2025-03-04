@@ -147,6 +147,12 @@ button.mat-raised-button.mat-button-disabled {
 }
 
 
+.custom-button-cancelar {
+  white-space: nowrap; /* Evita que el texto del botón se corte */
+  background-color: $complement-color !important;
+  color: #F5F5F6 !important;
+}
+
 .custom-button {
   white-space: nowrap; /* Evita que el texto del botón se corte */
   background-color: $primary-color !important;

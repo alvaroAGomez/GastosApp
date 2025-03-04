@@ -14,12 +14,14 @@
       <mat-form-field appearance="fill">
         <mat-label>Mes</mat-label>
         <mat-select formControlName="selectedMonth">
-          <mat-option *ngFor="let m of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="m">
-            {{ m }}
+          <mat-option *ngFor="let month of months" [value]="month.value">
+            {{ month.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
+    
+    
 
     <mat-form-field appearance="fill">
       <mat-label>Año</mat-label>
@@ -28,7 +30,7 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Categoría</mat-label>
-      <mat-select formControlName="category">
+      <mat-select formControlName="category" >
         <mat-option value="">Todas</mat-option>
         <mat-option *ngFor="let cat of categories" [value]="cat">
           {{ cat }}
@@ -41,7 +43,7 @@
   <div class="charts">
     <!-- Gráfico de Torta -->
     <div class="chart-item">
-      <h3>Gastos por Categoría (Torta)</h3>
+      <h3>Gastos por Categoría</h3>
       <canvas baseChart
         [data]="pieChartData"
         [options]="pieChartOptions"
@@ -50,7 +52,7 @@
     </div>
     <!-- Gráfico de Barras -->
     <div class="chart-item">
-      <h3>Gastos por Categoría (Barras)</h3>
+      <h3>Gastos por Categoría</h3>
       <canvas baseChart
         [data]="barChartData"
         [options]="barChartOptions"

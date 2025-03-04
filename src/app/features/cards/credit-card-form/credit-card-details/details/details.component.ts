@@ -1,5 +1,4 @@
 import { DynamicChartsComponent } from './../../../../../shared/components/dynamic-charts/dynamic-charts.component';
-import { CreditCard } from './../../../../../models/card.model';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
@@ -130,9 +129,6 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  /**
-   * Filtro de la tabla (para buscar por descripción, categoría, etc.)
-   */
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();

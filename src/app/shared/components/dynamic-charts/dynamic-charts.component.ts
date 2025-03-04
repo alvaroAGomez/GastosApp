@@ -62,35 +62,7 @@ export class DynamicChartsComponent implements OnInit {
   categories: string[] = ['Alimentos', 'Transporte', 'Entretenimiento', 'Tecnología', 'Salud'];
 
   // Datos de gastos de ejemplo (fechas en 2025)
-  expenses: Expense[] = [
-    {
-      id: 1,
-      amount: 250,
-      date: new Date('2025-03-05'),
-      description: 'Compra supermercado',
-      category: 'Alimentos',
-      cardId: '1234',
-      nameCard: 'Visa Gold'
-    },
-    {
-      id: 2,
-      amount: 120,
-      date: new Date('2025-03-10'),
-      description: 'Taxi',
-      category: 'Transporte',
-      cardId: '1234',
-      nameCard: 'Visa Gold'
-    },
-    {
-      id: 3,
-      amount: 450,
-      date: new Date('2025-03-15'),
-      description: 'Cena en restaurante',
-      category: 'Entretenimiento',
-      cardId: '1234',
-      nameCard: 'Visa Gold'
-    }
-  ];
+  expenses: Expense[] = [];
 
    colors = [
     'rgba(255, 99, 132, 0.6)', 
@@ -114,13 +86,30 @@ export class DynamicChartsComponent implements OnInit {
     'rgba(255, 20, 147, 0.6)'
   ];
 
+  public months = [
+    { value: 1, name: 'Enero' },
+    { value: 2, name: 'Febrero' },
+    { value: 3, name: 'Marzo' },
+    { value: 4, name: 'Abril' },
+    { value: 5, name: 'Mayo' },
+    { value: 6, name: 'Junio' },
+    { value: 7, name: 'Julio' },
+    { value: 8, name: 'Agosto' },
+    { value: 9, name: 'Septiembre' },
+    { value: 10, name: 'Octubre' },
+    { value: 11, name: 'Noviembre' },
+    { value: 12, name: 'Diciembre' }
+  ];
+  
+
+
   // Configuración del gráfico de torta (pie)
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     plugins: {
       legend: {
         display: true,
-        position: 'right' // Mueve la leyenda al costado
+        position: 'right'
       },
       tooltip: {
         callbacks: {
@@ -178,8 +167,8 @@ export class DynamicChartsComponent implements OnInit {
   constructor(private fb: FormBuilder, private expenseService: ExpenseService) {
     // Inicializar filtros con valores que coincidan con los datos (fechas 2025)
     this.filterForm = this.fb.group({
-      timeFilter: ['month'], // "month" o "year"
-      selectedMonth: [new Date('2025-03-05').getMonth() + 1], // 3
+      timeFilter: ['month'],
+      selectedMonth: [new Date('2025-03-05').getMonth() + 1], 
       selectedYear: [2025],
       category: ['']
     });
@@ -200,57 +189,63 @@ export class DynamicChartsComponent implements OnInit {
 
   updateCharts(): void {
     const { timeFilter, selectedMonth, selectedYear, category } = this.filterForm.value;
-    console.log("Filtros:", { timeFilter, selectedMonth, selectedYear, category });
 
-    // Filtrar gastos por año y, si corresponde, por mes
+    let filteredExpenses = this.getFilteredExpenses(timeFilter, selectedMonth, selectedYear, category);
+    const { labels, dataValues } = this.aggregateExpensesByCategory(filteredExpenses);
+
+    this.updatePieChart(labels, dataValues);
+    this.updateBarChart(labels, dataValues);
+    this.updateLineChart(timeFilter, selectedMonth, selectedYear, filteredExpenses);
+  }
+
+  private getFilteredExpenses(timeFilter: string, selectedMonth: number, selectedYear: number, category?: string): any[] {
     let filteredExpenses = this.expenses.filter(exp => {
       const expDate = new Date(exp.date);
       const matchYear = expDate.getFullYear() === selectedYear;
-      if (timeFilter === 'month') {
-        return expDate.getMonth() + 1 === selectedMonth && matchYear;
-      }
-      return matchYear;
+      return timeFilter === 'month' ? expDate.getMonth() + 1 === selectedMonth && matchYear : matchYear;
     });
 
     if (category) {
       filteredExpenses = filteredExpenses.filter(exp => exp.category === category);
-      console.log("Filtrado por categoría:", filteredExpenses);
     }
+    return filteredExpenses;
+  }
 
-    // Agregación para gráficos de torta y barras por categoría
+  private aggregateExpensesByCategory(expenses: any[]): { labels: string[], dataValues: number[] } {
     const categoryMap: { [key: string]: number } = {};
-    filteredExpenses.forEach(exp => {
+    expenses.forEach(exp => {
       const cat = typeof exp.category === 'string' ? exp.category : (exp.category as any).name;
       categoryMap[cat] = (categoryMap[cat] || 0) + exp.amount;
     });
-    const labels = Object.keys(categoryMap);
-    const dataValues = Object.values(categoryMap);
-    const pieColors = this.colors;
+    return { labels: Object.keys(categoryMap), dataValues: Object.values(categoryMap) };
+  }
 
-    // Reasignar datos del gráfico de torta
+  private updatePieChart(labels: string[], dataValues: number[]): void {
     this.pieChartLabels = labels;
     this.pieChartData = {
       labels: labels,
       datasets: [{
         data: dataValues,
-        backgroundColor: pieColors.slice(0, labels.length)
+        backgroundColor: this.colors.slice(0, labels.length)
       }]
     };
+  }
 
-    // Gráfico de barras
+  private updateBarChart(labels: string[], dataValues: number[]): void {
     this.barChartLabels = labels;
     this.barChartData = {
       labels: labels,
       datasets: [{
         data: dataValues,
         label: 'Gastos por Categoría',
-        backgroundColor: pieColors.slice(0, labels.length),//'rgba(75, 192, 192, 0.6)',
-        borderColor: pieColors.slice(0, labels.length), //'rgba(75, 192, 192, 1)',
+        backgroundColor: this.colors.slice(0, labels.length),
+        borderColor: this.colors.slice(0, labels.length),
         borderWidth: 1
       }]
     };
+  }
 
-    // Gráfico de tendencia (línea)
+  private updateLineChart(timeFilter: string, selectedMonth: number, selectedYear: number, filteredExpenses: any[]): void {
     if (timeFilter === 'month') {
       const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
       const dailyTotals = new Array(daysInMonth).fill(0);
@@ -258,39 +253,31 @@ export class DynamicChartsComponent implements OnInit {
         const day = new Date(exp.date).getDate();
         dailyTotals[day - 1] += exp.amount;
       });
-      const dayLabels = Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
-      this.lineChartLabels = dayLabels;
-      this.lineChartData = {
-        labels: dayLabels,
-        datasets: [{
-          data: dailyTotals,
-          label: 'Gastos Diarios',
-          fill: false,
-          borderColor: 'rgba(153, 102, 255, 1)',
-          backgroundColor: 'rgba(153, 102, 255, 0.6)',
-          tension: 0.4
-        }]
-      };
+      this.lineChartLabels = Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
+      this.lineChartData = this.createLineChartData(dailyTotals, 'Gastos Diarios', 'rgba(153, 102, 255, 1)', 'rgba(153, 102, 255, 0.6)');
     } else {
       const monthlyTotals = new Array(12).fill(0);
       filteredExpenses.forEach(exp => {
-        const month = new Date(exp.date).getMonth(); // 0-indexed
+        const month = new Date(exp.date).getMonth(); 
         monthlyTotals[month] += exp.amount;
       });
-      const monthLabels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-                           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-      this.lineChartLabels = monthLabels;
-      this.lineChartData = {
-        labels: monthLabels,
-        datasets: [{
-          data: monthlyTotals,
-          label: 'Gastos Mensuales',
-          fill: false,
-          borderColor: 'rgba(255, 159, 64, 1)',
-          backgroundColor: 'rgba(255, 159, 64, 0.6)',
-          tension: 0.4
-        }]
-      };
+      this.lineChartLabels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      this.lineChartData = this.createLineChartData(monthlyTotals, 'Gastos Mensuales', 'rgba(255, 159, 64, 1)', 'rgba(255, 159, 64, 0.6)');
     }
   }
+
+  private createLineChartData(data: number[], label: string, borderColor: string, backgroundColor: string): any {
+    return {
+      labels: this.lineChartLabels,
+      datasets: [{
+        data: data,
+        label: label,
+        fill: false,
+        borderColor: borderColor,
+        backgroundColor: backgroundColor,
+        tension: 0.4
+      }]
+    };
+  }
+
 }

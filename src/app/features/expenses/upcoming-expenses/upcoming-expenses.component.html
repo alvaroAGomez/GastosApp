@@ -1,1 +1,62 @@
-<p>upcoming-expenses works!</p>
+<mat-dialog-content>
+    <!-- Título del modal -->
+    <h2 class="modal-title">Nuevo Gasto</h2>
+    
+    <!-- Formulario de Nuevo Gasto -->
+    <form [formGroup]="upcomingExpenseForm" (ngSubmit)="onSubmit()" class="expense-form">
+      <div class="form-row">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Monto</mat-label>
+          <input matInput formControlName="amount" type="number" required>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" [value]="todayDate" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+  
+      <div class="form-row">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <input matInput formControlName="description" required>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Categoría</mat-label>
+          <mat-select formControlName="category" required>
+            <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+  
+      <div class="form-row">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Cuotas</mat-label>
+          <input matInput formControlName="installments" type="number">
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Cuotas Restantes</mat-label>
+          <input matInput formControlName="remainingInstallments" type="number">
+        </mat-form-field>
+      </div>
+  
+      <div class="form-row">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Tarjeta</mat-label>
+          <mat-select formControlName="cardId" required>
+            <mat-option *ngFor="let card of cards" [value]="card.id">{{ card.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+  
+      <div class="modal-actions">
+        <button mat-raised-button color="primary" class="custom-button-cancelar" (click)="onClose()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit" class="custom-button"  [disabled]="upcomingExpenseForm.invalid">Guardar</button>
+      </div>
+    </form>
+  </mat-dialog-content>
+  

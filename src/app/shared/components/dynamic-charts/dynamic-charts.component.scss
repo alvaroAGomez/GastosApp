@@ -1,25 +1,55 @@
 .dynamic-charts-container {
-    padding: 16px;
+  padding: 16px;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.filter-form mat-form-field {
+  flex: 1 1 200px; /* Ajusta el ancho de los campos del formulario */
+}
+
+.charts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.chart-item {
+  flex: 1 1 calc(33.333% - 16px); /* Tres gráficos por fila en pantallas grandes */
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .chart-item {
+    flex: 1 1 calc(50% - 16px); /* Dos gráficos por fila en pantallas medianas */
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-form {
+    flex-direction: column; /* Los filtros se apilan en pantallas pequeñas */
   }
   
-  .filter-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 24px;
+  .filter-form mat-form-field {
+    flex: 1 1 100%; /* Cada campo de filtro ocupa el 100% del ancho */
   }
   
   .charts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
+    flex-direction: column; /* Los gráficos se apilan en pantallas pequeñas */
   }
-  
+
   .chart-item {
-    flex: 1 1 300px;
-    padding: 16px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
+    flex: 1 1 100%; /* Cada gráfico ocupa el 100% del ancho */
   }
-  
+}
