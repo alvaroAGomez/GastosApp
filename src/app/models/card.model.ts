@@ -1,26 +1,54 @@
-import { Expense } from "./expense.model";
+import { Expense } from './expense.model';
 
-// card.model.ts
-export type CardType = 'credit' | 'debit';
-
-export interface Card {
-  id: number;
-  name: string;
-  type: CardType;
-  balance: number;
-  creditLimit?: number;
-  closingDay?: number;
-  dueDay?: number;
-  expenses?: Expense[];  // Hacer opcional con ?
-}
-
-// Tipo para creación
-export type CreateCardDTO = Omit<Card, 'id'> & {
-  expenses?: Expense[];
-};
+// ...existing code...
 
 export interface CreditCard {
   id: number;
-  name: string;
-  amount: number;
+  nombreTarjeta: string;
+  numeroTarjeta: string;
+  limiteCredito: number;
+  cierreCiclo?: string; // o Date, según lo que devuelva el backend
+  fechaVencimiento?: string; // o Date
+  banco: { id: number; nombre: string }; // ajusta según tu entidad Banco
+  gastos?: Expense[];
+}
+
+export interface CreditCardAnnualGeneralSummary {
+  resumenMensual: { mes: string; totalGasto: number }[];
+  totalAnual: number;
+}
+
+export interface CreditCardMonthlyDetail {
+  mes: string;
+  gastoActual: number;
+  montoCuotas: number;
+  totalMes: number;
+}
+
+export interface CreditCardMonthlyDetailSummary {
+  tarjetaId: number;
+  nombreTarjeta: string;
+  anio: number;
+  resumenMensual: CreditCardMonthlyDetail[];
+  totalAnual: number;
+}
+
+// DTO para crear tarjeta
+export interface CreateCreditCardDTO {
+  nombreTarjeta: string;
+  numeroTarjeta: string;
+  limiteCredito: number;
+  cierreCiclo?: string;
+  fechaVencimiento?: string;
+  bancoId: number;
+}
+
+// DTO para actualizar tarjeta
+export interface UpdateCreditCardDTO {
+  nombreTarjeta?: string;
+  numeroTarjeta?: string;
+  limiteCredito?: number;
+  cierreCiclo?: string;
+  fechaVencimiento?: string;
+  bancoId?: number;
 }

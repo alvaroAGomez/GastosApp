@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface User {
   id: string;
@@ -10,29 +11,32 @@ interface User {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/auth';
-  
+  private apiUrl = environment.apiUrl + 'auth';
+
   public isAuthenticated = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticated.asObservable();
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
-    this.checkAuthStatus();
-  }
+  constructor() {}
 
   login(credentials: { email: string; password: string }) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.token);
-        this.isAuthenticated.next(true);
-      })
-    );
+    return this.http
+      .post<{ access_token: string }>(`${this.apiUrl}/login`, credentials)
+      .pipe(
+        tap((response) => {
+          localStorage.setItem('token', response.access_token);
+          this.isAuthenticated.next(true);
+        })
+      );
   }
 
-  register(userData: { name: string; email: string; password: string }) {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/register`, userData);
+  register(userData: { nombre: string; email: string; password: string }) {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/register`,
+      userData
+    );
   }
 
   logout() {
@@ -40,20 +44,8 @@ export class AuthService {
     this.isAuthenticated.next(false);
   }
 
-/*   private checkAuthStatus() {
+  /*   private checkAuthStatus() {
     const token = localStorage.getItem('token');
     this.isAuthenticated.next(!!token);
   } */
-
-    // Agregar método para cargar usuario al iniciar
-    private checkAuthStatus() {
-      const token = localStorage.getItem('token');
-      if (token) {
-        this.http.get<User>(`${this.apiUrl}/me`).subscribe({
-          next: user => this.currentUserSubject.next(user),
-          error: () => this.logout()
-        });
-      }
-    }
-  
 }

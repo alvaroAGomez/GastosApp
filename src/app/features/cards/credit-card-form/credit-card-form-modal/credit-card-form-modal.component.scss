@@ -35,3 +35,13 @@ button[mat-button][disabled] {
     grid-template-columns: 1fr;
   }
 }
+
+.snackbar-success {
+  background-color: #43a047 !important; // verde
+  color: #fff !important;
+}
+
+.snackbar-error {
+  background-color: #e53935 !important; // rojo
+  color: #fff !important;
+}

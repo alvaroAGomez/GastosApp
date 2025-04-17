@@ -1,24 +1,21 @@
-<div class="summary-grid" >
-    <mat-table [dataSource]="allExpenses">
-      <ng-container matColumnDef="month">
-        <mat-header-cell *matHeaderCellDef>Mes</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{ row.month }}</mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="total">
-        <mat-header-cell *matHeaderCellDef>Total del Mes</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{ row.amount | currency }}</mat-cell>
-      </ng-container>
-  
-      <mat-header-row *matHeaderRowDef="['month', 'total']"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: ['month', 'total'];"></mat-row>
+<div class="summary-grid">
+  <mat-table [dataSource]="allExpenses">
+    <ng-container matColumnDef="month">
+      <mat-header-cell *matHeaderCellDef>Mes</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.month }}</mat-cell>
+    </ng-container>
 
-    </mat-table>
+    <ng-container matColumnDef="total">
+      <mat-header-cell *matHeaderCellDef>Total del Mes</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.amount | currency }}</mat-cell>
+    </ng-container>
 
-    <div class="total-footer">
-      <span>Total Anual: </span>
-      <strong>{{ total | currency }}</strong>
-    </div>
+    <mat-header-row *matHeaderRowDef="['month', 'total']"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['month', 'total'];"></mat-row>
+  </mat-table>
+
+  <div class="total-footer">
+    <span>Total Anual: </span>
+    <strong>{{ total | currency }}</strong>
   </div>
-  
-
+</div>

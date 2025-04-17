@@ -15,39 +15,44 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatButtonModule,
     RouterLink,
-    MatInputModule // <
+    MatInputModule, // <
   ],
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  registerForm = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', Validators.required]
-  }, { validators: passwordMatchValidator });
+  registerForm = this.fb.group(
+    {
+      nombre: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required],
+    },
+    { validators: passwordMatchValidator }
+  );
 
   onSubmit() {
     if (this.registerForm.valid) {
       // Usar type assertion y non-null operator
-      const { name, email, password } = this.registerForm.value as {
-        name: string;
+      const { nombre, email, password } = this.registerForm.value as {
+        nombre: string;
         email: string;
         password: string;
       };
-  
-      this.authService.register({ 
-        name: name!, 
-        email: email!, 
-        password: password! 
-      }).subscribe({
-        next: () => this.router.navigate(['/login']),
-        error: (error) => console.error(error)
-      });
+
+      this.authService
+        .register({
+          nombre: nombre!,
+          email: email!,
+          password: password!,
+        })
+        .subscribe({
+          next: () => this.router.navigate(['/login']),
+          error: (error) => console.error(error),
+        });
     }
   }
 }

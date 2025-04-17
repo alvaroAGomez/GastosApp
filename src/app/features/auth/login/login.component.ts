@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   standalone: true,
   imports: [ReactiveFormsModule, MatInputModule, MatButtonModule, RouterLink],
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
 })
 export class LoginComponent {
   fb = inject(FormBuilder);
@@ -18,16 +18,25 @@ export class LoginComponent {
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
+    password: ['', Validators.required],
   });
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.authService.login({
-        email: this.loginForm.value.email!,
-        password: this.loginForm.value.password!
-      }).subscribe();
+      this.authService
+        .login({
+          email: this.loginForm.value.email!,
+          password: this.loginForm.value.password!,
+        })
+        .subscribe({
+          next: (res) => {
+            // Guarda el token en localStorage
+            localStorage.setItem('token', res.access_token);
+            // Redirige o realiza otra acción si es necesario
+            this.router.navigate(['/']); // Cambia la ruta según tu app
+          },
+          // Puedes agregar manejo de error aquí si lo deseas
+        });
     }
   }
-  
 }

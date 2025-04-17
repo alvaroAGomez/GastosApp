@@ -1,7 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { CardService } from '../../../services/card.service';
-import { Card, CardType } from '../../../models/card.model';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import {
+  CreditCard,
+  CreditCardAnnualGeneralSummary,
+  CreditCardMonthlyDetailSummary,
+} from '../../../models/card.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -13,190 +15,147 @@ import { CreditCardSummary } from './interfaces';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
-
-
+import { CardService } from '../../../services/card.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-credit-card-form',
   standalone: true,
-  imports: [MatButtonModule,
+  imports: [
+    MatButtonModule,
     MatCardModule,
     MatExpansionModule,
-    MatSelectModule, 
+    MatSelectModule,
     MatOptionModule,
     CreditCardSummaryComponent,
     CreditCardDetailsComponent,
-    CommonModule
-],
-    providers: [MatDialog],
+    CommonModule,
+  ],
+  providers: [MatDialog],
   templateUrl: './credit-card-form.component.html',
-  styleUrl: './credit-card-form.component.scss'
-
-
+  styleUrl: './credit-card-form.component.scss',
 })
-export class CreditCardFormComponent implements OnInit {
-  creditCards: Card[] = [];
+export class CreditCardFormComponent implements OnInit, OnDestroy {
+  creditCards: CreditCard[] = [];
   expensesSummary!: CreditCardSummary;
-  cardDetails: CreditCardSummary[] =[];
+  cardDetails: CreditCardSummary[] = [];
   selectedYear: number = new Date().getFullYear();
   availableYears: number[] = [];
+  annualSummary: any[] = [];
+  annualGeneralSummary?: CreditCardAnnualGeneralSummary;
+  cardMonthlyDetails: CreditCardMonthlyDetailSummary[] = [];
 
-  constructor(public dialog: MatDialog) {
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(public dialog: MatDialog, private cardService: CardService) {
     const currentYear = new Date().getFullYear();
-    this.availableYears = Array.from({ length: 5 }, (_, index) => currentYear - index);
-
+    this.availableYears = Array.from(
+      { length: 5 },
+      (_, index) => currentYear - index
+    );
   }
 
   ngOnInit() {
-    // Simulando respuesta del backend
-    const response: CreditCardSummary[] = [
-      {"Id":1,
-        "CreditCard": "ALL",
-        "Months": {
-          "Enero": 4515,
-          "Febrero": 56000,
-          "Marzo": 415864,
-          "Abril": 10000,
-          "Mayo": 4515,
-          "Junio": 56000,
-          "Julio": 415864,
-          "Agosto": 10000,
-          "Septiembre": 4515,
-          "Octubre": 56000,
-          "Noviembre": 415864,
-          "Diciembre": 10000
-        },
-        "Total": 10000000
-      },
-      {"Id":2,
-        "CreditCard": "VISA",
-        "Months": {
-          "Enero": 4515,
-          "Febrero": 56000,
-          "Marzo": 415864,
-          "Abril": 10000,
-          "Mayo": 4515,
-          "Junio": 56000,
-          "Julio": 415864,
-          "Agosto": 10000,
-          "Septiembre": 4515,
-          "Octubre": 56000,
-          "Noviembre": 415864,
-          "Diciembre": 10000
-        },
-        "Total": 200000
-      },
-      {"Id":3,
-        "CreditCard": "MASTER",
-        "Months": {
-          "Enero": 4515,
-          "Febrero": 56000,
-          "Marzo": 415864,
-          "Abril": 10000,
-          "Mayo": 4515,
-          "Junio": 56000,
-          "Julio": 415864,
-          "Agosto": 10000,
-          "Septiembre": 4515,
-          "Octubre": 56000,
-          "Noviembre": 415864,
-          "Diciembre": 10000
-        },
-        "Total": 4156419
-      },
-      {"Id":4,
-        "CreditCard": "NARANJA",
-        "Months": {
-          "Enero": 4515,
-          "Febrero": 56000,
-          "Marzo": 415864,
-          "Abril": 10000,
-          "Mayo": 4515,
-          "Junio": 56000,
-          "Julio": 415864,
-          "Agosto": 10000,
-          "Septiembre": 4515,
-          "Octubre": 56000,
-          "Noviembre": 415864,
-          "Diciembre": 10000
-        },
-        "Total": 6785678
-      },
-      {"Id":5,
-        "CreditCard": "YOY",
-        "Months": {
-          "Enero": 4515,
-          "Febrero": 56000,
-          "Marzo": 415864,
-          "Abril": 10000,
-          "Mayo": 4515,
-          "Junio": 56000,
-          "Julio": 415864,
-          "Agosto": 10000,
-          "Septiembre": 4515,
-          "Octubre": 56000,
-          "Noviembre": 415864,
-          "Diciembre": 10000
-        },
-        "Total": 123123213
-      },
-      {"Id":6,
-        "CreditCard": "UALA",
-        "Months": {
-          "Enero": 4515,
-          "Febrero": 56000,
-          "Marzo": 415864,
-          "Abril": 10000,
-          "Mayo": 4515,
-          "Junio": 56000,
-          "Julio": 415864,
-          "Agosto": 10000,
-          "Septiembre": 4515,
-          "Octubre": 56000,
-          "Noviembre": 415864,
-          "Diciembre": 10000
-        },
-        "Total": 66666666
-      }]
-      
-      
+    this.subscriptions.add(
+      this.cardService.getCards().subscribe((cards) => {
+        this.creditCards = cards;
+        this.loadAllCardMonthlyDetails(this.selectedYear);
+        console.log('Cards:', cards);
+      })
+    );
 
-    this.processData(response);
+    //this.loadAnnualSummary(this.selectedYear);
+    this.loadAnnualGeneralSummary(this.selectedYear);
+  }
+
+  loadAnnualSummary(year: number) {
+    this.subscriptions.add(
+      this.cardService.getAnnualSummary(year).subscribe((summary) => {
+        this.annualSummary = summary.resumenPorTarjeta;
+      })
+    );
+  }
+
+  loadAnnualGeneralSummary(year: number) {
+    this.subscriptions.add(
+      this.cardService.getAnnualGeneralSummary(year).subscribe((summary) => {
+        this.annualGeneralSummary = summary;
+      })
+    );
+  }
+
+  loadAllCardMonthlyDetails(year: number) {
+    this.cardMonthlyDetails = [];
+    this.creditCards.forEach((card) => {
+      this.subscriptions.add(
+        this.cardService
+          .getMonthlyDetailByCard(card.id, year)
+          .subscribe((detail) => {
+            this.cardMonthlyDetails.push(detail);
+          })
+      );
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   processData(data: CreditCardSummary[]) {
-    if(data[0].CreditCard == 'ALL'){
+    if (data[0].CreditCard == 'ALL') {
       this.expensesSummary = data[0];
     }
     const months = Object.keys(data[0].Months);
 
     const cardDetail = data.slice(1);
-    
-/*     this.cardDetails = data.map(card => ({
-      name: card.CreditCard,
-      expenses: Object.entries(card.Months).map(([month, amount]) => ({ month, amount }))
-    })); */
-    this.cardDetails = cardDetail
+
+    this.cardDetails = cardDetail;
   }
 
   openNewCardDialog() {
     const dialogRef = this.dialog.open(CreditCardFormModalComponent, {
-      width: '600px',       // Ajusta a tu gusto
-      maxWidth: '90vw',     // Para que no exceda el 90% del ancho de la ventana
+      width: '600px',
+      maxWidth: '90vw',
       height: 'auto',
       disableClose: false,
-      data:{}
+      data: {},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog result:', result);
+
       if (result) {
         this.creditCards.push(result);
+
+        // Agregar resumen anual vacío para la nueva tarjeta
+        this.annualSummary.push({
+          tarjetaId: result.id,
+          nombreTarjeta: result.nombreTarjeta,
+          anio: this.selectedYear,
+          resumenMensual: [
+            { mes: 'enero', totalCuotas: 0 },
+            { mes: 'febrero', totalCuotas: 0 },
+            { mes: 'marzo', totalCuotas: 0 },
+            { mes: 'abril', totalCuotas: 0 },
+            { mes: 'mayo', totalCuotas: 0 },
+            { mes: 'junio', totalCuotas: 0 },
+            { mes: 'julio', totalCuotas: 0 },
+            { mes: 'agosto', totalCuotas: 0 },
+            { mes: 'septiembre', totalCuotas: 0 },
+            { mes: 'octubre', totalCuotas: 0 },
+            { mes: 'noviembre', totalCuotas: 0 },
+            { mes: 'diciembre', totalCuotas: 0 },
+          ],
+          totalAnual: 0,
+        });
       }
     });
   }
 
   onYearChange(event: any) {
     this.selectedYear = event.value;
-    //this.loadExpensesData();
+    this.loadAnnualSummary(this.selectedYear);
+    this.loadAnnualGeneralSummary(this.selectedYear);
+    this.loadAllCardMonthlyDetails(this.selectedYear);
   }
 }
