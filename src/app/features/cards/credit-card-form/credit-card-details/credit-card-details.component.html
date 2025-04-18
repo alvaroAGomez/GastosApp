@@ -4,6 +4,7 @@
       <div class="header-content">
         <mat-panel-title>
           {{ getCardName(card) }}
+          <span class="bank-name" *ngIf="card.banco">- {{ card.banco }}</span>
         </mat-panel-title>
         <a (click)="$event.stopPropagation(); onDetailsClick(card)" class="details-link">Ver Detalles</a>
       </div>
@@ -12,11 +13,11 @@
       <mat-table [dataSource]="getCardExpenses(card)">
         <ng-container matColumnDef="month">
           <mat-header-cell *matHeaderCellDef>Mes</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.month }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.month }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="total">
           <mat-header-cell *matHeaderCellDef>Total del Mes</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.amount | currency }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.amount | currency }}</mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="['month', 'total']"></mat-header-row>
         <mat-row *matRowDef="let row; columns: ['month', 'total'];"></mat-row>
@@ -33,6 +34,7 @@
       <div class="header-content">
         <mat-panel-title>
           {{ getCardName(card) }}
+          <span class="bank-name" *ngIf="card.banco">- {{ card.banco }}</span>
         </mat-panel-title>
         <a (click)="$event.stopPropagation(); onDetailsClick(card)" class="details-link">Ver Detalles</a>
       </div>
@@ -41,19 +43,19 @@
       <mat-table [dataSource]="getCardExpenses(card)">
         <ng-container matColumnDef="month">
           <mat-header-cell *matHeaderCellDef>Mes</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.month }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.month }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="gastoActual">
           <mat-header-cell *matHeaderCellDef>Gasto Actual</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.gastoActual | currency }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.gastoActual | currency }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="montoCuotas">
           <mat-header-cell *matHeaderCellDef>Monto Cuotas</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.montoCuotas | currency }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.montoCuotas | currency }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="totalMes">
           <mat-header-cell *matHeaderCellDef>Total Mes</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.totalMes | currency }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.totalMes | currency }}</mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="['month', 'gastoActual', 'montoCuotas', 'totalMes']"></mat-header-row>
         <mat-row *matRowDef="let row; columns: ['month', 'gastoActual', 'montoCuotas', 'totalMes'];"></mat-row>

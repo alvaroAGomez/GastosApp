@@ -1,49 +1,56 @@
 mat-expansion-panel {
-    margin-bottom: 16px;
-  }
-  
-  .total {
-    margin-top: 8px;
-    font-weight: bold;
-  }
+  margin-bottom: 16px;
+}
 
-  .total-footer {
-    margin-top: 20px;
-    text-align: right;
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
+.total {
+  margin-top: 8px;
+  font-weight: bold;
+}
 
+.total-footer {
+  margin-top: 20px;
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.expansion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+mat-expansion-panel {
+  width: 100%;
+  align-self: flex-start;
+}
+
+.details-link {
+  display: block;
+  margin-top: 0px;
+  color: #3b8386;
+  font-size: 10px;
+  text-decoration: none;
+  font-weight: normal;
+  transition: color 0.3s ease-in-out;
+}
+
+.details-link:hover {
+  color: #1976d2;
+  cursor: pointer;
+}
+
+.mat-expansion-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (max-width: 800px) {
   .expansion-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 16px;
-   
+    grid-template-columns: 1fr;
   }
-  
-  mat-expansion-panel {
-    width: 100%;
-    align-self: flex-start; // Esto evita que se expandan juntos en la misma fila
+  .cell-text {
+    font-size: 0.7rem;
   }
-  
-  .details-link {
-    display: block;
-    margin-top: 0px;  /* Espaciado entre el título y el enlace */
-    color: #3B8386;  /* Un color discreto */
-    font-size: 10px;  /* Tamaño de fuente más pequeño */
-    text-decoration: none;  /* Elimina el subrayado */
-    font-weight: normal;  /* Peso de fuente normal */
-    transition: color 0.3s ease-in-out;  /* Efecto al pasar el mouse */
-  }
-  
-  .details-link:hover {
-    color: #1976D2; 
-    cursor: pointer;
-  }
-
-  .mat-expansion-panel {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
+}

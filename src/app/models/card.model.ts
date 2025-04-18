@@ -31,6 +31,7 @@ export interface CreditCardMonthlyDetailSummary {
   anio: number;
   resumenMensual: CreditCardMonthlyDetail[];
   totalAnual: number;
+  banco: string;
 }
 
 // DTO para crear tarjeta

@@ -11,6 +11,16 @@ import { Expense } from '../models/expense.model';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+export interface CreditCardDetailHeader {
+  tarjetaId: number;
+  nombreTarjeta: string;
+  banco?: string;
+  limiteTotal: number;
+  gastoActualMensual: number;
+  totalConsumosPendientes: number;
+  limiteDisponible: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class CardService {
   private apiUrl = environment.apiUrl + 'tarjetas-credito';
@@ -56,9 +66,28 @@ export class CardService {
     return this.http.get<CreditCardMonthlyDetailSummary>(url);
   }
 
-  /*   private cards: CreditCard[] = [
-    { id: 1, nombreTarjeta: 'Visa Platinum', gastos: 2500.5 },
-    { id: 2, nombreTarjeta: 'Mastercard Gold', amount: 3200.75 },
-    { id: 3, nombreTarjeta: 'American Express', amount: 4100.0 },
-  ];  */
+  getCreditCardHeaderDetail(id: number) {
+    return this.http.get<CreditCardDetailHeader>(
+      `${this.apiUrl}/${id}/detalle`
+    );
+  }
+
+  getCardExpensesPaged(
+    tarjetaId: number,
+    params: {
+      page?: number;
+      limit?: number;
+      fechaDesde?: string;
+      fechaHasta?: string;
+      categoria?: string;
+      cuotasRestantes?: number;
+      sortField?: string;
+      sortDirection?: 'ASC' | 'DESC';
+    }
+  ) {
+    return this.http.get<{ data: Expense[]; total: number }>(
+      `${environment.apiUrl}gastos/por-tarjeta/${tarjetaId}`,
+      { params: { ...params } }
+    );
+  }
 }

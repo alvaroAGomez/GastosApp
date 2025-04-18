@@ -1,84 +1,113 @@
 <div class="card-details-container">
   <!-- CABECERA CON DATOS DE LA TARJETA -->
-  <div class="card-details-header">
-    <!-- Fila 1: Nombre de la tarjeta en grande y centrado -->
-    <h1 class="card-name">{{ cardName }}</h1>
-  
-    <!-- Fila 2: Tres columnas con información de límites -->
+  <div class="card-details-header" *ngIf="cardHeaderDetail">
+    <h1 class="card-name">
+      {{ cardHeaderDetail.nombreTarjeta }}
+      <span class="bank-name" *ngIf="cardHeaderDetail.banco">- {{ cardHeaderDetail.banco }}</span>
+    </h1>
     <div class="card-limits">
       <div class="limit-item">
         <span class="limit-label">Límite Total</span>
-        <span class="limit-value">{{ cardLimit | currency }}</span>
+        <span class="limit-value">{{ cardHeaderDetail.limiteTotal | currency }}</span>
       </div>
       <div class="limit-item">
-        <span class="limit-label">Gasto Actual</span>
-        <span class="limit-value">{{ currentExpense | currency }}</span>
+        <span class="limit-label">Gasto Actual Mes</span>
+        <span class="limit-value">{{ cardHeaderDetail.gastoActualMensual | currency }}</span>
+      </div>
+      <div class="limit-item">
+        <span class="limit-label">Gastos Pendientes</span>
+        <span class="limit-value">{{ cardHeaderDetail.totalConsumosPendientes | currency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Límite Disponible</span>
-        <span class="limit-value">{{ (cardLimit - currentExpense) | currency }}</span>
+        <span class="limit-value" [ngClass]="getLimitColorClass(cardHeaderDetail)">
+          {{ cardHeaderDetail.limiteDisponible | currency }}
+        </span>
       </div>
     </div>
   </div>
-  
+
 
   <!-- BUSCADOR PARA FILTRAR GASTOS -->
-  <div class=" headerBuscador">
-    <mat-form-field>
-      <mat-label>Buscar gastos</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar gasto">
-    </mat-form-field>
+  <div class="headerBuscador">
+    <form [formGroup]="filterForm" class="filter-form" (ngSubmit)="onSearch()" autocomplete="off">
+      <mat-form-field>
+        <mat-label>Desde</mat-label>
+        <input matInput [matDatepicker]="picker1" formControlName="fechaDesde">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Hasta</mat-label>
+        <input matInput [matDatepicker]="picker2" formControlName="fechaHasta">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Categoría</mat-label>
+        <mat-select formControlName="categoria">
+          <mat-option value="Todas">Todas</mat-option>
+          <mat-option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nombre }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Cuotas Restantes</mat-label>
+        <input matInput type="number" formControlName="cuotasRestantes" min="0">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Buscar</button>
+      <button mat-raised-button color="accent" type="button" (click)="clearFilters()">Limpiar filtros</button>
+    </form>
   </div>
 
 
   <!-- TABLA DE GASTOS -->
-  <mat-table [dataSource]="dataSource" matSort>
+  <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)">
 
     <!-- FECHA -->
-    <ng-container matColumnDef="date">
+    <ng-container matColumnDef="fecha">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
       <mat-cell *matCellDef="let expense">
-        {{ expense.date | date: 'shortDate' }}
+        {{ expense.fecha | date: 'dd/MM/yyyy':'':'es-ES' }}
       </mat-cell>
     </ng-container>
 
     <!-- DESCRIPCIÓN -->
-    <ng-container matColumnDef="description">
+    <ng-container matColumnDef="descripcion">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</mat-header-cell>
       <mat-cell *matCellDef="let expense">
-        {{ expense.description }}
+        {{ expense.descripcion }}
       </mat-cell>
     </ng-container>
 
     <!-- CATEGORÍA -->
-    <ng-container matColumnDef="category">
+    <ng-container matColumnDef="categoria">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Categoría</mat-header-cell>
       <mat-cell *matCellDef="let expense">
-        {{ expense.category }}
+        {{ expense.categoria }}
       </mat-cell>
     </ng-container>
 
     <!-- MONTO -->
-    <ng-container matColumnDef="amount">
+    <ng-container matColumnDef="monto">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Monto</mat-header-cell>
       <mat-cell *matCellDef="let expense">
-        {{ expense.amount | currency }}
+        {{ expense.monto | currency }}
       </mat-cell>
     </ng-container>
 
     <!-- CUOTAS -->
-    <ng-container matColumnDef="installments">
+    <ng-container matColumnDef="cuotas">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Cuotas</mat-header-cell>
       <mat-cell *matCellDef="let expense">
-        {{ expense.installments }}
+        {{ expense.cuotas }}
       </mat-cell>
     </ng-container>
 
     <!-- RESTANTES -->
-    <ng-container matColumnDef="remainingInstallments">
+    <ng-container matColumnDef="cuotasRestantes">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Restantes</mat-header-cell>
       <mat-cell *matCellDef="let expense">
-        {{ expense.remainingInstallments }}
+        {{ expense.cuotasRestantes }}
       </mat-cell>
     </ng-container>
 
@@ -88,11 +117,11 @@
   </mat-table>
 
   <!-- PAGINACIÓN -->
-  <mat-paginator
-    [pageSize]="5"
-    [pageSizeOptions]="[5, 10, 20]"
-  ></mat-paginator>
+  <mat-paginator [length]="totalExpenses" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPaginate($event)">
+  </mat-paginator>
 </div>
 
-<br>
+<!-- <br>
 <app-dynamic-charts></app-dynamic-charts>
+ -->

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   CreditCard,
   CreditCardAnnualGeneralSummary,
@@ -50,8 +50,8 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
   constructor(public dialog: MatDialog, private cardService: CardService) {
     const currentYear = new Date().getFullYear();
     this.availableYears = Array.from(
-      { length: 5 },
-      (_, index) => currentYear - index
+      { length: 8 },
+      (_, index) => currentYear + 2 - index
     );
   }
 
@@ -60,20 +60,9 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
       this.cardService.getCards().subscribe((cards) => {
         this.creditCards = cards;
         this.loadAllCardMonthlyDetails(this.selectedYear);
-        console.log('Cards:', cards);
       })
     );
-
-    //this.loadAnnualSummary(this.selectedYear);
     this.loadAnnualGeneralSummary(this.selectedYear);
-  }
-
-  loadAnnualSummary(year: number) {
-    this.subscriptions.add(
-      this.cardService.getAnnualSummary(year).subscribe((summary) => {
-        this.annualSummary = summary.resumenPorTarjeta;
-      })
-    );
   }
 
   loadAnnualGeneralSummary(year: number) {
@@ -101,17 +90,6 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  processData(data: CreditCardSummary[]) {
-    if (data[0].CreditCard == 'ALL') {
-      this.expensesSummary = data[0];
-    }
-    const months = Object.keys(data[0].Months);
-
-    const cardDetail = data.slice(1);
-
-    this.cardDetails = cardDetail;
-  }
-
   openNewCardDialog() {
     const dialogRef = this.dialog.open(CreditCardFormModalComponent, {
       width: '600px',
@@ -122,39 +100,18 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog result:', result);
-
       if (result) {
-        this.creditCards.push(result);
-
-        // Agregar resumen anual vacío para la nueva tarjeta
-        this.annualSummary.push({
-          tarjetaId: result.id,
-          nombreTarjeta: result.nombreTarjeta,
-          anio: this.selectedYear,
-          resumenMensual: [
-            { mes: 'enero', totalCuotas: 0 },
-            { mes: 'febrero', totalCuotas: 0 },
-            { mes: 'marzo', totalCuotas: 0 },
-            { mes: 'abril', totalCuotas: 0 },
-            { mes: 'mayo', totalCuotas: 0 },
-            { mes: 'junio', totalCuotas: 0 },
-            { mes: 'julio', totalCuotas: 0 },
-            { mes: 'agosto', totalCuotas: 0 },
-            { mes: 'septiembre', totalCuotas: 0 },
-            { mes: 'octubre', totalCuotas: 0 },
-            { mes: 'noviembre', totalCuotas: 0 },
-            { mes: 'diciembre', totalCuotas: 0 },
-          ],
-          totalAnual: 0,
+        this.cardService.getCards().subscribe((cards) => {
+          this.creditCards = cards;
+          this.loadAllCardMonthlyDetails(this.selectedYear);
         });
+        this.loadAnnualGeneralSummary(this.selectedYear);
       }
     });
   }
 
   onYearChange(event: any) {
     this.selectedYear = event.value;
-    this.loadAnnualSummary(this.selectedYear);
     this.loadAnnualGeneralSummary(this.selectedYear);
     this.loadAllCardMonthlyDetails(this.selectedYear);
   }
