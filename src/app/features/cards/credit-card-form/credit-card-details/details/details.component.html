@@ -122,6 +122,21 @@
   </mat-paginator>
 </div>
 
-<!-- <br>
-<app-dynamic-charts></app-dynamic-charts>
- -->
+<br>
+
+<div class="charts-row">
+  <div class="chart-cell">
+    <h2 style="text-align:center;">Distribución por Categoría</h2>
+    <p style="text-align:center;">Muestra cómo se reparten los gastos de la tarjeta en el período seleccionado.</p>
+    <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialPieChartFilters"
+      [allowedCharts]="['doughnut']">
+    </app-expense-charts>
+  </div>
+  <div class="chart-cell">
+    <h2 style="text-align:center;">Comparación por Categoría</h2>
+    <p style="text-align:center;">Compara cuánto se gasta por cada categoría en el período seleccionado.</p>
+    <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialBarChartFilters"
+      [allowedCharts]="['bar']">
+    </app-expense-charts>
+  </div>
+</div>

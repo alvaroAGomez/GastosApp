@@ -19,6 +19,8 @@ import { CategoryService } from '../../../../../services/category.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ExpenseChartsComponent } from '../../../../../shared/components/expense-charts/expense-charts.component';
+import { NgChartsModule } from 'ng2-charts';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -44,13 +46,15 @@ export interface CreditCardDetailHeader {
     MatInputModule,
     MatCardModule,
     MatTableModule,
-    DynamicChartsComponent,
+    // DynamicChartsComponent,
     MatDatepicker,
     ReactiveFormsModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatOptionModule,
     MatSelectModule,
+    NgChartsModule,
+    ExpenseChartsComponent,
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   templateUrl: './details.component.html',
@@ -92,6 +96,7 @@ export class DetailsComponent implements OnInit {
   sortField = 'fecha';
   sortDirection: 'asc' | 'desc' = 'desc';
   categories: { id: number; nombre: string }[] = [];
+  selectedCardId: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -111,6 +116,7 @@ export class DetailsComponent implements OnInit {
     this.cardDetails = history.state.cardDetails;
     const cardId = this.route.snapshot.paramMap.get('id');
     if (cardId) {
+      this.selectedCardId = +cardId;
       this.cardService
         .getCreditCardHeaderDetail(+cardId)
         .subscribe((header) => {
@@ -124,14 +130,9 @@ export class DetailsComponent implements OnInit {
 
     this.loadCategories();
 
-    // Inicializamos la fuente de datos con los gastos
-    //this.dataSource = new MatTableDataSource(this.expenses);
-
-    // Asignamos sort y paginator
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
 
-    // Personalizamos el sort para que la fecha sea Date (y no un string)
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
         case 'fecha':
@@ -141,7 +142,6 @@ export class DetailsComponent implements OnInit {
       }
     };
 
-    // Ordenamos por fecha descendente al inicio
     this.sort.active = 'fecha';
     this.sort.direction = 'desc';
     this.sort.sortChange.emit({
@@ -149,13 +149,6 @@ export class DetailsComponent implements OnInit {
       direction: 'desc',
     });
 
-    // Elimina la suscripción a valueChanges para evitar búsqueda automática
-    // this.filterForm.valueChanges.subscribe(() => {
-    //   this.pageIndex = 0;
-    //   this.loadExpenses();
-    // });
-
-    // Llama una sola vez al cargar el componente
     this.loadExpenses();
   }
 
@@ -181,7 +174,6 @@ export class DetailsComponent implements OnInit {
     if (!cardId) return;
     const filters = { ...this.filterForm.value };
 
-    // Formatea fechas a 'YYYY-MM-DD' si existen
     if (filters.fechaDesde instanceof Date && !isNaN(filters.fechaDesde)) {
       filters.fechaDesde = filters.fechaDesde.toISOString().slice(0, 10);
     }
@@ -198,7 +190,6 @@ export class DetailsComponent implements OnInit {
         sortDirection: this.sortDirection.toUpperCase(),
       })
       .subscribe((res) => {
-        // Convierte las fechas a tipo Date para que el pipe de Angular funcione
         this.dataSource.data = res.data.map((item: any) => ({
           ...item,
           fecha: item.fecha ? new Date(item.fecha) : null,
@@ -227,7 +218,6 @@ export class DetailsComponent implements OnInit {
     this.searchValue = filterValue;
     this.dataSource.filter = filterValue;
 
-    // Reset de la paginación cuando se filtra
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -247,5 +237,15 @@ export class DetailsComponent implements OnInit {
     if (percent <= 15) return 'limit-red';
     if (percent > 15 && percent <= 55) return 'limit-orange';
     return 'limit-green';
+  }
+
+  get initialPieChartFilters() {
+    return { tarjeta: this.selectedCardId ?? undefined };
+  }
+  get initialBarChartFilters() {
+    return { tarjeta: this.selectedCardId ?? undefined };
+  }
+  get initialLineChartFilters() {
+    return { tarjeta: this.selectedCardId ?? undefined };
   }
 }

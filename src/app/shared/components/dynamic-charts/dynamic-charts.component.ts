@@ -23,7 +23,7 @@ import { Expense } from '../../../models/expense.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { BaseChartDirective } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 import { ExpenseService } from '../../../services/expense.service';
 
 // Registrar los elementos necesarios para todos los gráficos
@@ -51,7 +51,7 @@ Chart.register(
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
-    BaseChartDirective,
+    NgChartsModule,
   ],
   templateUrl: './dynamic-charts.component.html',
   styleUrls: ['./dynamic-charts.component.scss'],
