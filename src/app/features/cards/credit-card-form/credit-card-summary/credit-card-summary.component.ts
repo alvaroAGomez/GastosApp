@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 
 import { CreditCardAnnualGeneralSummary } from '../../../../models/card.model';
 import { CreditCardSummary } from '../interfaces';
+import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pipe';
 
 export interface CardExpense {
   month: string;
@@ -21,8 +22,8 @@ export interface CardExpense {
     MatSelectModule,
     MatOptionModule,
     MatFormFieldModule,
-    CurrencyPipe,
     CommonModule,
+    CustomCurrencyPipe,
   ],
   templateUrl: './credit-card-summary.component.html',
   styleUrl: './credit-card-summary.component.scss',

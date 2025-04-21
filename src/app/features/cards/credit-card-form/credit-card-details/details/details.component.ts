@@ -1,4 +1,3 @@
-import { DynamicChartsComponent } from './../../../../../shared/components/dynamic-charts/dynamic-charts.component';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
@@ -46,7 +45,6 @@ export interface CreditCardDetailHeader {
     MatInputModule,
     MatCardModule,
     MatTableModule,
-    // DynamicChartsComponent,
     MatDatepicker,
     ReactiveFormsModule,
     MatDatepickerModule,

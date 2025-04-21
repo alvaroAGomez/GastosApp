@@ -17,7 +17,7 @@
         </ng-container>
         <ng-container matColumnDef="total">
           <mat-header-cell *matHeaderCellDef>Total del Mes</mat-header-cell>
-          <mat-cell class="cell-text" *matCellDef="let row">{{ row.amount | currency }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.amount | customCurrency:0 }}</mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="['month', 'total']"></mat-header-row>
         <mat-row *matRowDef="let row; columns: ['month', 'total'];"></mat-row>
@@ -25,7 +25,7 @@
     </div>
     <div class="total-footer">
       <span>Total: </span>
-      <strong>{{ getTotal(card) | currency }}</strong>
+      <strong>{{ getTotal(card) | customCurrency:0 }}</strong>
     </div>
   </mat-expansion-panel>
 
@@ -47,15 +47,15 @@
         </ng-container>
         <ng-container matColumnDef="gastoActual">
           <mat-header-cell *matHeaderCellDef>Gasto Actual</mat-header-cell>
-          <mat-cell class="cell-text" *matCellDef="let row">{{ row.gastoActual | currency }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.gastoActual | customCurrency:0 }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="montoCuotas">
           <mat-header-cell *matHeaderCellDef>Monto Cuotas</mat-header-cell>
-          <mat-cell class="cell-text" *matCellDef="let row">{{ row.montoCuotas | currency }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.montoCuotas | customCurrency:0 }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="totalMes">
           <mat-header-cell *matHeaderCellDef>Total Mes</mat-header-cell>
-          <mat-cell class="cell-text" *matCellDef="let row">{{ row.totalMes | currency }}</mat-cell>
+          <mat-cell class="cell-text" *matCellDef="let row">{{ row.totalMes | customCurrency:0 }}</mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="['month', 'gastoActual', 'montoCuotas', 'totalMes']"></mat-header-row>
         <mat-row *matRowDef="let row; columns: ['month', 'gastoActual', 'montoCuotas', 'totalMes'];"></mat-row>
@@ -63,7 +63,7 @@
     </div>
     <div class="total-footer">
       <span>Total: </span>
-      <strong>{{ getTotal(card) | currency }}</strong>
+      <strong>{{ getTotal(card) | customCurrency:0 }}</strong>
     </div>
   </mat-expansion-panel>
 </mat-accordion>

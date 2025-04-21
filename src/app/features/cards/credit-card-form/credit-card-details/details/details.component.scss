@@ -91,9 +91,11 @@ mat-paginator {
 }
 
 .filter-form button {
+  border: none;
+  border-radius: 25px;
   height: 40px;
-  align-self: flex-end;
-  margin-left: 8px;
+  width: 10%;
+  cursor: pointer;
 }
 
 .charts-row {

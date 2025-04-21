@@ -7,7 +7,7 @@
 
     <ng-container matColumnDef="total">
       <mat-header-cell *matHeaderCellDef>Total del Mes</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.amount | currency }}</mat-cell>
+      <mat-cell *matCellDef="let row">{{ row.amount | customCurrency:0 }}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="['month', 'total']"></mat-header-row>
@@ -16,6 +16,6 @@
 
   <div class="total-footer">
     <span>Total Anual: </span>
-    <strong>{{ total | currency }}</strong>
+    <strong>{{ total | customCurrency:0 }}</strong>
   </div>
 </div>

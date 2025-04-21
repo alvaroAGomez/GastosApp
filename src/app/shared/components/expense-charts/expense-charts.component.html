@@ -32,3 +32,7 @@
 <div *ngIf="allowedCharts[0] === 'bar'">
     <canvas baseChart [data]="barChartData" [type]="'bar'" [options]="barChartOptions"></canvas>
 </div>
+
+<div *ngIf="allowedCharts[0] === 'line'">
+    <canvas baseChart [data]="lineChartData" [type]="'line'" [options]="lineChartOptions"></canvas>
+</div>

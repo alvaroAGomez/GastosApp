@@ -16,14 +16,6 @@ mat-form-field {
   padding: 12px;
 }
 
-/* button[mat-button] {
-  font-weight: 600;
-}
-
-button[mat-button][disabled] {
-  color: rgba(0, 0, 0, 0.26);
-} */
-
 .form-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -37,11 +29,11 @@ button[mat-button][disabled] {
 }
 
 .snackbar-success {
-  background-color: #43a047 !important; // verde
+  background-color: #43a047 !important;
   color: #fff !important;
 }
 
 .snackbar-error {
-  background-color: #e53935 !important; // rojo
+  background-color: #e53935 !important;
   color: #fff !important;
 }

@@ -1,9 +1,9 @@
 // Paleta de colores
-$primary-color: #3B8386;
+$primary-color: #3b8386;
 $secondary-color-1: #2e6769;
 $secondary-color-2: #2a5a5c;
-$complement-color: #DE6461;
-$background-color: #F5F5F6;
+$complement-color: #de6461;
+$background-color: #f5f5f6;
 $text-color: #242424;
 
 :root {
@@ -15,74 +15,74 @@ $text-color: #242424;
   --text-color: #{$text-color};
 }
 
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
 
 .auth-form {
-    max-width: 400px;
-    margin: 2rem auto;
-    padding: 2rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    
-    mat-form-field {
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-    
-    button[type="submit"] {
-      width: 100%;
-      margin-top: 1rem;
-      background-color: $primary-color;
-      color: #F5F5F6 !important;
-    }
-    
-    p {
-      text-align: center;
-      margin-top: 1rem;
-      a {
-        color: var(--primary-color);
-        text-decoration: none;
-        &:hover {
-          text-decoration: underline;
-        }
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    margin-top: 1rem;
+    background-color: $primary-color;
+    color: #f5f5f6 !important;
+  }
+
+  p {
+    text-align: center;
+    margin-top: 1rem;
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
-
-
+}
 
 // Estilos globales
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
 }
-
 
 // Estilos comunes para formularios
 .auth-container {
   height: 100vh;
   display: flex;
-  
+
   .image-section {
     flex: 1;
     background: linear-gradient(rgba(59, 131, 134, 0.8), rgba(16, 105, 19, 0.9)),
-                url('./app/assets/images/x.jpg') center/cover;
+      url("./app/assets/images/x.jpg") center/cover;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     text-align: center;
     padding: 2rem;
-    
+
     .content {
       max-width: 500px;
-      
+
       h1 {
         font-size: 2.5rem;
         margin-bottom: 1rem;
       }
-      
+
       p {
         font-size: 1.1rem;
         line-height: 1.6;
@@ -104,8 +104,9 @@ body {
 @media (max-width: 768px) {
   .auth-container {
     flex-direction: column;
-    
-    .image-section, .form-section {
+
+    .image-section,
+    .form-section {
       flex: none;
       height: 50vh;
       width: 100%;
@@ -115,16 +116,15 @@ body {
 
 .mat-sidenav {
   transition: transform 0.3s ease-in-out !important;
-  color: #F5F5F6 !important;
+  color: #f5f5f6 !important;
 }
 
 .mat-list-item {
   transition: background-color 0.2s ease;
 }
 
-
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-  background-color: #F5F5F6  !important;
+  background-color: #f5f5f6 !important;
 }
 
 .mat-mdc-form-field-focus-overlay {
@@ -134,43 +134,48 @@ body {
 button.mat-raised-button {
   white-space: nowrap; /* Evita que el texto del botón se corte */
   background-color: $primary-color !important;
-  color: #F5F5F6 !important;
+  color: #f5f5f6 !important;
 }
 
 button.mat-raised-button[disabled],
 button.mat-raised-button:disabled,
 button.mat-raised-button.mat-button-disabled {
-  background-color: #ccc !important; /* Fondo gris */
-  color: #666 !important;           /* Texto gris más oscuro */
-  cursor: not-allowed !important;   /* Cursor de "no permitido" */
+  background-color: #ccc !important;
+  color: #666 !important;
+  cursor: not-allowed !important;
   opacity: 0.7 !important;
 }
-
 
 .custom-button-cancelar {
   white-space: nowrap; /* Evita que el texto del botón se corte */
   background-color: $complement-color !important;
-  color: #F5F5F6 !important;
+  color: #f5f5f6 !important;
+}
+
+.custom-button-info {
+  white-space: nowrap; /* Evita que el texto del botón se corte */
+  background-color: $complement-color !important;
+  color: #f5f5f6 !important;
 }
 
 .custom-button {
   white-space: nowrap; /* Evita que el texto del botón se corte */
   background-color: $primary-color !important;
-  color: #F5F5F6 !important;
+  color: #f5f5f6 !important;
 }
 
 .custom-button[disabled] {
-  background-color: #ccc !important; 
-  color: #666 !important;           
-  cursor: not-allowed !important;   
-  opacity: 0.7;                     
+  background-color: #ccc !important;
+  color: #666 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
 }
 
 .headerBuscador {
   display: flex;
   align-items: center; /* Alinea verticalmente los elementos */
   justify-content: flex-start; /* Alinea horizontalmente sin espacios innecesarios */
-  gap: 10px; /* Espaciado entre input y botón */
+  gap: 10px;
   margin-bottom: 16px;
 
   /* Para que el campo de búsqueda y el botón estén alineados */
@@ -178,6 +183,4 @@ button.mat-raised-button.mat-button-disabled {
     flex-grow: 1; /* Hace que el input ocupe el espacio disponible */
     min-width: 250px;
   }
-
-
 }

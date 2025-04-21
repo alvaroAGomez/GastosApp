@@ -8,20 +8,22 @@
     <div class="card-limits">
       <div class="limit-item">
         <span class="limit-label">Límite Total</span>
-        <span class="limit-value">{{ cardHeaderDetail.limiteTotal | currency }}</span>
+        <span class="limit-value">{{ cardHeaderDetail.limiteTotal | currency:'ARS':'symbol':'1.0-0':'es-AR' }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Gasto Actual Mes</span>
-        <span class="limit-value">{{ cardHeaderDetail.gastoActualMensual | currency }}</span>
+        <span class="limit-value">{{ cardHeaderDetail.gastoActualMensual | currency:'ARS':'symbol':'1.0-0':'es-AR'
+          }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Gastos Pendientes</span>
-        <span class="limit-value">{{ cardHeaderDetail.totalConsumosPendientes | currency }}</span>
+        <span class="limit-value">{{ cardHeaderDetail.totalConsumosPendientes | currency:'ARS':'symbol':'1.0-0':'es-AR'
+          }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Límite Disponible</span>
         <span class="limit-value" [ngClass]="getLimitColorClass(cardHeaderDetail)">
-          {{ cardHeaderDetail.limiteDisponible | currency }}
+          {{ cardHeaderDetail.limiteDisponible | currency:'ARS':'symbol':'1.0-0':'es-AR' }}
         </span>
       </div>
     </div>
@@ -54,11 +56,12 @@
         <mat-label>Cuotas Restantes</mat-label>
         <input matInput type="number" formControlName="cuotasRestantes" min="0">
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">Buscar</button>
-      <button mat-raised-button color="accent" type="button" (click)="clearFilters()">Limpiar filtros</button>
+      <button mat-raised-button color="primary" type="submit" class="custom-button">Buscar</button>
+      <button mat-raised-button color="primary" type="button" class="custom-button-cancelar"
+        (click)="clearFilters()">Limpiar
+        filtros</button>
     </form>
   </div>
-
 
   <!-- TABLA DE GASTOS -->
   <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)">
@@ -91,7 +94,7 @@
     <ng-container matColumnDef="monto">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Monto</mat-header-cell>
       <mat-cell *matCellDef="let expense">
-        {{ expense.monto | currency }}
+        {{ expense.monto | currency:'ARS':'symbol':'1.0-0':'es-AR' }}
       </mat-cell>
     </ng-container>
 
@@ -137,6 +140,16 @@
     <p style="text-align:center;">Compara cuánto se gasta por cada categoría en el período seleccionado.</p>
     <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialBarChartFilters"
       [allowedCharts]="['bar']">
+    </app-expense-charts>
+  </div>
+</div>
+
+<div class="charts-row">
+  <div class="chart-cell">
+    <h2 style="text-align:center;">Tendencia de Gastos</h2>
+    <p style="text-align:center;">Evolución mensual de los gastos de la tarjeta en el período seleccionado.</p>
+    <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialLineChartFilters"
+      [allowedCharts]="['line']">
     </app-expense-charts>
   </div>
 </div>
