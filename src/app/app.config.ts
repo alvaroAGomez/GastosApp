@@ -7,7 +7,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
+import { provideToastr, ToastrModule } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +15,18 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideAnimationsAsync(),
-
-    importProvidersFrom(BrowserAnimationsModule, ToastrModule.forRoot({})),
+    provideToastr(),
+    importProvidersFrom(
+      BrowserAnimationsModule,
+      ToastrModule.forRoot({
+        positionClass: 'toast-top-right',
+        preventDuplicates: true,
+        closeButton: true,
+        timeOut: 3000,
+        newestOnTop: true,
+        tapToDismiss: true,
+        enableHtml: true,
+      })
+    ),
   ],
 };

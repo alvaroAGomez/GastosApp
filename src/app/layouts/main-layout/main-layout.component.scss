@@ -1,102 +1,118 @@
-.mat-sidenav-container {
-  background-color: var(--background-color);
-  margin-top: 64px;
-  height: calc(100vh - 64px);
-  position: relative;
+.categories-sidenav-container {
+  height: 100vh;
 }
 
-.sidenav {
+mat-sidenav {
   width: 240px;
-  background-color: var(--secondary-color-1);
-  box-shadow: 2px 0 8px rgba(224, 0, 0, 0.1);
-  overflow-y: auto;
-  border-radius: 0 !important;
+  min-width: 200px;
+  background-color: var(--secondary-color-1, #2e6769);
+  color: #fff !important;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  margin-top: 64px; // Hace que el sidenav arranque debajo del toolbar
+  height: calc(100vh - 64px); // Ajusta el alto para no tapar el toolbar
+  .sidenav-toolbar {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    font-weight: bold;
+    background: var(--primary-color, #3b8386);
+  }
+  mat-icon {
+    margin-right: 8px;
+    color: #fff !important;
+    fill: #fff !important;
+  }
+
+  // Fuerza texto e íconos blancos en todo el sidenav (Angular Material v15+)
+  ::ng-deep .mat-list-base .mat-list-item,
+  ::ng-deep .mat-list-base .mat-list-item .mat-icon,
+  ::ng-deep .mat-list-base .mat-list-item .mat-line,
+  ::ng-deep .mat-list-base .mat-list-item span,
+  ::ng-deep .mat-list-base .mat-list-item .menu-label,
+  ::ng-deep .mat-list-base .mat-list-item mat-icon {
+    color: #fff !important;
+    fill: #fff !important;
+  }
+
+  // Para versiones anteriores
+  ::ng-deep .mat-list-item,
+  ::ng-deep .mat-list-item .mat-icon,
+  ::ng-deep .mat-list-item .mat-line,
+  ::ng-deep .mat-list-item span,
+  ::ng-deep .mat-list-item .menu-label,
+  ::ng-deep .mat-list-item mat-icon {
+    color: #fff !important;
+    fill: #fff !important;
+  }
+
+  // Fuerza texto e íconos blancos en todo el sidenav
+  .mat-list-item,
+  .mat-list-item .mat-icon,
+  .mat-list-item .mat-line,
+  .mat-list-item span,
+  .mat-list-item .menu-label,
+  .mat-list-item mat-icon {
+    color: #fff !important;
+    fill: #fff !important;
+  }
 }
 
 mat-nav-list {
-  padding: 16px 0;
-}
-
-span {
-  color: white !important;
-}
-
-mat-icon {
-  color: white;
-  padding-right: 5px;
+  padding: 16px 0 0 0;
 }
 
 mat-list-item:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-.mat-sidenav-content.with-sidenav {
-  margin-left: 240px;
-  overflow: auto;
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--background-color, #f5f5f6);
 }
 
-.toolbar {
+// Toolbar: fuerza íconos y texto blancos
+.main-toolbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1002;
   height: 64px;
-  background-color: var(--primary-color);
-  color: white;
   display: flex;
   align-items: center;
-  padding: 0 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+  background: var(--primary-color, #3b8386);
+  color: #fff !important;
   .logo {
     font-size: 1.2rem;
     font-weight: bold;
+    margin-left: 16px;
+    color: #fff !important;
   }
-
-  .spacer {
-    flex: 1;
-  }
-
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-right: 24px;
-    
-    mat-icon {
-      color: rgba(255, 255, 255, 0.8);
-    }
-  }
-
-  button {
-    color: white;
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
+  button,
+  button mat-icon,
+  mat-icon {
+    color: #fff !important;
+    fill: #fff !important;
   }
 }
 
-main {
+.main-content {
+  flex: 1 1 auto;
+  overflow: auto;
   padding: 24px;
-  min-height: 100%;
+  box-sizing: border-box;
+  min-height: 0;
+  max-height: calc(100vh - 64px);
+  margin-top: 64px;
 }
 
-@media (max-width: 959px) {
-  .mat-sidenav-container {
-    margin-top: 56px; 
-    height: calc(100vh - 56px);
-  }
+mat-icon {
+  padding-right: 5px;
+}
 
-  .toolbar {
-    height: 56px;
-    padding: 0 16px;
-  }
-
-  main {
-    padding: 16px;
-  }
-  .mat-sidenav-content.with-sidenav {
-    margin-left: 0;
-  }
+span {
+  color: #fff;
 }

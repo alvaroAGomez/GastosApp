@@ -1,109 +1,37 @@
-<!-- <mat-toolbar color="primary" class="toolbar">
-  <button mat-icon-button (click)="toggleMenu()">
-    <mat-icon>{{ menuIcon }}</mat-icon>
-  </button>
-  <span class="logo">GASTOSAPP</span>
-  <span class="spacer"></span>
-  <div class="user-info">
-    <mat-icon>person</mat-icon>
-    <span>{{ (authService.currentUser$ | async)?.name }}</span>
-  </div>
-  <button mat-icon-button (click)="authService.logout()" matTooltip="Cerrar sesión">
-    <mat-icon>logout</mat-icon>
-  </button>
-</mat-toolbar>
-
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    [(opened)]="isMenuOpen"
-    [mode]="(isMobile | async) ? 'over' : 'side'"
-    [fixedInViewport]="(isMobile | async)"
-    [fixedTopGap]="(isMobile | async) ? 56 : 64"
-    class="sidenav">
-    <mat-nav-list>
-      <a class="menuItem" mat-list-item routerLink="/" routerLinkActive="active-link">
+<mat-sidenav-container class="categories-sidenav-container">
+  <mat-sidenav #drawer mode="side" [(opened)]="isSidenavOpen">
+    <mat-nav-list [class.sidenav-mobile]="isMobile$ | async">
+      <a mat-list-item routerLink="/" routerLinkActive="active-link" (click)="closeMenuIfMobile()">
         <mat-icon>dashboard</mat-icon>
-        <span class="menu-label">Dashboard</span>
+        <span>Dashboard</span>
       </a>
-      <a mat-list-item routerLink="/credit-cards" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/credit-cards" routerLinkActive="active-link" (click)="closeMenuIfMobile()">
         <mat-icon>credit_card</mat-icon>
-        <span class="menu-label">Tarjetas de Crédito</span>
+        <span>Tarjetas de Crédito</span>
       </a>
-      <a mat-list-item routerLink="/debit-cards" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/debit-cards" routerLinkActive="active-link" (click)="closeMenuIfMobile()">
         <mat-icon>account_balance</mat-icon>
-        <span class="menu-label">Tarjetas de Débito</span>
+        <span>Tarjetas de Débito</span>
       </a>
-      <a mat-list-item routerLink="/reports" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/reports" routerLinkActive="active-link" (click)="closeMenuIfMobile()">
         <mat-icon>bar_chart</mat-icon>
-        <span class="menu-label">Reportes</span>
+        <span>Reportes</span>
       </a>
-      <a mat-list-item routerLink="/categories" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/categories" routerLinkActive="active-link" (click)="closeMenuIfMobile()">
         <mat-icon>category</mat-icon>
-        <span class="menu-label">Categorías</span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content [class.with-sidenav]="isMenuOpen && !(isMobile | async)">
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-  </mat-sidenav-content>
-</mat-sidenav-container>
- -->
-
- <mat-toolbar color="primary" class="toolbar">
-  <button mat-icon-button (click)="toggleMenu()">
-    <mat-icon>{{ menuIcon }}</mat-icon>
-  </button>
-  <span class="logo">GASTOSAPP</span>
-  <span class="spacer"></span>
-  <div class="user-info">
-    <mat-icon>person</mat-icon>
-    <span>{{ (authService.currentUser$ | async)?.name }}</span>
-  </div>
-  <button mat-icon-button (click)="authService.logout()" matTooltip="Cerrar sesión">
-    <mat-icon>logout</mat-icon>
-  </button>
-</mat-toolbar>
-
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    [(opened)]="isMenuOpen"
-    [mode]="(isMobile | async) ? 'over' : 'side'"
-    [fixedInViewport]="(isMobile | async)"
-    [fixedTopGap]="(isMobile | async) ? 56 : 64"
-    class="sidenav">
-    <mat-nav-list>
-<!--       <a class="menuItem" mat-list-item routerLink="/" routerLinkActive="active-link">
-        <mat-icon></mat-icon>
-        <span class="menu-label"></span>
-      </a> -->
-      <a class="menuItem" mat-list-item routerLink="/" routerLinkActive="active-link">
-        <mat-icon>dashboard</mat-icon>
-        <span class="menu-label">Dashboard</span>
-      </a>
-      <a mat-list-item routerLink="/credit-cards" routerLinkActive="active-link">
-        <mat-icon>credit_card</mat-icon>
-        <span class="menu-label">Tarjetas de Crédito</span>
-      </a>
-      <a mat-list-item routerLink="/debit-cards" routerLinkActive="active-link">
-        <mat-icon>account_balance</mat-icon>
-        <span class="menu-label">Tarjetas de Débito</span>
-      </a>
-      <a mat-list-item routerLink="/reports" routerLinkActive="active-link">
-        <mat-icon>bar_chart</mat-icon>
-        <span class="menu-label">Reportes</span>
-      </a>
-      <a mat-list-item routerLink="/categories" routerLinkActive="active-link">
-        <mat-icon>category</mat-icon>
-        <span class="menu-label">Categorías</span>
+        <span>Categorías</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <main>
+    <mat-toolbar color="primary" class="main-toolbar">
+      <button mat-icon-button (click)="toggleMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="logo" routerLink="/" style="cursor:pointer;">GASTOSAPP</span>
+    </mat-toolbar>
+    <main class="main-content">
       <router-outlet></router-outlet>
     </main>
   </mat-sidenav-content>
