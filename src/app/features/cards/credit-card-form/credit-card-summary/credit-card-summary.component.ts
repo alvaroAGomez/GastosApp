@@ -1,5 +1,11 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -28,7 +34,7 @@ export interface CardExpense {
   templateUrl: './credit-card-summary.component.html',
   styleUrl: './credit-card-summary.component.scss',
 })
-export class CreditCardSummaryComponent implements OnInit {
+export class CreditCardSummaryComponent implements OnInit, OnChanges {
   @Input() expensesSummary?: CreditCardSummary;
   @Input() generalSummary?: CreditCardAnnualGeneralSummary;
 
@@ -37,6 +43,12 @@ export class CreditCardSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadExpensesData();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['generalSummary'] || changes['expensesSummary']) {
+      this.loadExpensesData();
+    }
   }
 
   loadExpensesData() {

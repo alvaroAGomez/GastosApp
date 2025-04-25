@@ -203,7 +203,6 @@ export class DetailsComponent implements OnInit {
   }
 
   onSort(event: any) {
-    debugger;
     this.sortField = event.active;
     this.sortDirection = event.direction || 'asc';
     this.loadExpenses();

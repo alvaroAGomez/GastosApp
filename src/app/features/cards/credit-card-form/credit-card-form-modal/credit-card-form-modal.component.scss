@@ -37,3 +37,7 @@ mat-form-field {
   background-color: #e53935 !important;
   color: #fff !important;
 }
+
+.mat-mdc-dialog-content {
+  max-height: none !important;
+}

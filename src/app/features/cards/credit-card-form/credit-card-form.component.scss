@@ -1,24 +1,32 @@
-.summary-section{
-    margin-bottom: 20px;
+.summary-section {
+  margin-bottom: 20px;
 }
 
-button{
-    margin-bottom: 30px;;
+button {
+  margin-bottom: 30px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; // Espacio igual entre botones
+  margin-bottom: 20px;
 }
 
 .year-selector {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-  }
-  
-  mat-select {
-    width: 200px;
-    margin-left: 10px;
-  }
-  
-  mat-label {
-    font-weight: bold;
-  }
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
 
+mat-select {
+  width: 200px;
+  margin-left: 10px;
+}
+
+mat-label {
+  font-weight: bold;
+}

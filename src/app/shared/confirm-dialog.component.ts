@@ -20,13 +20,6 @@ import {
         color="primary"
         class="custom-button-cancelar"
         mat-dialog-close="false"
-        [ngStyle]="{
-          border: 'none',
-          'border-radius': '25px',
-          height: '40px',
-
-          cursor: 'pointer'
-        }"
       >
         Cancelar
       </button>
@@ -35,12 +28,6 @@ import {
         color="primary"
         class="custom-button"
         [mat-dialog-close]="true"
-        [ngStyle]="{
-          border: 'none',
-          'border-radius': '25px',
-          height: '40px',
-          cursor: 'pointer'
-        }"
       >
         Confirmar
       </button>

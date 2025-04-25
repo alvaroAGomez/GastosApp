@@ -38,6 +38,8 @@ export class CategoriesComponent {
   dataSource = new MatTableDataSource<Category>(this.categories);
   displayedColumns: string[] = ['name', 'actions'];
 
+  editingCategory: Category | null = null; // <-- Para saber si estamos editando
+
   constructor(
     private categoryService: CategoryService,
     private toast: ToastrService,
@@ -57,52 +59,61 @@ export class CategoriesComponent {
     });
   }
 
-  addCategory(form: NgForm) {
+  addOrUpdateCategory(form: NgForm) {
     const name = this.newCategory.name.trim();
     if (!name) return;
 
     // Validar unicidad (no case sensitive)
     if (
       this.categories.some(
-        (c) => c.name.trim().toLowerCase() === name.toLowerCase()
+        (c) =>
+          c.name.trim().toLowerCase() === name.toLowerCase() &&
+          (!this.editingCategory || c.id !== this.editingCategory.id)
       )
     ) {
-      alert('Ya existe una categoría con ese nombre');
+      this.toast.info('Ya existe una categoría con ese nombre');
       return;
     }
 
-    this.categoryService.createCategory({ nombre: name }).subscribe({
-      next: () => {
-        this.loadCategories();
-        form.resetForm();
-        this.toast.success('Categoría creada con éxito', 'Éxito');
-      },
-      error: (err) => alert(err.error?.message || 'Error al crear categoría'),
-    });
-  }
-
-  editCategory(category: Category) {
-    const newName = prompt('Editar categoría', category.name);
-    if (newName !== null && newName.trim() !== '') {
-      // Validar unicidad (no case sensitive)
-      if (
-        this.categories.some(
-          (c) =>
-            c.id !== category.id &&
-            c.name.trim().toLowerCase() === newName.trim().toLowerCase()
-        )
-      ) {
-        this.toast.warning('Ya existe una categoría con ese nombre', 'Cuidado');
-        return;
-      }
+    if (this.editingCategory) {
+      // Actualizar
       this.categoryService
-        .updateCategory(category.id!, { nombre: newName.trim() })
+        .updateCategory(this.editingCategory.id!, { nombre: name })
         .subscribe({
-          next: () => this.loadCategories(),
+          next: () => {
+            this.loadCategories();
+            this.toast.success('Categoría actualizada con éxito', 'Éxito');
+            this.editingCategory = null;
+            this.newCategory = { name: '' };
+            form.resetForm();
+          },
           error: (err) =>
             this.toast.error(err.error?.message || 'Error al editar categoría'),
         });
+    } else {
+      // Agregar
+      this.categoryService.createCategory({ nombre: name }).subscribe({
+        next: () => {
+          this.loadCategories();
+          form.resetForm();
+          this.toast.success('Categoría creada con éxito', 'Éxito');
+        },
+        error: (err) =>
+          this.toast.error(err.error?.message || 'Error al crear categoría'),
+      });
     }
+  }
+
+  startEditCategory(category: Category, form: NgForm) {
+    this.editingCategory = category;
+    this.newCategory = { ...category };
+    form.controls['name']?.setValue(category.name); // Si usas template-driven forms
+  }
+
+  cancelEdit(form: NgForm) {
+    this.editingCategory = null;
+    this.newCategory = { name: '' };
+    form.resetForm();
   }
 
   deleteCategory(category: Category) {
@@ -114,9 +125,12 @@ export class CategoriesComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
+      if (result === true) {
         this.categoryService.deleteCategory(category.id!).subscribe({
-          next: () => this.loadCategories(),
+          next: () => {
+            this.loadCategories();
+            this.toast.success('Categoría eliminada con éxito', 'Éxito');
+          },
           error: (err) =>
             this.toast.error(
               err.error?.message || 'Error al eliminar categoría'

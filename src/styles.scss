@@ -153,18 +153,32 @@ button.mat-raised-button.mat-button-disabled {
   white-space: nowrap; /* Evita que el texto del botón se corte */
   background-color: $complement-color !important;
   color: #f5f5f6 !important;
+  border: none;
+  border-radius: 25px;
+  height: 40px;
+  min-width: 100px;
+  cursor: pointer;
 }
 
 .custom-button-info {
   white-space: nowrap; /* Evita que el texto del botón se corte */
-  background-color: $complement-color !important;
+  background-color: $secondary-color-2 !important;
   color: #f5f5f6 !important;
+  border: none;
+  border-radius: 25px;
+  height: 40px;
+  cursor: pointer;
 }
 
 .custom-button {
   white-space: nowrap; /* Evita que el texto del botón se corte */
   background-color: $primary-color !important;
   color: #f5f5f6 !important;
+  border: none;
+  border-radius: 25px;
+  height: 40px;
+  min-width: 100px;
+  cursor: pointer;
 }
 
 .custom-button[disabled] {
@@ -172,6 +186,10 @@ button.mat-raised-button.mat-button-disabled {
   color: #666 !important;
   cursor: not-allowed !important;
   opacity: 0.7;
+  border: none;
+  border-radius: 25px;
+  height: 40px;
+  cursor: pointer;
 }
 
 .headerBuscador {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, LOCALE_ID } from '@angular/core';
 import {
   CreditCard,
   CreditCardAnnualGeneralSummary,
@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { CardService } from '../../../services/card.service';
 import { Subscription } from 'rxjs';
+import { DeleteCardModalComponent } from './delete-card-modal/delete-card-modal.component';
 
 @Component({
   selector: 'app-credit-card-form',
@@ -101,6 +102,49 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.cardService.getCards().subscribe((cards) => {
+          this.creditCards = cards;
+          this.loadAllCardMonthlyDetails(this.selectedYear);
+        });
+        this.loadAnnualGeneralSummary(this.selectedYear);
+      }
+    });
+  }
+
+  openEditCardDialog() {
+    const dialogRef = this.dialog.open(CreditCardFormModalComponent, {
+      width: '600px',
+      maxWidth: '100vw',
+      disableClose: false,
+      data: {
+        mode: 'edit',
+        cards: this.creditCards,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.cardService.getCards().subscribe((cards) => {
+          this.creditCards = cards;
+          this.loadAllCardMonthlyDetails(this.selectedYear);
+        });
+        this.loadAnnualGeneralSummary(this.selectedYear);
+      }
+    });
+  }
+
+  openDeleteCardDialog() {
+    const dialogRef = this.dialog.open(DeleteCardModalComponent, {
+      width: '500px',
+      maxWidth: '90vw',
+      disableClose: false,
+      data: {
+        cards: this.creditCards,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.deleted) {
         this.cardService.getCards().subscribe((cards) => {
           this.creditCards = cards;
           this.loadAllCardMonthlyDetails(this.selectedYear);

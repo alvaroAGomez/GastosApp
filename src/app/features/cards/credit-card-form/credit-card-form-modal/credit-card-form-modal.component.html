@@ -1,6 +1,16 @@
-<h2 mat-dialog-title>Nueva Tarjeta</h2>
+<h2 mat-dialog-title>{{ mode === 'edit' ? 'Editar Tarjeta' : 'Nueva Tarjeta' }}</h2>
 <form [formGroup]="cardForm" (ngSubmit)="save()">
   <mat-dialog-content class="dialog-content">
+    <div *ngIf="mode === 'edit'" class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Selecciona la Tarjeta</mat-label>
+        <mat-select [(value)]="selectedCardId" (selectionChange)="onCardSelect($event.value)">
+          <mat-option *ngFor="let card of cards" [value]="card.id">
+            {{ card.nombreTarjeta }} ({{ card.numeroTarjeta }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <!-- Nombre de la tarjeta -->
     <div class="form-row">
       <mat-form-field appearance="outline">
@@ -58,7 +68,7 @@
   <mat-dialog-actions align="end">
     <button mat-raised-button color="primary" class="custom-button-cancelar"
       (click)="dialogRef.close()">Cancelar</button>
-    <button mat-raised-button color="primary" type="submit" class="custom-button"
-      [disabled]="cardForm.invalid">Guardar</button>
+    <button mat-raised-button color="primary" type="submit" class="custom-button" [disabled]="cardForm.invalid">{{ mode
+      === 'edit' ? 'Actualizar' : 'Guardar' }}</button>
   </mat-dialog-actions>
 </form>
