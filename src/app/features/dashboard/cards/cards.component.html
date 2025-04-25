@@ -1,29 +1,30 @@
 <div class="cards-container">
-
-
-
-  <mat-card *ngFor="let card of creditCards" class="card">
+  <mat-card *ngFor="let card of cardSummaries" class="card card-summary" (click)="goToDetail(card.tarjetaId)"
+    style="cursor: pointer;">
     <mat-card-header>
-      <mat-card-title>{{ card.nombreTarjeta }}</mat-card-title>
+      <mat-card-title>
+        <span class="card-title-main">{{ card.nombreTarjeta }}</span>
+        <span class="card-title-bank">({{ card.banco }})</span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <span class="card-last4">**** {{ card.ultimos4 }}</span>
+      </mat-card-subtitle>
     </mat-card-header>
-
     <mat-card-content>
-      <div class="price-container">
-        <div class="price-item">
-          <span>Gasto Acumulado</span>
-          <span class="price">
-            {{ (card.limiteCredito| currency:'$ ':'symbol':'1.2-2') || 'N/A' }}
-          </span>
+      <div class="summary-table">
+        <div class="summary-row">
+          <span class="summary-label">Gasto actual</span>
+          <span class="summary-value gasto">{{ card.gastoActualMensual | customCurrency }}</span>
         </div>
-
+        <div class="summary-row">
+          <span class="summary-label">Gastos Pendiente</span>
+          <span class="summary-value pendiente">{{ card.totalConsumosPendientes | customCurrency }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Limite Disponible</span>
+          <span class="summary-value disponible">{{ card.limiteDisponible | customCurrency }}</span>
+        </div>
       </div>
     </mat-card-content>
-
-    <!--     <mat-card-footer *ngIf="!loading && currency?.actualizado">
-      <div class="update-time">
-        Actualizado: {{ currency.actualizado | date:'shortTime' }}
-      </div>
-    </mat-card-footer> -->
   </mat-card>
-
 </div>

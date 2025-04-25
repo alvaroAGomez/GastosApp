@@ -10,6 +10,7 @@ import {
 import { Expense } from '../models/expense.model';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { CreditCardSummary } from '../models/card-summary.model';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -89,5 +90,9 @@ export class CardService {
       `${environment.apiUrl}gastos/por-tarjeta/${tarjetaId}`,
       { params: { ...params } }
     );
+  }
+
+  getCardsSummary(): Observable<CreditCardSummary[]> {
+    return this.http.get<CreditCardSummary[]>(`${this.apiUrl}/resumen`);
   }
 }

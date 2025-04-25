@@ -15,7 +15,7 @@ import { GridComponent } from './grid/grid.component';
     NgApexchartsModule,
     MatCardModule,
     CommonModule,
-    //CardsComponent,
+    CardsComponent,
     GridComponent,
   ],
   templateUrl: './dashboard.component.html',

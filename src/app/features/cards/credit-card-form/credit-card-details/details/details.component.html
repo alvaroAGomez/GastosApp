@@ -8,22 +8,20 @@
     <div class="card-limits">
       <div class="limit-item">
         <span class="limit-label">Límite Total</span>
-        <span class="limit-value">{{ cardHeaderDetail.limiteTotal | currency:'ARS':'symbol':'1.0-0':'es-AR' }}</span>
+        <span class="limit-value">{{ cardHeaderDetail.limiteTotal | customCurrency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Gasto Actual Mes</span>
-        <span class="limit-value">{{ cardHeaderDetail.gastoActualMensual | currency:'ARS':'symbol':'1.0-0':'es-AR'
-          }}</span>
+        <span class="limit-value">{{ cardHeaderDetail.gastoActualMensual | customCurrency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Gastos Pendientes</span>
-        <span class="limit-value">{{ cardHeaderDetail.totalConsumosPendientes | currency:'ARS':'symbol':'1.0-0':'es-AR'
-          }}</span>
+        <span class="limit-value">{{ cardHeaderDetail.totalConsumosPendientes | customCurrency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Límite Disponible</span>
         <span class="limit-value" [ngClass]="getLimitColorClass(cardHeaderDetail)">
-          {{ cardHeaderDetail.limiteDisponible | currency:'ARS':'symbol':'1.0-0':'es-AR' }}
+          {{ cardHeaderDetail.limiteDisponible | customCurrency }}
         </span>
       </div>
     </div>

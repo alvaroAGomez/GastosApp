@@ -20,6 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ExpenseChartsComponent } from '../../../../../shared/components/expense-charts/expense-charts.component';
 import { NgChartsModule } from 'ng2-charts';
+import { CustomCurrencyPipe } from '../../../../../shared/pipes/custom-currency.pipe';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -53,6 +54,7 @@ export interface CreditCardDetailHeader {
     MatSelectModule,
     NgChartsModule,
     ExpenseChartsComponent,
+    CustomCurrencyPipe,
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   templateUrl: './details.component.html',

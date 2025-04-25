@@ -1,70 +1,194 @@
 /* currency-card.component.scss */
 mat-card {
-    transition: all 0.3s ease;
-    min-height: 180px;
-    background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
-    border: 1px solid #dee2e6;
-    
-    &.loading {
-      opacity: 0.6;
-    }
-  
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    }
-  }
-  
-  mat-card-header {
-    mat-card-title {
-      color: #2d3436;
-      font-weight: 600;
-      font-size: 1.2em;
-    }
-  }
-  
-  .price-container {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0;
-  }
-  
-  .price-item {
-    text-align: center;
-    
-    span {
-      display: block;
-      
-      &:first-child {
-        color: #6c757d;
-        font-size: 0.9em;
-        margin-bottom: 8px;
-        font-weight: 500;
-      }
-    }
-  }
-  
-  .price {
-    font-size: 1.5em;
-    font-weight: 700;
-    color: #28a745; /* Verde financiero */
-    letter-spacing: -0.5px;
-  }
-  
-  .update-time {
-    padding: 16px;
-    text-align: center;
-    color: #6c757d;
-    font-size: 0.85em;
-    background: rgba(0, 0, 0, 0.03);
-    border-radius: 0 0 4px 4px;
+  transition: all 0.3s ease;
+  min-height: 180px;
+  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 1px solid #dee2e6;
+
+  &.loading {
+    opacity: 0.6;
   }
 
-  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+}
 
+mat-card-header {
+  mat-card-title {
+    color: #2d3436;
+    font-weight: 600;
+    font-size: 1.2em;
+  }
+}
+
+.price-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.price-item {
+  text-align: center;
+
+  span {
+    display: block;
+
+    &:first-child {
+      color: #6c757d;
+      font-size: 0.9em;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+  }
+}
+
+.price {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #28a745; /* Verde financiero */
+  letter-spacing: -0.5px;
+}
+
+.update-time {
+  padding: 16px;
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 0 0 4px 4px;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: flex-start;
+  padding: 16px 0;
+}
+
+.card-summary {
+  min-width: 260px;
+  max-width: 320px;
+  width: 100%;
+  flex: 1 1 260px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  transition: box-shadow 0.2s;
+  border: 2px solid #e0e0e0;
+  box-sizing: border-box;
+  overflow: hidden;
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
+    border-color: #1976d2;
+  }
+}
+
+.card-title-main {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #1976d2;
+}
+
+.card-title-bank {
+  font-size: 1em;
+  color: #757575;
+  margin-left: 6px;
+}
+
+.card-last4 {
+  font-size: 1em;
+  color: #333;
+  letter-spacing: 2px;
+}
+
+.summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.summary-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 8px 0;
+  border-radius: 8px;
+  background: #f5f7fa;
+  overflow: hidden;
+}
+
+.summary-label {
+  font-size: 1em;
+  color: #555;
+  align-self: center;
+  padding-left: 4px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.summary-value {
+  font-size: 1.08em;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-left: 2px;
+  justify-self: end;
+  text-align: right;
+  min-width: 80px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.gasto {
+    background: #ffe0e0;
+    color: #d32f2f;
+  }
+  &.pendiente {
+    background: #fff3cd;
+    color: #b8860b;
+  }
+  &.disponible {
+    background: #e0ffe0;
+    color: #388e3c;
+  }
+  &.limite {
+    background: #e3e7fa;
+    color: #1a237e;
+  }
+}
+
+.summary-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+.summary-row {
+  display: contents;
+}
+
+// Opcional: Responsive para pantallas chicas
+@media (max-width: 700px) {
   .cards-container {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    flex-direction: column;
+    gap: 16px;
   }
-
+  .card-summary {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .summary-grid {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

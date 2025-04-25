@@ -1,24 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { CreditCard } from '../../../models/card.model';
 import { CardService } from '../../../services/card.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { CreditCardSummary } from '../../../models/card-summary.model';
+import { CustomCurrencyPipe } from '../../../shared/pipes/custom-currency.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cards',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, CustomCurrencyPipe],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss',
 })
 export class CardsComponent implements OnInit {
-  creditCards: CreditCard[] = [];
+  cardSummaries: CreditCardSummary[] = [];
 
-  constructor(private creditCardService: CardService) {}
+  constructor(private creditCardService: CardService, private router: Router) {}
 
   ngOnInit(): void {
-    this.creditCardService.getCards().subscribe((cards) => {
-      this.creditCards = cards;
+    this.creditCardService.getCardsSummary().subscribe((summaries) => {
+      this.cardSummaries = summaries.sort(
+        (a, b) => b.gastoActualMensual - a.gastoActualMensual
+      );
     });
+  }
+
+  goToDetail(cardId: number) {
+    this.router.navigate(['/credit-cards', cardId]);
   }
 }
