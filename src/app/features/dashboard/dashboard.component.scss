@@ -48,6 +48,19 @@
   flex: 1 1 auto;
 }
 
+.dashboard-container {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.dashboard-charts-row,
+.dashboard-toolbar-row {
+  max-width: 100vw;
+  overflow-x: auto;
+}
+
 @media (max-width: 900px) {
   .dashboard-charts-row {
     grid-template-columns: 1fr;

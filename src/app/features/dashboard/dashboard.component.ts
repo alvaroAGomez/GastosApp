@@ -57,11 +57,9 @@ export class DashboardComponent {
     chartData: { labels: [], datasets: [{ data: [] }] },
     chartOptions: {},
   };
-
   private customCurrency = new CustomCurrencyPipe();
 
   constructor(
-    private cardService: CardService,
     private dashboardExpenseService: DashboardExpenseService,
     private dialog: MatDialog
   ) {}
@@ -108,9 +106,7 @@ export class DashboardComponent {
                   );
                   const value = ctx.dataset.data[ctx.dataIndex];
                   const pct = total ? ((value / total) * 100).toFixed(1) : 0;
-                  return `${ctx.label}: ${this.customCurrency.transform(
-                    value
-                  )} (${pct}%)`;
+                  return `${this.customCurrency.transform(value)} (${pct}%)`;
                 },
               },
             },
@@ -198,7 +194,7 @@ export class DashboardComponent {
         if (this.cardsComponent) {
           this.cardsComponent.reload();
         }
-        this.loadCharts(); // <-- Actualiza los gráficos
+        this.loadCharts();
       }
     });
   }

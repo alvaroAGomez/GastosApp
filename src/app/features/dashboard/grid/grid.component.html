@@ -9,8 +9,8 @@
     </mat-form-field>
   </div>
 
-  <div class="table-scroll-x">
-    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="min-width:600px; width:100%;">
       <ng-container matColumnDef="tarjeta">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tarjeta de Crédito </th>
         <td mat-cell *matCellDef="let expense"> {{ expense.tarjeta }} </td>

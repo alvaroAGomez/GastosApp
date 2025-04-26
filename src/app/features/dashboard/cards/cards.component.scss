@@ -64,8 +64,11 @@ mat-card-header {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  justify-content: flex-start;
+  //justify-content: flex-start;
   padding: 16px 0;
+
+  justify-content: space-evenly;
+  align-items: flex-start;
 }
 
 .card-summary {
@@ -83,6 +86,11 @@ mat-card-header {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
     border-color: #1976d2;
   }
+  min-height: unset !important;
+  height: auto !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card-title-main {
@@ -176,19 +184,88 @@ mat-card-header {
 .summary-row {
   display: contents;
 }
+/* === Animación de fade-in y subida === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* === Aplicación general a las cards === */
+.cards-container mat-card {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+  transform-origin: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* === Delay dinámico para que aparezcan escalonadas === */
+@for $i from 1 through 20 {
+  .cards-container mat-card:nth-child(#{$i}) {
+    animation-delay: #{0.1 * $i}s;
+  }
+}
+
+/* === Efecto hover (solo para pantallas grandes) === */
+@media (min-width: 701px) {
+  .cards-container mat-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+}
 
 // Opcional: Responsive para pantallas chicas
+/* === Ajustes extra para mobile === */
 @media (max-width: 700px) {
   .cards-container {
     flex-direction: column;
     gap: 16px;
   }
-  .card-summary {
-    max-width: 100%;
+
+  mat-card.card-summary {
+    flex: unset !important;
+    width: 100%;
     min-width: 0;
-  }
-  .summary-grid {
+    max-width: 100%;
+    min-height: unset !important;
+    height: auto !important;
+    padding: 12px;
+    display: flex;
     flex-direction: column;
-    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  mat-card-header {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  mat-card-content {
+    padding: 0;
+    margin: 0;
+  }
+
+  mat-card-title {
+    font-size: 1em;
+  }
+
+  .summary-table {
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+
+  .summary-value {
+    font-size: 0.95em;
+    padding: 2px 6px;
+    min-width: 60px;
+  }
+
+  .summary-label {
+    font-size: 0.9em;
   }
 }
