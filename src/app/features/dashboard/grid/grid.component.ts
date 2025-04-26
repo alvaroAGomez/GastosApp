@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  OnInit,
   ViewChild,
   Output,
   EventEmitter,
@@ -68,7 +67,6 @@ export class GridComponent implements AfterViewInit {
         this.dataSource = new MatTableDataSource(expenses);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.paginator.pageSize = this.paginator.pageSizeOptions[0];
       });
   }
 
@@ -79,7 +77,6 @@ export class GridComponent implements AfterViewInit {
     this.searchValue = filterValue;
     this.dataSource.filter = filterValue;
 
-    // Reset de la paginación cuando se filtra
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -96,9 +93,6 @@ export class GridComponent implements AfterViewInit {
 
   NewExpense() {
     const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
-      // width: '600px',       // Ajusta a tu gusto
-      // maxWidth: '90vw',     // Para que no exceda el 90% del ancho de la ventana
-      //height: 'auto',
       disableClose: false,
       data: {},
     });

@@ -14,6 +14,8 @@ import { ChartConfiguration } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts';
 import { CustomCurrencyPipe } from '../../shared/pipes/custom-currency.pipe';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialog } from '@angular/material/dialog';
+import { UpcomingExpensesComponent } from '../expenses/upcoming-expenses/upcoming-expenses.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,9 +41,9 @@ export class DashboardComponent {
   isMobile = false;
   cardsExpanded = false;
 
-  @ViewChild('grid') gridComponent: any;
+  @ViewChild('grid') gridComponent?: GridComponent;
+  @ViewChild('cards') cardsComponent?: CardsComponent;
 
-  // Datos para los gráficos (puedes obtenerlos de tus servicios)
   doughnutData: any = {
     chartData: { labels: [], datasets: [{ data: [] }] },
     total: 0,
@@ -60,7 +62,8 @@ export class DashboardComponent {
 
   constructor(
     private cardService: CardService,
-    private dashboardExpenseService: DashboardExpenseService
+    private dashboardExpenseService: DashboardExpenseService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -182,14 +185,31 @@ export class DashboardComponent {
   }
 
   onNewExpense() {
-    if (this.gridComponent && this.gridComponent.NewExpense) {
-      this.gridComponent.NewExpense();
-    }
+    const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
+      disableClose: false,
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (this.gridComponent) {
+          this.gridComponent.reloadData();
+        }
+        if (this.cardsComponent) {
+          this.cardsComponent.reload();
+        }
+        this.loadCharts(); // <-- Actualiza los gráficos
+      }
+    });
   }
 
   onExpenseAdded() {
-    if (this.gridComponent && this.gridComponent.reloadData) {
+    if (this.gridComponent) {
       this.gridComponent.reloadData();
     }
+    if (this.cardsComponent) {
+      this.cardsComponent.reload();
+    }
+    this.loadCharts(); // <-- Actualiza los gráficos
   }
 }

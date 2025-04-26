@@ -7,10 +7,10 @@ import {
   CreditCardAnnualGeneralSummary,
   CreditCardMonthlyDetailSummary,
 } from '../models/card.model';
-import { Expense } from '../models/expense.model';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CreditCardSummary } from '../models/card-summary.model';
+import { Expense } from '../models/expense.model';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;

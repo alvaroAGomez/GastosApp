@@ -1,12 +1,12 @@
 import { Category } from './category.model';
 export interface Expense {
-  id: number;
+  id?: number;
   monto: number;
-  fecha: Date;
+  fecha: Date | string;
   descripcion: string;
-  categoria: string;
-  cuotas?: number;
-  cuotasRestantes?: number;
-  cardId: string;
-  nameCard: string;
+  categoriaGastoId: number;
+  tarjetaCreditoId?: number;
+  tarjetaDebitoId?: number;
+  esEnCuotas: boolean;
+  numeroCuotas?: number;
 }

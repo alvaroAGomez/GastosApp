@@ -126,7 +126,6 @@ export class CreditCardFormModalComponent {
 
   save() {
     if (this.cardForm.valid) {
-      // Asegura que limiteCredito sea number
       const formValue = {
         ...this.cardForm.value,
         limiteCredito: Number(this.cardForm.value.limiteCredito),

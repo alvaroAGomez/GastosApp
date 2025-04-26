@@ -20,6 +20,10 @@ export class CardsComponent implements OnInit {
   constructor(private creditCardService: CardService, private router: Router) {}
 
   ngOnInit(): void {
+    this.reload();
+  }
+
+  reload(): void {
     this.creditCardService.getCardsSummary().subscribe((summaries) => {
       this.cardSummaries = summaries.sort(
         (a, b) => b.gastoActualMensual - a.gastoActualMensual

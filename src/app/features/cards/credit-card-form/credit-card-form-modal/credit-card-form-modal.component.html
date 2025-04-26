@@ -66,7 +66,7 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-raised-button color="primary" class="custom-button-cancelar"
+    <button mat-raised-button color="primary" type="button" class="custom-button-cancelar"
       (click)="dialogRef.close()">Cancelar</button>
     <button mat-raised-button color="primary" type="submit" class="custom-button" [disabled]="cardForm.invalid">{{ mode
       === 'edit' ? 'Actualizar' : 'Guardar' }}</button>

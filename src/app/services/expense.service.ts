@@ -2,21 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Expense } from '../models/expense.model';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExpenseService {
+  private apiUrl = environment.apiUrl + 'gastos';
+
   constructor(private http: HttpClient) {}
 
-  private expenses: Expense[] = [];
-
-  getExpenses(): Expense[] {
-    return this.expenses.sort((a, b) => b.id - a.id); // Ordenados de más nuevos a más viejos
-  }
-
-  private expensesUrl = '/expenses.json';
-  getExpensesTC(): Observable<Expense[]> {
-    return this.http.get<Expense[]>(this.expensesUrl);
+  crearGasto(gasto: Expense): Observable<any> {
+    return this.http.post<any>(this.apiUrl, gasto);
   }
 }
