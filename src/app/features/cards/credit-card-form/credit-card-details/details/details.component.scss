@@ -17,60 +17,203 @@ mat-paginator {
 
 .card-details-header {
   width: 100%;
-  background-color: #e0e0e0; /* Color de fondo ligeramente más oscuro */
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto 24px auto;
+  background: #f0f2f4; // color principal de la tarjeta
+  padding: 28px 24px 24px 24px;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.1);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .card-name {
-  font-size: 28px;
+  font-size: 2.1em;
   font-weight: bold;
-  margin-bottom: 12px;
+  margin-bottom: 32px; // más espacio con los valores
   text-align: center;
-  color: #333;
+  color: #105aa3;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 8px rgba(44, 62, 80, 0.1);
+  .bank-name {
+    color: #757d86;
+    font-size: 0.95em;
+    font-weight: 500;
+    margin-left: 8px;
+    letter-spacing: 0;
+    text-shadow: none;
+  }
 }
-
-/* .bank-name {
-  font-weight: normal;
-  color: #666;
-  margin-left: 8px;
-} */
 
 .card-limits {
   display: flex;
   justify-content: space-between;
-  text-align: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 900px;
+  gap: 18px;
+  margin-top: 0;
+  overflow-x: auto;
 }
 
 .limit-item {
-  flex: 1;
-  /* Para que cada uno tenga un poco de separación lateral */
-  padding: 0 8px;
+  flex: 1 1 0;
+  padding: 0 10px;
+  border-radius: 10px;
+  margin: 0 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 150px;
+  transition: box-shadow 0.2s;
 }
 
 .limit-label {
   display: block;
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 4px;
+  font-size: 1.08em;
+  color: #6c7a89;
+  margin-bottom: 6px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .limit-value {
-  font-size: 20px;
+  font-size: 1.35em;
   font-weight: bold;
-  color: #000;
+  border-radius: 6px;
+  padding: 2px 12px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+  min-width: 100px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(44, 62, 80, 0.06);
+  color: #1976d2;
+  &.limit-red {
+    background: #ffe0e0;
+    color: #d32f2f !important;
+    text-shadow: 0 1px 0 #fff;
+  }
+  &.limit-orange {
+    background: #fff8e1;
+    color: #b8860b !important;
+    text-shadow: 0 1px 0 #fff;
+  }
+  &.limit-green {
+    background: #e0ffe0;
+    color: #388e3c !important;
+    text-shadow: 0 1px 0 #fff;
+  }
+  &.limit-total {
+    background: #e3e7fa;
+    color: #283593;
+    text-shadow: 0 1px 0 #fff;
+  }
+  &.limit-mes {
+    background: #ffe0e0;
+    color: #d32f2f;
+    text-shadow: 0 1px 0 #fff;
+  }
+  &.limit-pendiente {
+    background: #fff8e1;
+    color: #b8860b;
+    text-shadow: 0 1px 0 #fff;
+  }
 }
 
-.limit-red {
-  color: #d32f2f !important;
+@media (max-width: 900px) {
+  .card-details-header {
+    max-width: 100vw;
+    padding: 18px 4px 14px 4px;
+  }
+  .card-limits {
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+    max-width: 100vw;
+    overflow-x: visible;
+  }
+  .limit-item {
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+  }
 }
-.limit-orange {
-  color: #ff9800 !important;
+
+@media (max-width: 600px) {
+  .card-details-header {
+    padding: 10px 2px 8px 2px;
+    border-radius: 12px;
+  }
+  .card-name {
+    font-size: 1.25em;
+    margin-bottom: 14px;
+  }
+  .card-limits {
+    flex-direction: column;
+    gap: 10px;
+    max-width: 100vw;
+  }
+  .limit-item {
+    padding: 0 4px;
+    min-width: 0;
+  }
+  .limit-label {
+    font-size: 0.98em;
+  }
+  .limit-value {
+    font-size: 1.05em;
+    padding: 2px 6px;
+    min-width: 70px;
+  }
 }
-.limit-green {
-  color: #388e3c !important;
+
+@media (max-width: 900px) {
+  .card-limits {
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+  }
+  .limit-item {
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .card-details-header {
+    padding: 14px 6px 12px 6px;
+    border-radius: 12px;
+  }
+  .card-name {
+    font-size: 1.25em;
+    margin-bottom: 10px;
+  }
+  .card-limits {
+    flex-direction: column;
+    gap: 10px;
+    max-width: 100vw;
+  }
+  .limit-item {
+    padding: 0 4px;
+    min-width: 0;
+  }
+  .limit-label {
+    font-size: 0.98em;
+  }
+  .limit-value {
+    font-size: 1.05em;
+    padding: 2px 6px;
+    min-width: 70px;
+  }
 }
 
 .filter-form {

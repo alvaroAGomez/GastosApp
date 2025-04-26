@@ -8,15 +8,15 @@
     <div class="card-limits">
       <div class="limit-item">
         <span class="limit-label">Límite Total</span>
-        <span class="limit-value">{{ cardHeaderDetail.limiteTotal | customCurrency }}</span>
+        <span class="limit-value limit-total">{{ cardHeaderDetail.limiteTotal | customCurrency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Gasto Actual Mes</span>
-        <span class="limit-value">{{ cardHeaderDetail.gastoActualMensual | customCurrency }}</span>
+        <span class="limit-value limit-mes">{{ cardHeaderDetail.gastoActualMensual | customCurrency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Gastos Pendientes</span>
-        <span class="limit-value">{{ cardHeaderDetail.totalConsumosPendientes | customCurrency }}</span>
+        <span class="limit-value limit-pendiente">{{ cardHeaderDetail.totalConsumosPendientes | customCurrency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Límite Disponible</span>
@@ -27,40 +27,52 @@
     </div>
   </div>
 
-
-  <!-- BUSCADOR PARA FILTRAR GASTOS -->
-  <div class="headerBuscador">
-    <form [formGroup]="filterForm" class="filter-form" (ngSubmit)="onSearch()" autocomplete="off">
-      <mat-form-field>
-        <mat-label>Desde</mat-label>
-        <input matInput [matDatepicker]="picker1" formControlName="fechaDesde">
-        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Hasta</mat-label>
-        <input matInput [matDatepicker]="picker2" formControlName="fechaHasta">
-        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker #picker2></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Categoría</mat-label>
-        <mat-select formControlName="categoria">
-          <mat-option value="Todas">Todas</mat-option>
-          <mat-option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nombre }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Cuotas Restantes</mat-label>
-        <input matInput type="number" formControlName="cuotasRestantes" min="0">
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" class="custom-button">Buscar</button>
-      <button mat-raised-button color="primary" type="button" class="custom-button-cancelar"
-        (click)="clearFilters()">Limpiar
-        filtros</button>
-    </form>
+  <div class="details-toolbar-row" style="margin-bottom: 18px; display: flex; align-items: center; gap: 16px;">
+    <button mat-raised-button color="primary" type="button" class="custom-button" (click)="onNewExpense()">
+      Nuevo Gasto
+    </button>
+    <span class="toolbar-spacer" style="flex: 1 1 auto;"></span>
+    <mat-button-toggle-group [value]="showCharts ? 'charts' : 'table'" (change)="toggleView($event)" exclusive>
+      <mat-button-toggle value="table">Ver como Tabla</mat-button-toggle>
+      <mat-button-toggle value="charts">Ver como Gráficos</mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
+</div>
 
+<!-- BUSCADOR PARA FILTRAR GASTOS -->
+<div class="headerBuscador" *ngIf="!showCharts">
+  <form [formGroup]="filterForm" class="filter-form" (ngSubmit)="onSearch()" autocomplete="off">
+    <mat-form-field>
+      <mat-label>Desde</mat-label>
+      <input matInput [matDatepicker]="picker1" formControlName="fechaDesde">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="picker2" formControlName="fechaHasta">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="categoria">
+        <mat-option value="Todas">Todas</mat-option>
+        <mat-option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nombre }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Cuotas Restantes</mat-label>
+      <input matInput type="number" formControlName="cuotasRestantes" min="0">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" class="custom-button">Buscar</button>
+    <button mat-raised-button color="primary" type="button" class="custom-button-cancelar"
+      (click)="clearFilters()">Limpiar
+      filtros</button>
+  </form>
+</div>
+
+<div *ngIf="!showCharts">
   <!-- TABLA DE GASTOS -->
   <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)">
 
@@ -115,6 +127,13 @@
     <!-- FILAS DE ENCABEZADO Y DE DATOS -->
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <ng-container *ngIf="dataSource.data.length === 0">
+      <tr>
+        <td [attr.colspan]="displayedColumns.length" style="text-align:center; padding: 24px;">
+          No hay datos suficientes
+        </td>
+      </tr>
+    </ng-container>
   </mat-table>
 
   <!-- PAGINACIÓN -->
@@ -123,31 +142,41 @@
   </mat-paginator>
 </div>
 
+<div *ngIf="showCharts">
+  <div class="charts-row">
+    <div class="chart-cell">
+      <h2 style="text-align:center;">Distribución por Categoría</h2>
+      <p style="text-align:center;">Muestra cómo se reparten los gastos de la tarjeta en el período seleccionado.</p>
+      <ng-container>
+        <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialPieChartFilters"
+          [allowedCharts]="['doughnut']">
+        </app-expense-charts>
+      </ng-container>
+
+    </div>
+    <div class="chart-cell">
+      <h2 style="text-align:center;">Comparación por Categoría</h2>
+      <p style="text-align:center;">Compara cuánto se gasta por cada categoría en el período seleccionado.</p>
+      <ng-container>
+        <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialBarChartFilters"
+          [allowedCharts]="['bar']">
+        </app-expense-charts>
+      </ng-container>
+
+    </div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-cell">
+      <h2 style="text-align:center;">Tendencia de Gastos</h2>
+      <p style="text-align:center;">Evolución mensual de los gastos de la tarjeta en el período seleccionado.</p>
+      <ng-container>
+        <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialLineChartFilters"
+          [allowedCharts]="['line']">
+        </app-expense-charts>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+
 <br>
-
-<div class="charts-row">
-  <div class="chart-cell">
-    <h2 style="text-align:center;">Distribución por Categoría</h2>
-    <p style="text-align:center;">Muestra cómo se reparten los gastos de la tarjeta en el período seleccionado.</p>
-    <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialPieChartFilters"
-      [allowedCharts]="['doughnut']">
-    </app-expense-charts>
-  </div>
-  <div class="chart-cell">
-    <h2 style="text-align:center;">Comparación por Categoría</h2>
-    <p style="text-align:center;">Compara cuánto se gasta por cada categoría en el período seleccionado.</p>
-    <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialBarChartFilters"
-      [allowedCharts]="['bar']">
-    </app-expense-charts>
-  </div>
-</div>
-
-<div class="charts-row">
-  <div class="chart-cell">
-    <h2 style="text-align:center;">Tendencia de Gastos</h2>
-    <p style="text-align:center;">Evolución mensual de los gastos de la tarjeta en el período seleccionado.</p>
-    <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialLineChartFilters"
-      [allowedCharts]="['line']">
-    </app-expense-charts>
-  </div>
-</div>

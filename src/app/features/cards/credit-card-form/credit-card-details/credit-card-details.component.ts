@@ -26,7 +26,6 @@ export interface CardExpense {
     MatSelectModule,
     MatOptionModule,
     MatFormFieldModule,
-    // CurrencyPipe,
     CustomCurrencyPipe,
     CommonModule,
     RouterModule,

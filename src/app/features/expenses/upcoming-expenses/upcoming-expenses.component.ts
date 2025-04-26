@@ -88,6 +88,13 @@ export class UpcomingExpensesComponent {
     this.createForm();
     this.loadCategorias();
     this.loadTarjetas();
+    // Mover esto después de createForm()
+    if (this.data?.tarjetaCreditoId && this.data?.tarjetaCreditoDisabled) {
+      this.upcomingExpenseForm
+        .get('tarjetaCreditoId')
+        ?.setValue(this.data.tarjetaCreditoId);
+      this.upcomingExpenseForm.get('tarjetaCreditoId')?.disable();
+    }
   }
 
   createForm() {
@@ -99,8 +106,24 @@ export class UpcomingExpensesComponent {
       tarjetaCreditoId: ['', [Validators.required]],
       tarjetaDebitoId: [],
       esEnCuotas: [false],
-      numeroCuotas: [''],
+      numeroCuotas: [{ value: '', disabled: true }],
     });
+
+    // Controlar habilitación y validación de numeroCuotas según esEnCuotas
+    this.upcomingExpenseForm
+      .get('esEnCuotas')
+      ?.valueChanges.subscribe((enCuotas: boolean) => {
+        const cuotasCtrl = this.upcomingExpenseForm.get('numeroCuotas');
+        if (enCuotas) {
+          cuotasCtrl?.enable();
+          cuotasCtrl?.setValidators([Validators.required, Validators.min(1)]);
+        } else {
+          cuotasCtrl?.reset();
+          cuotasCtrl?.disable();
+          cuotasCtrl?.clearValidators();
+        }
+        cuotasCtrl?.updateValueAndValidity();
+      });
   }
 
   loadCategorias() {
@@ -129,8 +152,8 @@ export class UpcomingExpensesComponent {
         .afterClosed()
         .subscribe((confirmed) => {
           if (confirmed === true) {
-            // Solo guardar si es true explícitamente
-            const formValue = this.upcomingExpenseForm.value;
+            // Usar getRawValue para incluir campos deshabilitados
+            const formValue = this.upcomingExpenseForm.getRawValue();
             formValue.esEnCuotas = !!formValue.tarjetaCreditoId;
             if (!formValue.tarjetaCreditoId) {
               formValue.numeroCuotas = undefined;

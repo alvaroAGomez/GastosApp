@@ -21,6 +21,9 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ExpenseChartsComponent } from '../../../../../shared/components/expense-charts/expense-charts.component';
 import { NgChartsModule } from 'ng2-charts';
 import { CustomCurrencyPipe } from '../../../../../shared/pipes/custom-currency.pipe';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialog } from '@angular/material/dialog';
+import { UpcomingExpensesComponent } from '../../../../expenses/upcoming-expenses/upcoming-expenses.component';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -55,6 +58,7 @@ export interface CreditCardDetailHeader {
     NgChartsModule,
     ExpenseChartsComponent,
     CustomCurrencyPipe,
+    MatButtonToggleModule,
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   templateUrl: './details.component.html',
@@ -97,12 +101,14 @@ export class DetailsComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'desc';
   categories: { id: number; nombre: string }[] = [];
   selectedCardId: number | null = null;
+  showCharts = false;
 
   constructor(
     private route: ActivatedRoute,
     private cardService: CardService,
     private fb: FormBuilder,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private dialog: MatDialog
   ) {
     this.filterForm = this.fb.group({
       fechaDesde: [''],
@@ -125,7 +131,12 @@ export class DetailsComponent implements OnInit {
           this.cardLimit = header.limiteTotal;
           this.currentExpense = header.gastoActualMensual;
           this.banco = header.banco;
+          // Cargar gastos solo después de obtener el header (y selectedCardId)
+          this.loadExpenses();
         });
+    } else {
+      // Si no hay cardId, igual intentar cargar gastos (no debería pasar)
+      this.loadExpenses();
     }
 
     this.loadCategories();
@@ -149,7 +160,8 @@ export class DetailsComponent implements OnInit {
       direction: 'desc',
     });
 
-    this.loadExpenses();
+    // Quitar el this.loadExpenses() de aquí para evitar doble llamada
+    // this.loadExpenses();
   }
 
   loadCategories() {
@@ -246,5 +258,26 @@ export class DetailsComponent implements OnInit {
   }
   get initialLineChartFilters() {
     return { tarjeta: this.selectedCardId ?? undefined };
+  }
+
+  toggleView(event: any) {
+    this.showCharts = event.value === 'charts';
+  }
+
+  onNewExpense() {
+    this.dialog
+      .open(UpcomingExpensesComponent, {
+        disableClose: false,
+        data: {
+          tarjetaCreditoId: this.selectedCardId,
+          tarjetaCreditoDisabled: true,
+        },
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.loadExpenses();
+        }
+      });
   }
 }

@@ -7,6 +7,15 @@ import { CustomCurrencyPipe } from '../../../shared/pipes/custom-currency.pipe';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
+export interface CreditCardDetailHeader {
+  tarjetaId: number;
+  nombreTarjeta: string;
+  banco?: string;
+  limiteTotal: number;
+  gastoActualMensual: number;
+  totalConsumosPendientes: number;
+  limiteDisponible: number;
+}
 @Component({
   selector: 'app-cards',
   standalone: true,
@@ -33,5 +42,16 @@ export class CardsComponent implements OnInit {
 
   goToDetail(cardId: number) {
     this.router.navigate(['/credit-cards', cardId]);
+  }
+
+  getLimitColorClass(header: CreditCardSummary | undefined): string {
+    if (!header) return '';
+    const percent =
+      header.limiteTotal > 0
+        ? (header.limiteDisponible / header.limiteTotal) * 100
+        : 0;
+    if (percent <= 15) return 'limit-red';
+    if (percent > 15 && percent <= 55) return 'limit-orange';
+    return 'limit-green';
   }
 }

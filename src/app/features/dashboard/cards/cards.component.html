@@ -22,7 +22,8 @@
         </div>
         <div class="summary-row">
           <span class="summary-label">Limite Disponible</span>
-          <span class="summary-value disponible">{{ card.limiteDisponible | customCurrency }}</span>
+          <span class="summary-value disponible" [ngClass]="getLimitColorClass(card)">{{
+            card.limiteDisponible | customCurrency }}</span>
         </div>
       </div>
     </mat-card-content>
