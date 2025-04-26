@@ -7,41 +7,40 @@
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
-
-    <button mat-raised-button color="primary" type="button" class="custom-button" (click)="NewExpense()">
-      Nuevo Gasto
-    </button>
+    <!-- Elimina el botón Nuevo Gasto de aquí -->
   </div>
 
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-    <ng-container matColumnDef="tarjeta">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tarjeta de Crédito </th>
-      <td mat-cell *matCellDef="let expense"> {{ expense.tarjeta }} </td>
-    </ng-container>
+  <div class="table-scroll-x">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <ng-container matColumnDef="tarjeta">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tarjeta de Crédito </th>
+        <td mat-cell *matCellDef="let expense"> {{ expense.tarjeta }} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="categoria">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </th>
-      <td mat-cell *matCellDef="let expense"> {{ expense.categoria }} </td>
-    </ng-container>
+      <ng-container matColumnDef="categoria">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </th>
+        <td mat-cell *matCellDef="let expense"> {{ expense.categoria }} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="monto">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto </th>
-      <td mat-cell *matCellDef="let expense"> {{ expense.monto | customCurrency }} </td>
-    </ng-container>
+      <ng-container matColumnDef="monto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto </th>
+        <td mat-cell *matCellDef="let expense"> {{ expense.monto | customCurrency }} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="fecha">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
-      <td mat-cell *matCellDef="let expense"> {{ expense.fecha | date:'dd/MM/yyyy' }} </td>
-    </ng-container>
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+        <td mat-cell *matCellDef="let expense"> {{ expense.fecha | date:'dd/MM/yyyy' }} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="descripcion">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
-      <td mat-cell *matCellDef="let expense"> {{ expense.descripcion }} </td>
-    </ng-container>
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+        <td mat-cell *matCellDef="let expense"> {{ expense.descripcion }} </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
 
   <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
     class="custom-paginator"></mat-paginator>

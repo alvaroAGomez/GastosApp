@@ -1,4 +1,53 @@
 <div class="dashboard-container">
-  <app-cards></app-cards>
-  <app-grid></app-grid>
+  <ng-container *ngIf="isMobile; else desktopCards">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="cardsExpanded">
+        <mat-expansion-panel-header (click)="cardsExpanded = !cardsExpanded">
+          <mat-panel-title>
+            Tarjetas de Crédito
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-cards></app-cards>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
+  <ng-template #desktopCards>
+    <app-cards></app-cards>
+  </ng-template>
+
+  <div class="dashboard-toolbar-row">
+    <button mat-raised-button color="primary" type="button" class="custom-button" (click)="onNewExpense()">
+      Nuevo Gasto
+    </button>
+    <span class="toolbar-spacer"></span>
+    <mat-button-toggle-group [value]="showCharts ? 'charts' : 'table'" (change)="toggleView($event)" exclusive>
+      <mat-button-toggle value="table">Ver como Tabla</mat-button-toggle>
+      <mat-button-toggle value="charts">Ver como Gráficos</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div *ngIf="!showCharts">
+    <app-grid #grid (expenseAdded)="onExpenseAdded()"></app-grid>
+  </div>
+
+  <div *ngIf="showCharts" class="dashboard-charts-row">
+    <div class="dashboard-charts-col">
+      <h2 class="chart-title">Gastos por Categoría</h2>
+      <p class="chart-desc">Distribución de los gastos del mes actual agrupados por categoría.</p>
+      <app-doughnut-category-chart [chartData]="doughnutData.chartData" [total]="doughnutData.total"
+        [chartOptions]="doughnutData.chartOptions"></app-doughnut-category-chart>
+    </div>
+    <div class="dashboard-charts-col">
+      <h2 class="chart-title">Evolución Mensual</h2>
+      <p class="chart-desc">Total gastado mes a mes durante el último año.</p>
+      <app-bar-monthly-evolution-chart [chartData]="barData.chartData"
+        [chartOptions]="barData.chartOptions"></app-bar-monthly-evolution-chart>
+    </div>
+    <div class="dashboard-charts-col" style="grid-column: 1 / span 2;">
+      <h2 class="chart-title">Gastos por Tarjeta de Crédito</h2>
+      <p class="chart-desc">Proporción de gastos del mes actual por cada tarjeta de crédito.</p>
+      <app-pie-card-distribution-chart [chartData]="pieData.chartData"
+        [chartOptions]="pieData.chartOptions"></app-pie-card-distribution-chart>
+    </div>
+  </div>
 </div>

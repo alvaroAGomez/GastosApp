@@ -92,7 +92,7 @@
     <ng-container matColumnDef="monto">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Monto</mat-header-cell>
       <mat-cell *matCellDef="let expense">
-        {{ expense.monto | currency:'ARS':'symbol':'1.0-0':'es-AR' }}
+        {{ expense.monto | customCurrency }}
       </mat-cell>
     </ng-container>
 

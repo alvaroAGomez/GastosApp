@@ -1,0 +1,18 @@
+.chart-container {
+  width: 100%;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.no-data {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #888;
+  font-size: 1.1em;
+  text-align: center;
+  width: 100%;
+}

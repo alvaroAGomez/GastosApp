@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,7 +26,7 @@ import { Observable } from 'rxjs';
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss'],
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements AfterViewInit {
   @ViewChild('drawer') drawer!: MatSidenav;
   isSidenavOpen = true;
 
@@ -40,6 +40,18 @@ export class MainLayoutComponent {
         map((result) => result.matches),
         shareReplay()
       );
+  }
+
+  ngAfterViewInit() {
+    this.isMobile$.subscribe((isMobile) => {
+      this.isSidenavOpen = !isMobile;
+      if (isMobile && this.drawer.opened) {
+        this.drawer.close();
+      }
+      if (!isMobile && !this.drawer.opened) {
+        this.drawer.open();
+      }
+    });
   }
 
   toggleMenu() {

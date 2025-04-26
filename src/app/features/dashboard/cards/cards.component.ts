@@ -5,11 +5,12 @@ import { MatCardModule } from '@angular/material/card';
 import { CreditCardSummary } from '../../../models/card-summary.model';
 import { CustomCurrencyPipe } from '../../../shared/pipes/custom-currency.pipe';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-cards',
   standalone: true,
-  imports: [CommonModule, MatCardModule, CustomCurrencyPipe],
+  imports: [CommonModule, MatCardModule, CustomCurrencyPipe, MatIconModule],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss',
 })

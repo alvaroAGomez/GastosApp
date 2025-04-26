@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { DashboardExpense } from '../../../models/dashboard-expense.model';
 import { DashboardExpenseService } from '../../../services/dashboard-expense.service';
 import { CustomCurrencyPipe } from '../../../shared/pipes/custom-currency.pipe';
@@ -43,6 +50,7 @@ export class GridComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @Output() expenseAdded = new EventEmitter<void>();
 
   constructor(
     private dashboardExpenseService: DashboardExpenseService,
@@ -50,6 +58,10 @@ export class GridComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+    this.reloadData();
+  }
+
+  reloadData() {
     this.dashboardExpenseService
       .getDashboardExpenses()
       .subscribe((expenses) => {
@@ -93,7 +105,7 @@ export class GridComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log(result);
+        this.expenseAdded.emit();
       }
     });
   }

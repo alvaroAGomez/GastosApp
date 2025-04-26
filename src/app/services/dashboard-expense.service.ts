@@ -13,4 +13,22 @@ export class DashboardExpenseService {
       `${environment.apiUrl}gastos/dashboard/tarjetas`
     );
   }
+
+  getDoughnutCategoryChart(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}gastos/charts/doughnut-category`
+    );
+  }
+
+  getBarMonthlyEvolutionChart(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}gastos/charts/bar-monthly-evolution`
+    );
+  }
+
+  getPieCardDistributionChart(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}gastos/charts/pie-card-distribution`
+    );
+  }
 }

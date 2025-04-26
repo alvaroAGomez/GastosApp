@@ -1,19 +1,33 @@
 .grid-container {
-    width: 100%;
-    margin-top: 20px;
-    padding: 16px; 
-  }
-  
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px;
+  overflow-x: auto;
+}
+
+.table-scroll-x {
+  width: 100%;
+  overflow-x: auto;
+}
 
 /* Media query para pantallas pequeñas */
 @media (max-width: 600px) {
   .header {
+    width: 100%;
     flex-direction: column;
     align-items: stretch;
-
-    button {
-      width: 100%;
-    }
+  }
+  button {
+    width: 100%;
   }
 }
-
+@media (max-width: 900px) {
+  .mat-elevation-z8 {
+    min-width: 600px;
+  }
+  .grid-container {
+    min-width: 340px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
