@@ -2,7 +2,7 @@
   <mat-table [dataSource]="allExpenses">
     <ng-container matColumnDef="month">
       <mat-header-cell *matHeaderCellDef>Mes</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.month }}</mat-cell>
+      <mat-cell *matCellDef="let row">{{ row.month | uppercase }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="total">

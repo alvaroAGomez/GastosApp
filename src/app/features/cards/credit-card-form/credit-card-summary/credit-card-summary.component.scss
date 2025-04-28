@@ -1,47 +1,106 @@
 .summary-grid {
   display: block;
   width: 100%;
-  overflow-x: auto;
+  max-width: 700px; // ancho máximo para centrar el contenido
+  margin: 0 auto !important; // centra horizontalmente
+  background: transparent !important;
+  border-radius: 0 0 12px 12px;
+  box-shadow: none;
+  padding: 12px 32px 0 32px !important; // padding lateral generoso
+  box-sizing: border-box;
 }
 
 mat-table {
   width: 100%;
-  border-collapse: collapse;
+  min-width: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 0 12px 12px;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  table-layout: fixed;
 }
 
-mat-header-cell, mat-cell, mat-footer-cell {
-  padding: 12px;
+mat-header-cell,
+mat-cell,
+mat-footer-cell {
+  padding: 8px 6px !important;
   text-align: center;
+  background: transparent !important;
+  border-bottom: 1px solid #e0e4ea !important; // línea divisoria clara
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 mat-header-cell {
   font-weight: bold;
-  
+  border-bottom: 2px solid #b0b8c9 !important; // línea más fuerte para header
 }
 
 mat-footer-cell {
   font-weight: bold;
 }
 
-
 mat-footer-row {
   font-size: 1.2rem;
 }
 
 .total-footer {
-  margin-top: 20px;
+  margin-top: 0;
   text-align: right;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: bold;
+  background: transparent !important;
+  border-radius: 0 0 12px 12px;
+  padding: 12px 18px 18px 0 !important;
+  color: #1976d2;
+  box-shadow: none !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .summary-grid {
+    max-width: 100vw;
+    padding: 10px 4vw 0 4vw !important;
+  }
 }
 
 @media (max-width: 768px) {
+  .summary-grid {
+    padding: 8px 2vw 0 2vw !important;
+  }
   .total-footer {
     font-size: 1rem;
+    padding: 8px 4px 12px 0 !important;
   }
-  
-  mat-header-cell, mat-cell, mat-footer-cell {
-    padding: 8px;
+  mat-header-cell,
+  mat-cell,
+  mat-footer-cell {
+    padding: 6px 2px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .summary-grid {
+    max-width: 100vw;
+    padding: 8px 2vw 0 2vw !important;
+  }
+  .total-footer {
+    font-size: 1rem;
+    padding: 8px 2vw 12px 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  mat-header-cell,
+  mat-cell,
+  mat-footer-cell {
+    padding: 6px 2px !important;
   }
 }
 

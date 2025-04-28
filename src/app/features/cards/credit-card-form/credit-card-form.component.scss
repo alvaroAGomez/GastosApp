@@ -1,5 +1,7 @@
 .summary-section {
   margin-bottom: 20px;
+  background: transparent;
+  box-shadow: none;
 }
 
 button {
@@ -10,8 +12,8 @@ button {
 
 .header {
   display: flex;
-  justify-content: space-between;
-  gap: 20px; // Espacio igual entre botones
+  justify-content: flex-start;
+  gap: 20px;
   margin-bottom: 20px;
 }
 
@@ -29,4 +31,253 @@ mat-select {
 
 mat-label {
   font-weight: bold;
+}
+
+.summary-card {
+  background: #f5fafd;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0001;
+  margin-bottom: 32px;
+  padding: 16px 24px 16px 24px;
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.summary-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-left: 8px;
+  color: #1976d2;
+}
+
+.summary-icon {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.card-item {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px #0001;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: box-shadow 0.2s;
+  border: 1px solid #e3e8f0;
+}
+
+.card-item:hover {
+  box-shadow: 0 4px 16px #0002;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.card-info-icon {
+  font-size: 22px;
+  color: #1976d2;
+  vertical-align: middle;
+  align-self: center;
+  margin-right: 2px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #1976d2;
+  transition: text-decoration 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.card-title.clickable:hover {
+  text-decoration: underline;
+  color: #125399;
+}
+
+.bank-name {
+  color: #607d8b;
+  font-size: 0.95rem;
+  margin-left: 4px;
+}
+
+.card-table {
+  overflow-x: auto;
+  margin-bottom: 10px;
+}
+.card-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.card-table th,
+.card-table td {
+  padding: 4px 8px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+.card-table th {
+  background: #f1f5f9;
+  font-weight: bold;
+}
+
+.total-footer {
+  margin-top: 10px;
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.summary-card-custom {
+  background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+  border-radius: 12px;
+  margin-bottom: 32px;
+  padding: 16px 24px 16px 24px;
+  color: #fff;
+  box-shadow: 0 2px 8px #0001;
+}
+
+.summary-header-custom {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.summary-card-custom app-credit-card-summary {
+  background: transparent;
+  color: #fff;
+}
+
+.summary-card-custom .total-footer {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.colored-total {
+  background: #1976d2;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-top: 10px;
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.summary-card-modern {
+  background: #f8fafc;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  padding: 0; // sin padding para que la grilla quede alineada
+  color: #222;
+  box-shadow: 0 1px 6px #0001;
+  border: none;
+  transition: box-shadow 0.2s;
+}
+
+.summary-header-modern {
+  display: flex;
+  align-items: center;
+  padding: 18px 24px 12px 24px;
+  font-size: 1.15rem;
+  font-weight: bold;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 12px 12px 0 0;
+  transition: background 0.2s;
+}
+.summary-header-modern:hover {
+  background: #e3e8f0;
+}
+.summary-header-modern.collapsed {
+  border-radius: 12px;
+}
+
+button[mat-icon-button] {
+  background: #e3e8f0;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+button[mat-icon-button]:hover {
+  background: #cfd8dc;
+}
+
+.summary-card-modern app-credit-card-summary .summary-grid {
+  background: #f8fafc !important;
+  box-shadow: none !important;
+  border-radius: 0 0 12px 12px;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.summary-card-modern app-credit-card-summary mat-table {
+  background: #f8fafc !important;
+  box-shadow: none !important;
+  border-radius: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+.summary-card-modern app-credit-card-summary mat-header-cell,
+.summary-card-modern app-credit-card-summary mat-cell,
+.summary-card-modern app-credit-card-summary mat-footer-cell {
+  background: #f8fafc !important;
+  border-bottom: none !important;
+  padding: 10px 8px !important;
+}
+
+.summary-card-modern app-credit-card-summary .total-footer {
+  background: #f8fafc !important;
+  border-radius: 0 0 12px 12px;
+  margin: 0 !important;
+  padding: 12px 24px 18px 0 !important;
+  font-size: 1.15rem;
+  color: #1976d2;
+  box-shadow: none !important;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .summary-card {
+    margin-bottom: 16px;
+  }
+  .summary-card-custom {
+    margin-bottom: 16px;
+  }
+  .summary-card-modern {
+    margin-bottom: 16px;
+  }
 }

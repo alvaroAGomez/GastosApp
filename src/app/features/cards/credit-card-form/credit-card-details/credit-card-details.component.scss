@@ -1,5 +1,13 @@
 mat-expansion-panel {
   margin-bottom: 16px;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px #0001;
+  background: #fff;
+  transition: box-shadow 0.2s;
+}
+
+mat-expansion-panel:hover {
+  box-shadow: 0 4px 16px #0002;
 }
 
 .total {
@@ -12,11 +20,14 @@ mat-expansion-panel {
   text-align: right;
   font-size: 1.2rem;
   font-weight: bold;
+  background: #f5fafd;
+  border-radius: 6px;
+  padding: 8px 16px;
 }
 
 .expansion-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
@@ -46,8 +57,16 @@ mat-expansion-panel {
   justify-content: space-between;
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 @media (max-width: 800px) {
   .expansion-grid {
+    gap: 8px;
     grid-template-columns: 1fr;
   }
   .cell-text {

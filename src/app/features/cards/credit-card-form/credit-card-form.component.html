@@ -6,7 +6,6 @@
     Tarjeta</button>
 </div>
 
-
 <div class="year-selector">
   <mat-label>Selecciona el Año:</mat-label>
   <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange($event)">
@@ -16,21 +15,49 @@
   </mat-select>
 </div>
 
-
 <div class="credit-cards-container">
-  <mat-expansion-panel expanded class="summary-section">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Resumen General Anual (todas las tarjetas)
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div *ngIf="annualGeneralSummary">
+  <div class="summary-card-modern">
+    <div class="summary-header-modern" (click)="toggleGeneralSummary()" [class.collapsed]="!showGeneralSummary">
+      <mat-icon>{{ showGeneralSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
+      <span class="summary-title">Resumen General Anual (todas las tarjetas)</span>
+    </div>
+    <div *ngIf="showGeneralSummary && annualGeneralSummary">
       <app-credit-card-summary [generalSummary]="annualGeneralSummary"></app-credit-card-summary>
     </div>
-  </mat-expansion-panel>
+  </div>
 
-  <div class="details-section">
-    <app-credit-card-details [cardDetails]="cardDetails"
-      [cardMonthlyDetails]="cardMonthlyDetails"></app-credit-card-details>
+  <div class="cards-grid">
+    <ng-container *ngFor="let card of cardMonthlyDetails; let i = index">
+      <mat-card class="card-item" [ngStyle]="{'background': getCardColor(i)}">
+        <div class="card-header">
+          <div class="card-title-row" matTooltip="Ver detalle" matTooltipPosition="before"
+            (click)="onDetailsClick(card)">
+            <mat-icon class="card-info-icon">info</mat-icon>
+            <span class="card-title clickable">{{ getCardName(card) }}</span>
+            <span class="bank-name" *ngIf="card.banco">- {{ card.banco }}</span>
+          </div>
+        </div>
+        <div class="card-table">
+          <table>
+            <tr>
+              <th>Mes</th>
+              <th>Gasto Actual</th>
+              <th>Monto Cuotas</th>
+              <th>Total Mes</th>
+            </tr>
+            <tr *ngFor="let row of getCardExpenses(card)">
+              <td>{{ row.month }}</td>
+              <td>{{ row.gastoActual | customCurrency:0 }}</td>
+              <td>{{ row.montoCuotas | customCurrency:0 }}</td>
+              <td>{{ row.totalMes | customCurrency:0 }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="total-footer colored-total">
+          <span>Total: </span>
+          <strong>{{ getTotal(card) | customCurrency:0 }}</strong>
+        </div>
+      </mat-card>
+    </ng-container>
   </div>
 </div>
