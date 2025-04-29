@@ -8,6 +8,27 @@ mat-form-field {
 
 mat-table {
   width: 100%;
+  background: #fff;
+  margin-bottom: 0;
+}
+
+.table-scroll-x {
+  width: 100%;
+  overflow-x: auto;
+  max-width: 100vw;
+}
+
+.mat-row:last-child,
+tr:last-child {
+  border-bottom: none !important;
+}
+
+.mat-paginator {
+  margin-top: 0;
+}
+
+.custom-paginator {
+  margin-top: 0 !important;
 }
 
 /* Ajustes al paginator */
@@ -310,5 +331,48 @@ mat-paginator {
 
   .filter-form mat-form-field {
     min-width: 100%;
+  }
+}
+
+.acciones-btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.icon-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  transition: background 0.15s, box-shadow 0.15s;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  mat-icon {
+    font-size: 20px;
+    color: #333;
+    transition: color 0.15s;
+  }
+}
+
+.icon-action-btn.edit-btn:hover {
+  background: #e3f2fd;
+  mat-icon {
+    color: #1976d2;
+  }
+}
+
+.icon-action-btn.delete-btn:hover {
+  background: #ffebee;
+  mat-icon {
+    color: #d32f2f;
   }
 }

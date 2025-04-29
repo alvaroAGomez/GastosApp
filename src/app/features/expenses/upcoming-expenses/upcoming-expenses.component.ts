@@ -97,6 +97,35 @@ export class UpcomingExpensesComponent {
     }
   }
 
+  ngOnInit() {
+    // Si es edición, cargar datos
+    if (this.data?.isEdit) {
+      this.upcomingExpenseForm.patchValue({
+        monto: Number(this.data.monto),
+        fecha: this.data.fecha ? new Date(this.data.fecha) : this.todayDate,
+        descripcion: this.data.descripcion,
+        categoriaGastoId:
+          this.data.categoriaGastoId ?? this.data.categoria ?? '',
+        tarjetaCreditoId: this.data.tarjetaCreditoId ?? '',
+        tarjetaDebitoId: this.data.tarjetaDebitoId ?? '',
+        esEnCuotas:
+          this.data.esEnCuotas ??
+          (this.data.cuotas && Number(this.data.cuotas) > 1),
+        numeroCuotas: this.data.cuotas ?? '',
+      });
+      if (this.data.tarjetaCreditoDisabled) {
+        this.upcomingExpenseForm.get('tarjetaCreditoId')?.disable();
+      }
+      if (
+        this.data.esEnCuotas ||
+        (this.data.cuotas && Number(this.data.cuotas) > 1)
+      ) {
+        this.upcomingExpenseForm.get('esEnCuotas')?.setValue(true);
+        this.upcomingExpenseForm.get('numeroCuotas')?.enable();
+      }
+    }
+  }
+
   createForm() {
     this.upcomingExpenseForm = this.fb.group({
       monto: ['', [Validators.required]],
@@ -145,15 +174,17 @@ export class UpcomingExpensesComponent {
       this.dialog
         .open(ConfirmDialogComponent, {
           data: {
-            title: 'Confirmar',
-            message: '¿Está seguro que desea guardar el gasto?',
+            title: this.data?.isEdit ? 'Editar gasto' : 'Confirmar',
+            message: this.data?.isEdit
+              ? '¿Está seguro que desea actualizar el gasto?'
+              : '¿Está seguro que desea guardar el gasto?',
           },
         })
         .afterClosed()
         .subscribe((confirmed) => {
           if (confirmed === true) {
-            // Usar getRawValue para incluir campos deshabilitados
             const formValue = this.upcomingExpenseForm.getRawValue();
+            formValue.monto = Number(formValue.monto); // Forzar monto como number
             formValue.esEnCuotas = !!formValue.tarjetaCreditoId;
             if (!formValue.tarjetaCreditoId) {
               formValue.numeroCuotas = undefined;
@@ -170,15 +201,29 @@ export class UpcomingExpensesComponent {
                 ? Number(formValue.numeroCuotas)
                 : undefined,
             };
-            this.expenseService.crearGasto(gasto).subscribe({
-              next: (res) => {
-                this.toastr.success('Gasto guardado con éxito', 'Éxito');
-                this.dialogRef.close(res);
-              },
-              error: (err) => {
-                this.toastr.error('Error al crear gasto', 'Error');
-              },
-            });
+            if (this.data?.isEdit && this.data?.id) {
+              this.expenseService
+                .actualizarGasto(this.data.id, gasto)
+                .subscribe({
+                  next: (res) => {
+                    this.toastr.success('Gasto actualizado con éxito', 'Éxito');
+                    this.dialogRef.close({ updated: true });
+                  },
+                  error: (err) => {
+                    this.toastr.error('Error al actualizar gasto', 'Error');
+                  },
+                });
+            } else {
+              this.expenseService.crearGasto(gasto).subscribe({
+                next: (res) => {
+                  this.toastr.success('Gasto guardado con éxito', 'Éxito');
+                  this.dialogRef.close({ created: true });
+                },
+                error: (err) => {
+                  this.toastr.error('Error al crear gasto', 'Error');
+                },
+              });
+            }
           }
         });
     }

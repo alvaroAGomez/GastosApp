@@ -15,4 +15,12 @@ export class ExpenseService {
   crearGasto(gasto: Expense): Observable<any> {
     return this.http.post<any>(this.apiUrl, gasto);
   }
+
+  actualizarGasto(id: number, gasto: Expense): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, gasto);
+  }
+
+  eliminarGasto(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }

@@ -8,22 +8,26 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Expense } from '../../../../../models/expense.model';
-import { CardService } from '../../../../../services/card.service';
+import { Expense } from '../../../../models/expense.model';
+import { CardService } from '../../../../services/card.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { CategoryService } from '../../../../../services/category.service';
+import { CategoryService } from '../../../../services/category.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { ExpenseChartsComponent } from '../../../../../shared/components/expense-charts/expense-charts.component';
+import { ExpenseChartsComponent } from '../../../../shared/components/expense-charts/expense-charts.component';
 import { NgChartsModule } from 'ng2-charts';
-import { CustomCurrencyPipe } from '../../../../../shared/pipes/custom-currency.pipe';
+import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pipe';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
-import { UpcomingExpensesComponent } from '../../../../expenses/upcoming-expenses/upcoming-expenses.component';
+import { UpcomingExpensesComponent } from '../../../expenses/upcoming-expenses/upcoming-expenses.component';
+import { MatIconModule } from '@angular/material/icon';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog.component';
+import { ToastrService } from 'ngx-toastr';
+import { ExpenseService } from '../../../../services/expense.service';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -59,6 +63,7 @@ export interface CreditCardDetailHeader {
     ExpenseChartsComponent,
     CustomCurrencyPipe,
     MatButtonToggleModule,
+    MatIconModule,
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   templateUrl: './details.component.html',
@@ -88,6 +93,7 @@ export class DetailsComponent implements OnInit {
     'monto',
     'cuotas',
     'cuotasRestantes',
+    'acciones',
   ];
 
   // Fuente de datos para la tabla
@@ -108,7 +114,9 @@ export class DetailsComponent implements OnInit {
     private cardService: CardService,
     private fb: FormBuilder,
     private categoryService: CategoryService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastr: ToastrService,
+    private expenseService: ExpenseService
   ) {
     this.filterForm = this.fb.group({
       fechaDesde: [''],
@@ -159,9 +167,6 @@ export class DetailsComponent implements OnInit {
       active: 'fecha',
       direction: 'desc',
     });
-
-    // Quitar el this.loadExpenses() de aquí para evitar doble llamada
-    // this.loadExpenses();
   }
 
   loadCategories() {
@@ -279,5 +284,69 @@ export class DetailsComponent implements OnInit {
           this.loadExpenses();
         }
       });
+  }
+
+  editExpense(expense: any) {
+    this.dialog
+      .open(UpcomingExpensesComponent, {
+        disableClose: false,
+        data: {
+          ...expense,
+          isEdit: true,
+          id: expense.id,
+          categoriaGastoId: expense.categoriaGastoId || expense.categoria,
+          tarjetaCreditoId: this.selectedCardId,
+          tarjetaCreditoDisabled: true,
+        },
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result && result.updated) {
+          this.toastr.success('Gasto actualizado con éxito', 'Éxito');
+          this.loadHeaderAndExpenses();
+        }
+      });
+  }
+
+  deleteExpense(expense: any) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Eliminar gasto',
+          message: '¿Está seguro que desea eliminar este gasto?',
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.expenseService.eliminarGasto(expense.id).subscribe({
+            next: () => {
+              this.toastr.success('Gasto eliminado con éxito', 'Éxito');
+              this.loadHeaderAndExpenses();
+            },
+            error: () => {
+              this.toastr.error('Error al eliminar gasto', 'Error');
+            },
+          });
+        }
+      });
+  }
+
+  loadHeaderAndExpenses() {
+    const cardId = this.route.snapshot.paramMap.get('id');
+    if (cardId) {
+      this.cardService
+        .getCreditCardHeaderDetail(+cardId)
+        .subscribe((header) => {
+          this.cardHeaderDetail = header;
+          this.cardName = header.nombreTarjeta;
+          this.cardLimit = header.limiteTotal;
+          this.currentExpense = header.gastoActualMensual;
+          this.banco = header.banco;
+          this.loadExpenses();
+        });
+    } else {
+      this.loadExpenses();
+    }
   }
 }

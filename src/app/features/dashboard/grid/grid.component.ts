@@ -18,6 +18,10 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { UpcomingExpensesComponent } from '../../expenses/upcoming-expenses/upcoming-expenses.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component';
+import { ToastrService } from 'ngx-toastr';
+import { ExpenseService } from '../../../services/expense.service';
+import { Expense } from '../../../models/expense.model';
 
 @Component({
   selector: 'app-grid',
@@ -43,6 +47,7 @@ export class GridComponent implements AfterViewInit {
     'monto',
     'fecha',
     'descripcion',
+    'acciones',
   ];
   dataSource!: MatTableDataSource<DashboardExpense>;
   searchValue = '';
@@ -53,7 +58,9 @@ export class GridComponent implements AfterViewInit {
 
   constructor(
     private dashboardExpenseService: DashboardExpenseService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastr: ToastrService,
+    private expenseService: ExpenseService
   ) {}
 
   ngAfterViewInit(): void {
@@ -98,9 +105,59 @@ export class GridComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.expenseAdded.emit();
+      if (result && (result.created || result.updated)) {
+        this.expenseAdded.emit(); // <-- Esto ya notifica al dashboard
+        this.reloadData();
       }
     });
+  }
+
+  editExpense(expense: any) {
+    const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
+      disableClose: false,
+      data: {
+        ...expense,
+        isEdit: true,
+        id: expense.id,
+        categoriaGastoId:
+          expense.categoriaGastoId ?? expense.categoria?.id ?? null,
+        tarjetaCreditoId: expense.tarjetaCreditoId ?? expense.cardId ?? null,
+        tarjetaDebitoId: expense.tarjetaDebitoId ?? null,
+        cuotas: expense.cuotas ?? null,
+        esEnCuotas: expense.cuotas && Number(expense.cuotas) > 1 ? true : false,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.updated === true) {
+        this.toastr.success('Gasto actualizado con éxito', 'Éxito');
+        this.expenseAdded.emit(); // <-- Esto ya notifica al dashboard
+        this.reloadData();
+      }
+    });
+  }
+
+  deleteExpense(expense: any) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Eliminar gasto',
+          message: '¿Está seguro que desea eliminar este gasto?',
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed === true) {
+          this.expenseService.eliminarGasto(expense.id).subscribe({
+            next: () => {
+              this.toastr.success('Gasto eliminado con éxito', 'Éxito');
+              this.expenseAdded.emit(); // <-- Esto ya notifica al dashboard
+              this.reloadData();
+            },
+            error: () => {
+              this.toastr.error('Error al eliminar gasto', 'Error');
+            },
+          });
+        }
+      });
   }
 }

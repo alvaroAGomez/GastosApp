@@ -19,7 +19,7 @@ import {
         mat-raised-button
         color="primary"
         class="custom-button-cancelar"
-        mat-dialog-close="false"
+        [mat-dialog-close]="false"
       >
         Cancelar
       </button>

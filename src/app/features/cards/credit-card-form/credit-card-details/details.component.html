@@ -73,72 +73,78 @@
 </div>
 
 <div *ngIf="!showCharts">
-  <!-- TABLA DE GASTOS -->
-  <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)">
-
-    <!-- FECHA -->
-    <ng-container matColumnDef="fecha">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
-      <mat-cell *matCellDef="let expense">
-        {{ expense.fecha | date: 'dd/MM/yyyy':'':'es-ES' }}
-      </mat-cell>
-    </ng-container>
-
-    <!-- DESCRIPCIÓN -->
-    <ng-container matColumnDef="descripcion">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</mat-header-cell>
-      <mat-cell *matCellDef="let expense">
-        {{ expense.descripcion }}
-      </mat-cell>
-    </ng-container>
-
-    <!-- CATEGORÍA -->
-    <ng-container matColumnDef="categoria">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Categoría</mat-header-cell>
-      <mat-cell *matCellDef="let expense">
-        {{ expense.categoria }}
-      </mat-cell>
-    </ng-container>
-
-    <!-- MONTO -->
-    <ng-container matColumnDef="monto">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Monto</mat-header-cell>
-      <mat-cell *matCellDef="let expense">
-        {{ expense.monto | customCurrency }}
-      </mat-cell>
-    </ng-container>
-
-    <!-- CUOTAS -->
-    <ng-container matColumnDef="cuotas">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Cuotas</mat-header-cell>
-      <mat-cell *matCellDef="let expense">
-        {{ expense.cuotas }}
-      </mat-cell>
-    </ng-container>
-
-    <!-- RESTANTES -->
-    <ng-container matColumnDef="cuotasRestantes">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Restantes</mat-header-cell>
-      <mat-cell *matCellDef="let expense">
-        {{ expense.cuotasRestantes }}
-      </mat-cell>
-    </ng-container>
-
-    <!-- FILAS DE ENCABEZADO Y DE DATOS -->
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    <ng-container *ngIf="dataSource.data.length === 0">
-      <tr>
-        <td [attr.colspan]="displayedColumns.length" style="text-align:center; padding: 24px;">
-          No hay datos suficientes
+  <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" class="mat-elevation-z8"
+      style="min-width:600px; width:100%;">
+      <!-- FECHA -->
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+        <td mat-cell *matCellDef="let expense">
+          {{ expense.fecha | date: 'dd/MM/yyyy':'':'es-ES' }}
         </td>
-      </tr>
-    </ng-container>
-  </mat-table>
+      </ng-container>
 
-  <!-- PAGINACIÓN -->
+      <!-- DESCRIPCIÓN -->
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+        <td mat-cell *matCellDef="let expense">
+          {{ expense.descripcion }}
+        </td>
+      </ng-container>
+
+      <!-- CATEGORÍA -->
+      <ng-container matColumnDef="categoria">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoría</th>
+        <td mat-cell *matCellDef="let expense">
+          {{ expense.categoria }}
+        </td>
+      </ng-container>
+
+      <!-- MONTO -->
+      <ng-container matColumnDef="monto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
+        <td mat-cell *matCellDef="let expense">
+          {{ expense.monto | customCurrency }}
+        </td>
+      </ng-container>
+
+      <!-- CUOTAS -->
+      <ng-container matColumnDef="cuotas">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cuotas</th>
+        <td mat-cell *matCellDef="let expense">
+          {{ expense.cuotas }}
+        </td>
+      </ng-container>
+
+      <!-- RESTANTES -->
+      <ng-container matColumnDef="cuotasRestantes">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Restantes</th>
+        <td mat-cell *matCellDef="let expense">
+          {{ expense.cuotasRestantes }}
+        </td>
+      </ng-container>
+
+      <!-- ACCIONES -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let expense">
+          <div class="acciones-btn-group">
+            <button mat-icon-button color="primary" (click)="editExpense(expense)" class="icon-action-btn edit-btn">
+              <mat-icon fontIcon="edit"></mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteExpense(expense)" class="icon-action-btn delete-btn">
+              <mat-icon fontIcon="delete"></mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
   <mat-paginator [length]="totalExpenses" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="[5, 10, 20]"
-    (page)="onPaginate($event)">
+    (page)="onPaginate($event)" class="custom-paginator">
   </mat-paginator>
 </div>
 

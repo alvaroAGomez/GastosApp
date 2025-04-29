@@ -36,6 +36,20 @@
         <td mat-cell *matCellDef="let expense"> {{ expense.descripcion }} </td>
       </ng-container>
 
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let expense">
+          <div class="acciones-btn-group">
+            <button mat-icon-button color="primary" (click)="editExpense(expense)" class="icon-action-btn edit-btn">
+              <mat-icon fontIcon="edit"></mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteExpense(expense)" class="icon-action-btn delete-btn">
+              <mat-icon fontIcon="delete"></mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 

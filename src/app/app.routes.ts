@@ -9,7 +9,7 @@ import { UpcomingExpensesComponent } from './features/expenses/upcoming-expenses
 import { ReportsComponent } from './features/reports/reports.component';
 import { authGuard } from './guards/auth.guard';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
-import { DetailsComponent } from './features/cards/credit-card-form/credit-card-details/details/details.component';
+import { DetailsComponent } from './features/cards/credit-card-form/credit-card-details/details.component';
 
 export const routes: Routes = [
   {
