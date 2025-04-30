@@ -6,6 +6,28 @@ $complement-color: #de6461;
 $background-color: #f5f5f6;
 $text-color: #242424;
 
+// Colores adicionales para tablas y estados
+$table-header-bg: #f4f7fa;
+$table-header-color: #1976d2;
+$table-row-border: #e0e0e0;
+$table-row-bg: #fff;
+$table-row-hover: #f0f2f4;
+$table-row-alt: #f8fafc;
+$table-cell-color: #333;
+$table-footer-bg: #f4f7fa;
+$table-footer-color: #1976d2;
+
+// Variables para límites (usadas en tarjetas)
+$limit-red-bg: #ffe0e0;
+$limit-red-color: #d32f2f;
+$limit-orange-bg: #fff8e1;
+$limit-orange-color: #b8860b;
+$limit-green-bg: #e0ffe0;
+$limit-green-color: #388e3c;
+
+// Variables para sombras y bordes
+$box-shadow-light: 0 1px 4px rgba(44, 62, 80, 0.06);
+
 :root {
   --primary-color: #{$primary-color};
   --secondary-color-1: #{$secondary-color-1};
@@ -179,6 +201,7 @@ button.mat-raised-button.mat-button-disabled {
   height: 40px;
   min-width: 100px;
   cursor: pointer;
+  margin: 10px;
 }
 
 .custom-button[disabled] {
@@ -203,5 +226,86 @@ button.mat-raised-button.mat-button-disabled {
   mat-form-field {
     flex-grow: 1; /* Hace que el input ocupe el espacio disponible */
     min-width: 250px;
+  }
+}
+
+// --- CLASES GLOBALES REUTILIZABLES ---
+
+.table-scroll-x {
+  width: 100%;
+  overflow-x: auto;
+  max-width: 100vw;
+}
+
+.mat-elevation-z8,
+.mat-elevation-z2 {
+  box-shadow: $box-shadow-light !important;
+}
+
+.global-table {
+  width: 100%;
+  background: $table-row-bg;
+  border-radius: 10px;
+  box-shadow: $box-shadow-light;
+  margin-bottom: 0;
+  min-width: 600px;
+  th,
+  td {
+    font-size: 1em;
+    padding: 8px 10px;
+    color: $table-cell-color;
+  }
+  th {
+    color: $table-header-color;
+    font-weight: 600;
+    background: $table-header-bg;
+    border-bottom: 1px solid $table-row-border;
+  }
+  td {
+    border-bottom: 1px solid $table-row-border;
+    background: $table-row-bg;
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+  tr:hover td {
+    background: $table-row-hover;
+  }
+}
+
+.global-table-footer {
+  background: $table-footer-bg;
+  color: $table-footer-color;
+  font-weight: bold;
+  font-size: 1.15em;
+}
+
+.limit-red {
+  background: $limit-red-bg !important;
+  color: $limit-red-color !important;
+  text-shadow: 0 1px 0 #fff;
+}
+.limit-orange {
+  background: $limit-orange-bg !important;
+  color: $limit-orange-color !important;
+  text-shadow: 0 1px 0 #fff;
+}
+.limit-green {
+  background: $limit-green-bg !important;
+  color: $limit-green-color !important;
+  text-shadow: 0 1px 0 #fff;
+}
+.limit-total {
+  background: #e3e7fa !important;
+  color: #283593 !important;
+  text-shadow: 0 1px 0 #fff;
+}
+
+// Responsive para tablas
+@media (max-width: 900px) {
+  .global-table th,
+  .global-table td {
+    font-size: 0.98em;
+    padding: 6px 4px;
   }
 }

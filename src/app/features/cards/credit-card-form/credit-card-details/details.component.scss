@@ -1,7 +1,4 @@
-.search-section {
-  width: 300px;
-}
-
+// --- TAGS Y SELECTORES GENERALES ---
 mat-form-field {
   width: 100%;
 }
@@ -12,28 +9,19 @@ mat-table {
   margin-bottom: 0;
 }
 
+mat-paginator {
+  margin-top: 16px;
+}
+
+// --- CLASES DE SECCIÓN Y LAYOUT ---
+.search-section {
+  width: 300px;
+}
+
 .table-scroll-x {
   width: 100%;
   overflow-x: auto;
   max-width: 100vw;
-}
-
-.mat-row:last-child,
-tr:last-child {
-  border-bottom: none !important;
-}
-
-.mat-paginator {
-  margin-top: 0;
-}
-
-.custom-paginator {
-  margin-top: 0 !important;
-}
-
-/* Ajustes al paginator */
-mat-paginator {
-  margin-top: 16px;
 }
 
 .card-details-header {
@@ -117,38 +105,10 @@ mat-paginator {
   background: #fff;
   box-shadow: 0 1px 2px rgba(44, 62, 80, 0.06);
   color: #1976d2;
-  &.limit-red {
-    background: #ffe0e0;
-    color: #d32f2f !important;
-    text-shadow: 0 1px 0 #fff;
-  }
-  &.limit-orange {
-    background: #fff8e1;
-    color: #b8860b !important;
-    text-shadow: 0 1px 0 #fff;
-  }
-  &.limit-green {
-    background: #e0ffe0;
-    color: #388e3c !important;
-    text-shadow: 0 1px 0 #fff;
-  }
-  &.limit-total {
-    background: #e3e7fa;
-    color: #283593;
-    text-shadow: 0 1px 0 #fff;
-  }
-  &.limit-mes {
-    background: #ffe0e0;
-    color: #d32f2f;
-    text-shadow: 0 1px 0 #fff;
-  }
-  &.limit-pendiente {
-    background: #fff8e1;
-    color: #b8860b;
-    text-shadow: 0 1px 0 #fff;
-  }
+  // Elimina variantes de color, solo usa las clases globales en el HTML
 }
 
+// --- TOOLBAR Y BOTONES ---
 .details-toolbar-row {
   width: 100%;
   margin: 0 auto 18px auto;
@@ -192,24 +152,7 @@ mat-paginator {
   box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
   border: none; /* Quitar borde */
   cursor: pointer; /* Mostrar cursor pointer */
-  /* Para que quede bien a la izquierda */
   order: 0;
-}
-
-.custom-button {
-  min-width: 140px;
-  font-size: 1.07em;
-  border-radius: 22px;
-  padding: 8px 24px;
-  font-weight: 600;
-  background: #418b94;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
-  margin-right: 0;
-}
-
-.custom-button:hover {
-  background: #1976d2;
 }
 
 .cuotas-pendientes-btn {
@@ -242,108 +185,7 @@ mat-paginator {
   margin-left: 0;
 }
 
-@media (max-width: 1100px) {
-  .details-toolbar-row {
-    flex-wrap: wrap;
-    gap: 10px;
-    max-width: 100vw;
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .toolbar-left,
-  .toolbar-right {
-    gap: 10px;
-  }
-}
-
-@media (max-width: 700px) {
-  .details-toolbar-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    padding: 0;
-  }
-  .toolbar-left,
-  .toolbar-right {
-    width: 100%;
-    justify-content: stretch;
-  }
-  .details-toolbar-row .mat-button-toggle-group {
-    margin-left: 0;
-  }
-}
-
-.table-scroll-x {
-  width: 100%;
-  overflow-x: auto;
-  max-width: 100vw;
-}
-
-.gastos-table {
-  width: 100%;
-  background: #fff;
-  margin-bottom: 0;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(44, 62, 80, 0.06);
-}
-
-.gastos-table th,
-.gastos-table td {
-  font-size: 1em;
-  padding: 8px 10px;
-}
-
-.gastos-table th {
-  color: #1976d2;
-  font-weight: 600;
-  background: #f4f7fa;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.gastos-table td {
-  color: #333;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.gastos-table tr:last-child td {
-  border-bottom: none;
-}
-
-@media (max-width: 900px) {
-  .gastos-table th,
-  .gastos-table td {
-    font-size: 0.98em;
-    padding: 6px 4px;
-  }
-}
-
-.custom-paginator {
-  margin-top: 0 !important;
-}
-
-.filter-form {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 8px;
-  margin-bottom: 12px;
-  width: 100%;
-}
-
-.filter-form mat-form-field {
-  min-width: 120px;
-  flex: 1 1 0;
-  margin-bottom: 0;
-}
-
-.filter-form button {
-  border: none;
-  border-radius: 25px;
-  height: 40px;
-  width: 10%;
-  cursor: pointer;
-}
-
+// --- FILTROS Y FORMULARIOS ---
 .filter-form.compact-filter-form {
   display: flex;
   flex-direction: row;
@@ -376,42 +218,9 @@ mat-paginator {
   box-shadow: none;
 }
 
-@media (max-width: 1100px) {
-  .filter-form.compact-filter-form {
-    gap: 6px;
-  }
-}
-
-@media (max-width: 900px) {
-  .filter-form.compact-filter-form mat-form-field {
-    min-width: 90px;
-    max-width: 120px;
-  }
-}
-
-@media (max-width: 700px) {
-  .filter-form.compact-filter-form {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-  }
-  .filter-form.compact-filter-form mat-form-field {
-    min-width: 100%;
-    max-width: 100%;
-  }
-  .filter-form.compact-filter-form button.custom-button,
-  .filter-form.compact-filter-form button.custom-button-cancelar {
-    width: 100%;
-    min-width: 0;
-    margin-top: 4px;
-  }
-}
-
+// --- ACCIONES Y BOTONES DE TABLA ---
 .acciones-btn-group {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
 }
 
 .icon-action-btn {
@@ -449,10 +258,11 @@ mat-paginator {
   }
 }
 
+// --- CHARTS Y CELDAS DE GRÁFICOS ---
 .charts-row {
   display: flex;
   flex-direction: row;
-  gap: 12px; // menos espacio entre gráficos
+  gap: 12px;
   justify-content: center;
   align-items: flex-start;
   margin-bottom: 24px;
@@ -468,8 +278,19 @@ mat-paginator {
   padding: 0; // sin padding extra
 }
 
-// Responsive: una sola columna en pantallas chicas
+// --- RESPONSIVE ---
 @media (max-width: 1100px) {
+  .details-toolbar-row {
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 100vw;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .toolbar-left,
+  .toolbar-right {
+    gap: 10px;
+  }
   .charts-row {
     flex-direction: column;
     gap: 0;
@@ -486,6 +307,50 @@ mat-paginator {
   }
   .filter-form mat-form-field {
     min-width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .gastos-table th,
+  .gastos-table td {
+    font-size: 0.98em;
+    padding: 6px 4px;
+  }
+  .filter-form.compact-filter-form mat-form-field {
+    min-width: 90px;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 700px) {
+  .details-toolbar-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 0;
+  }
+  .toolbar-left,
+  .toolbar-right {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .details-toolbar-row .mat-button-toggle-group {
+    margin-left: 0;
+  }
+  .filter-form.compact-filter-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .filter-form.compact-filter-form mat-form-field {
+    min-width: 100%;
+    max-width: 100%;
+  }
+  .filter-form.compact-filter-form button.custom-button,
+  .filter-form.compact-filter-form button.custom-button-cancelar {
+    width: 100%;
+    min-width: 0;
+    margin-top: 4px;
   }
 }
 
@@ -520,7 +385,17 @@ mat-paginator {
   }
 }
 
+// --- UTILIDADES ---
 .button-filter {
   border: none;
   cursor: pointer;
+}
+
+.mat-row:last-child,
+tr:last-child {
+  border-bottom: none !important;
+}
+
+.custom-paginator {
+  margin-top: 0 !important;
 }

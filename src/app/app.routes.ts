@@ -15,7 +15,7 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
-    //canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       { path: '', component: DashboardComponent },
       { path: 'credit-cards', component: CreditCardFormComponent },

@@ -25,7 +25,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { UpcomingExpensesComponent } from '../../../expenses/upcoming-expenses/upcoming-expenses.component';
 import { MatIconModule } from '@angular/material/icon';
-import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
 import { ExpenseService } from '../../../../services/expense.service';
 import { PendingInstallmentsModalComponent } from './pending-installments-modal.component';

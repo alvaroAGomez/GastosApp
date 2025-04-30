@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
 import { CategoryService } from '../../services/category.service';
 import { ToastrService } from 'ngx-toastr';
 

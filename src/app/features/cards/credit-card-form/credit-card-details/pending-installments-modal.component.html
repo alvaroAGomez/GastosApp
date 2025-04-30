@@ -2,8 +2,7 @@
 <div class="pending-installments-modal-content" mat-dialog-content>
     <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
         <table mat-table [dataSource]="data.movimientos"
-            class="mat-elevation-z2 movimientos-table pending-installments-modal-table"
-            style="min-width:600px; width:100%;">
+            class="mat-elevation-z2 global-table pending-installments-modal-table" style="min-width:600px; width:100%;">
             <!-- FECHA DE COMPRA -->
             <ng-container matColumnDef="fecha">
                 <th mat-header-cell *matHeaderCellDef>Fecha de Compra</th>

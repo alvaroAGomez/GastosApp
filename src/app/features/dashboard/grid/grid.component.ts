@@ -18,7 +18,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { UpcomingExpensesComponent } from '../../expenses/upcoming-expenses/upcoming-expenses.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
 import { ExpenseService } from '../../../services/expense.service';
 import { Expense } from '../../../models/expense.model';

@@ -25,7 +25,7 @@ import { CommonModule } from '@angular/common';
 import { CardService } from '../../../../services/card.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog.component';
 
 @Component({
   selector: 'app-credit-card-form-modal',

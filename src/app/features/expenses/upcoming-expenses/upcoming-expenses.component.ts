@@ -21,7 +21,7 @@ import { ExpenseService } from '../../../services/expense.service';
 import { Expense } from '../../../models/expense.model';
 import { CategoryService } from '../../../services/category.service';
 import { CardService } from '../../../services/card.service';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 

@@ -12,7 +12,7 @@ import { CardService } from '../../../../services/card.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { CreditCard } from '../../../../models/card.model';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog.component';
 
 @Component({
   selector: 'app-delete-card-modal',

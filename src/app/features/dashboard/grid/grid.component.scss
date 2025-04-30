@@ -52,35 +52,6 @@
   }
 }
 
-.dashboard-table {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(44, 62, 80, 0.06);
-  margin-bottom: 0;
-}
-
-.dashboard-table th,
-.dashboard-table td {
-  font-size: 1em;
-  padding: 8px 10px;
-}
-
-.dashboard-table th {
-  color: #1976d2;
-  font-weight: 600;
-  background: #f4f7fa;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.dashboard-table td {
-  color: #333;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.dashboard-table tr:last-child td {
-  border-bottom: none;
-}
-
 /* Media query para pantallas pequeñas */
 @media (max-width: 600px) {
   .header {
@@ -97,10 +68,5 @@
     min-width: 340px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-  }
-  .dashboard-table th,
-  .dashboard-table td {
-    font-size: 0.98em;
-    padding: 6px 4px;
   }
 }

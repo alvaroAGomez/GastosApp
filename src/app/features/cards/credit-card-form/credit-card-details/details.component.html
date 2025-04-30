@@ -12,11 +12,11 @@
       </div>
       <div class="limit-item">
         <span class="limit-label">Gasto Actual Mes</span>
-        <span class="limit-value limit-mes">{{ cardHeaderDetail.gastoActualMensual | customCurrency }}</span>
+        <span class="limit-value limit-red">{{ cardHeaderDetail.gastoActualMensual | customCurrency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Gastos Pendientes</span>
-        <span class="limit-value limit-pendiente">{{ cardHeaderDetail.totalConsumosPendientes | customCurrency }}</span>
+        <span class="limit-value limit-orange">{{ cardHeaderDetail.totalConsumosPendientes | customCurrency }}</span>
       </div>
       <div class="limit-item">
         <span class="limit-label">Límite Disponible</span>
@@ -89,7 +89,7 @@
 <div *ngIf="!showCharts">
   <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)"
-      class="mat-elevation-z8 gastos-table" style="min-width:600px; width:100%;">
+      class="mat-elevation-z8 global-table" style="min-width:600px; width:100%;">
       <!-- FECHA -->
       <ng-container matColumnDef="fecha">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
