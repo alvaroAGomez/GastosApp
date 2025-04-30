@@ -1,0 +1,46 @@
+<h2 class="pending-installments-modal-title">Cuotas pendientes</h2>
+<div class="pending-installments-modal-content" mat-dialog-content>
+    <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
+        <table mat-table [dataSource]="data.movimientos"
+            class="mat-elevation-z2 movimientos-table pending-installments-modal-table"
+            style="min-width:600px; width:100%;">
+            <!-- FECHA DE COMPRA -->
+            <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>Fecha de Compra</th>
+                <td mat-cell *matCellDef="let mov">
+                    {{ mov.fecha | date: 'dd/MM/yyyy':'':'es-ES' }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="footer-label"></td>
+            </ng-container>
+            <!-- MOVIMIENTO (DESCRIPCIÓN) -->
+            <ng-container matColumnDef="movimiento">
+                <th mat-header-cell *matHeaderCellDef>Movimiento</th>
+                <td mat-cell *matCellDef="let mov">
+                    {{ mov.descripcion }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="footer-label"></td>
+            </ng-container>
+            <!-- CUOTAS PENDIENTES -->
+            <ng-container matColumnDef="cuotasPendientes">
+                <th mat-header-cell *matHeaderCellDef>Cuotas pendientes</th>
+                <td mat-cell *matCellDef="let mov">
+                    {{ mov.cuotasPendientes }} de {{ mov.montoCuota | customCurrency }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="footer-label">Total de cuotas pendientes</td>
+            </ng-container>
+            <!-- TOTAL -->
+            <ng-container matColumnDef="total">
+                <th mat-header-cell *matHeaderCellDef>Total</th>
+                <td mat-cell *matCellDef="let mov">
+                    {{ mov.total | customCurrency }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="footer-total">
+                    {{ data.totalCuotasPendientes | customCurrency }}
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="data.displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: data.displayedColumns"></tr>
+            <tr mat-footer-row *matFooterRowDef="data.displayedColumns"></tr>
+        </table>
+    </div>
+</div>

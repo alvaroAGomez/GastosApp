@@ -28,6 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
 import { ExpenseService } from '../../../../services/expense.service';
+import { PendingInstallmentsModalComponent } from './pending-installments-modal.component';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -108,6 +109,18 @@ export class DetailsComponent implements OnInit {
   categories: { id: number; nombre: string }[] = [];
   selectedCardId: number | null = null;
   showCharts = false;
+  showFilters = false;
+
+  // NUEVO: DataSource y columnas para movimientos
+  movimientosDataSource = new MatTableDataSource<any>([]);
+  movimientosDisplayedColumns: string[] = [
+    'fecha',
+    'movimiento',
+    'cuotasPendientes',
+    'total',
+  ];
+  movimientosFooterColumns: string[] = ['footerTotal'];
+  totalCuotasPendientes: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -139,8 +152,9 @@ export class DetailsComponent implements OnInit {
           this.cardLimit = header.limiteTotal;
           this.currentExpense = header.gastoActualMensual;
           this.banco = header.banco;
-          // Cargar gastos solo después de obtener el header (y selectedCardId)
+          // Cargar gastos y movimientos solo después de obtener el header (y selectedCardId)
           this.loadExpenses();
+          this.loadMovimientos(); // <-- Mover aquí
         });
     } else {
       // Si no hay cardId, igual intentar cargar gastos (no debería pasar)
@@ -215,6 +229,22 @@ export class DetailsComponent implements OnInit {
       });
   }
 
+  // NUEVO: Cargar movimientos tipo cuotas pendientes
+  loadMovimientos() {
+    if (!this.selectedCardId) return;
+    this.cardService.getCardMovements(this.selectedCardId).subscribe((res) => {
+      console.log(res);
+
+      // res debe venir ya con los campos: fecha, descripcion, cuotasPendientes, montoCuota, total
+      this.movimientosDataSource.data = res || [];
+      // Sumar el total de cuotas pendientes (sumar total de cada gasto)
+      this.totalCuotasPendientes = (res || []).reduce(
+        (acc, mov) => acc + (mov.total || 0),
+        0
+      );
+    });
+  }
+
   onPaginate(event: any) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
@@ -282,6 +312,7 @@ export class DetailsComponent implements OnInit {
       .subscribe((result) => {
         if (result) {
           this.loadExpenses();
+          this.loadMovimientos(); // <-- Actualiza cuotas pendientes también
         }
       });
   }
@@ -304,6 +335,7 @@ export class DetailsComponent implements OnInit {
         if (result && result.updated) {
           this.toastr.success('Gasto actualizado con éxito', 'Éxito');
           this.loadHeaderAndExpenses();
+          this.loadMovimientos(); // <-- Actualiza cuotas pendientes también
         }
       });
   }
@@ -323,6 +355,7 @@ export class DetailsComponent implements OnInit {
             next: () => {
               this.toastr.success('Gasto eliminado con éxito', 'Éxito');
               this.loadHeaderAndExpenses();
+              this.loadMovimientos(); // <-- Actualiza cuotas pendientes también
             },
             error: () => {
               this.toastr.error('Error al eliminar gasto', 'Error');
@@ -348,5 +381,17 @@ export class DetailsComponent implements OnInit {
     } else {
       this.loadExpenses();
     }
+  }
+
+  openPendingInstallmentsModal() {
+    this.dialog.open(PendingInstallmentsModalComponent, {
+      width: '900px',
+      maxWidth: '98vw',
+      data: {
+        movimientos: this.movimientosDataSource.data,
+        totalCuotasPendientes: this.totalCuotasPendientes,
+        displayedColumns: this.movimientosDisplayedColumns,
+      },
+    });
   }
 }

@@ -95,4 +95,9 @@ export class CardService {
   getCardsSummary(): Observable<CreditCardSummary[]> {
     return this.http.get<CreditCardSummary[]>(`${this.apiUrl}/resumen`);
   }
+
+  getCardMovements(tarjetaId: number) {
+    // Espera array de { fecha, descripcion, cuotasPendientes, montoCuota, total }
+    return this.http.get<any[]>(`${this.apiUrl}/${tarjetaId}/movimientos`);
+  }
 }
