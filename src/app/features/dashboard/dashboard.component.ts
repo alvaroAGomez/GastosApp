@@ -16,6 +16,7 @@ import { CustomCurrencyPipe } from '../../shared/pipes/custom-currency.pipe';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 import { UpcomingExpensesComponent } from '../expenses/upcoming-expenses/upcoming-expenses.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,6 +33,7 @@ import { UpcomingExpensesComponent } from '../expenses/upcoming-expenses/upcomin
     PieCardDistributionChartComponent,
     NgChartsModule,
     MatExpansionModule,
+    MatIconModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

@@ -10,6 +10,7 @@ mat-sidenav {
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   margin-top: 64px; // Hace que el sidenav arranque debajo del toolbar
   height: calc(100vh - 64px); // Ajusta el alto para no tapar el toolbar
+  z-index: 1200; // Asegura que el sidenav esté por encima del contenido
   .sidenav-toolbar {
     height: 64px;
     display: flex;
@@ -99,6 +100,20 @@ mat-sidenav-content {
   }
 }
 
+.main-toolbar button[mat-button] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-toolbar button[mat-button] mat-icon,
+.main-toolbar button[mat-button] span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
 .main-content {
   flex: 1 1 auto;
   overflow: auto;
@@ -115,4 +130,38 @@ mat-icon {
 
 span {
   color: #fff;
+}
+
+.logout-mobile {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.logout-mobile a {
+  width: 100%;
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 16px 0 16px 24px;
+}
+
+.logout-mobile mat-icon,
+.logout-mobile span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  vertical-align: middle;
+}
+
+// Puedes agregar reglas para ocultar el sidenav en mobile si lo deseas, pero el *ngIf ya lo maneja.
+
+.spacer {
+  flex: 1 1 auto;
 }

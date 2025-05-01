@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  HostListener,
+  AfterViewInit,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,6 +35,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 import { ToastrService } from 'ngx-toastr';
 import { ExpenseService } from '../../../../services/expense.service';
 import { PendingInstallmentsModalComponent } from './pending-installments-modal.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -65,12 +72,13 @@ export interface CreditCardDetailHeader {
     CustomCurrencyPipe,
     MatButtonToggleModule,
     MatIconModule,
+    MatTooltipModule,
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, AfterViewInit {
   cardDetails: any;
   cardHeaderDetail?: CreditCardDetailHeader;
 
@@ -122,6 +130,8 @@ export class DetailsComponent implements OnInit {
   movimientosFooterColumns: string[] = ['footerTotal'];
   totalCuotasPendientes: number = 0;
 
+  isMobile = false;
+
   constructor(
     private route: ActivatedRoute,
     private cardService: CardService,
@@ -163,24 +173,40 @@ export class DetailsComponent implements OnInit {
 
     this.loadCategories();
 
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.checkMobile();
+  }
 
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      switch (property) {
-        case 'fecha':
-          return new Date(item.fecha);
-        default:
-          return (item as any)[property];
+  ngAfterViewInit(): void {
+    // Espera al siguiente ciclo de detección de cambios para asegurar que ViewChilds estén definidos
+    setTimeout(() => {
+      if (this.sort && this.paginator) {
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sortingDataAccessor = (item, property) => {
+          switch (property) {
+            case 'fecha':
+              return new Date(item.fecha);
+            default:
+              return (item as any)[property];
+          }
+        };
+        this.sort.active = 'fecha';
+        this.sort.direction = 'desc';
+        this.sort.sortChange.emit({
+          active: 'fecha',
+          direction: 'desc',
+        });
       }
-    };
-
-    this.sort.active = 'fecha';
-    this.sort.direction = 'desc';
-    this.sort.sortChange.emit({
-      active: 'fecha',
-      direction: 'desc',
     });
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkMobile();
+  }
+
+  checkMobile() {
+    this.isMobile = window.innerWidth < 700;
   }
 
   loadCategories() {

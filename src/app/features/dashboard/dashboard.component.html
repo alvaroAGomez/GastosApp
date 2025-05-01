@@ -1,3 +1,5 @@
+<h1 class="page-title">Resumen general</h1>
+
 <div class="dashboard-container">
   <ng-container *ngIf="isMobile; else desktopCards">
     <mat-accordion>
@@ -15,8 +17,27 @@
     <app-cards #cards></app-cards>
   </ng-template>
 
-  <div class="dashboard-toolbar-row">
+  <!-- MOBILE TOOLBAR -->
+  <div *ngIf="isMobile" class="dashboard-toolbar-row mobile-toolbar">
+    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto">
+      <mat-icon>add</mat-icon>
+    </button>
+    <span class="toolbar-spacer"></span>
+    <mat-button-toggle-group [value]="showCharts ? 'charts' : 'table'" (change)="toggleView($event)" exclusive
+      class="mobile-toggle-group">
+      <mat-button-toggle value="table" matTooltip="Ver como Tabla">
+        <mat-icon>table_view</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="charts" matTooltip="Ver como Gráficos">
+        <mat-icon>insert_chart</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- DESKTOP TOOLBAR -->
+  <div *ngIf="!isMobile" class="dashboard-toolbar-row">
     <button mat-raised-button color="primary" type="button" class="custom-button" (click)="onNewExpense()">
+      <mat-icon>add</mat-icon>
       Nuevo Gasto
     </button>
     <span class="toolbar-spacer"></span>

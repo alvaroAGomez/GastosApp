@@ -27,8 +27,38 @@
     </div>
   </div>
 
-  <!-- TOOLBAR Y ACCIONES EN UNA SOLA FILA, PRIMEROS 2 A LA IZQUIERDA, ÚLTIMOS 2 A LA DERECHA -->
-  <div class="details-toolbar-row">
+  <!-- TOOLBAR MOBILE (dos filas) -->
+  <div *ngIf="isMobile" class="details-mobile-toolbar">
+    <div class="details-mobile-toolbar-row">
+      <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto">
+        <mat-icon>add</mat-icon>
+      </button>
+      <span class="toolbar-spacer"></span>
+      <mat-button-toggle-group [value]="showCharts ? 'charts' : 'table'" (change)="toggleView($event)" exclusive
+        class="mobile-toggle-group">
+        <mat-button-toggle value="table" matTooltip="Ver como Tabla">
+          <mat-icon>table_view</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="charts" matTooltip="Ver como Gráficos">
+          <mat-icon>insert_chart</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div class="details-mobile-toolbar-row">
+      <button mat-icon-button color="primary" class="filtros-toggle-btn" (click)="showFilters = !showFilters"
+        [matTooltip]="showFilters ? 'Ocultar filtros' : 'Mostrar filtros'">
+        <mat-icon>{{ showFilters ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
+      </button>
+      <button mat-stroked-button color="primary" class="cuotas-pendientes-btn" (click)="openPendingInstallmentsModal()"
+        [disabled]="movimientosDataSource.data.length === 0">
+        <mat-icon style="margin-right:8px;">list_alt</mat-icon>
+        Ver cuotas pendientes
+      </button>
+    </div>
+  </div>
+
+  <!-- TOOLBAR DESKTOP (original) -->
+  <div *ngIf="!isMobile" class="details-toolbar-row">
     <div class="toolbar-left">
       <button *ngIf="!showCharts" mat-stroked-button color="primary" class="filtros-toggle-btn"
         (click)="showFilters = !showFilters">
@@ -36,6 +66,7 @@
         {{ showFilters ? 'Ocultar filtros' : 'Mostrar filtros' }}
       </button>
       <button mat-raised-button color="primary" type="button" class="custom-button" (click)="onNewExpense()">
+        <mat-icon>add</mat-icon>
         Nuevo Gasto
       </button>
     </div>

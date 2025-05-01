@@ -107,7 +107,7 @@ export class CategoriesComponent {
   startEditCategory(category: Category, form: NgForm) {
     this.editingCategory = category;
     this.newCategory = { ...category };
-    form.controls['name']?.setValue(category.name); // Si usas template-driven forms
+    form.controls['name']?.setValue(category.name);
   }
 
   cancelEdit(form: NgForm) {

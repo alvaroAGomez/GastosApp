@@ -206,18 +206,6 @@ mat-paginator {
   background: transparent;
 }
 
-.filter-form.compact-filter-form button.custom-button,
-.filter-form.compact-filter-form button.custom-button-cancelar {
-  min-width: 90px;
-  height: 38px;
-  font-size: 0.98em;
-  border-radius: 18px;
-  margin-left: 0;
-  margin-right: 0;
-  padding: 0 14px;
-  box-shadow: none;
-}
-
 // --- ACCIONES Y BOTONES DE TABLA ---
 .acciones-btn-group {
   display: flex;
@@ -328,14 +316,20 @@ mat-paginator {
     align-items: stretch;
     gap: 10px;
     padding: 0;
+    width: 100%;
+    max-width: 100vw;
   }
   .toolbar-left,
   .toolbar-right {
     width: 100%;
     justify-content: stretch;
+    flex-direction: row;
+    gap: 8px;
   }
   .details-toolbar-row .mat-button-toggle-group {
     margin-left: 0;
+    width: 100%;
+    justify-content: stretch;
   }
   .filter-form.compact-filter-form {
     flex-direction: column;
@@ -346,11 +340,31 @@ mat-paginator {
     min-width: 100%;
     max-width: 100%;
   }
-  .filter-form.compact-filter-form button.custom-button,
-  .filter-form.compact-filter-form button.custom-button-cancelar {
+  // NUEVO: Botones ocupan todo el ancho
+  .toolbar-left button,
+  .toolbar-right button,
+  .details-toolbar-row .mat-button-toggle-group {
     width: 100%;
     min-width: 0;
-    margin-top: 4px;
+    margin: 0 0 8px 0;
+    box-sizing: border-box;
+  }
+  .toolbar-left,
+  .toolbar-right {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .details-toolbar-row {
+    display: none !important;
+  }
+  .details-mobile-toolbar {
+    display: block;
+  }
+}
+
+@media (min-width: 700px) {
+  .details-mobile-toolbar {
+    display: none !important;
   }
 }
 
@@ -383,6 +397,38 @@ mat-paginator {
   .filter-form mat-form-field {
     min-width: 100%;
   }
+  // NUEVO: Botones en mobile ocupan todo el ancho y se apilan
+  .details-toolbar-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+    max-width: 100vw;
+    padding: 0;
+  }
+  .toolbar-left,
+  .toolbar-right {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .toolbar-left button,
+  .toolbar-right button,
+  .details-toolbar-row .mat-button-toggle-group {
+    width: 100%;
+    min-width: 0;
+    margin: 0 0 8px 0;
+    box-sizing: border-box;
+  }
+  .table-scroll-x {
+    max-width: 100vw;
+    overflow-x: auto;
+  }
+  .global-table {
+    min-width: 600px;
+    width: 100%;
+  }
 }
 
 // --- UTILIDADES ---
@@ -398,4 +444,69 @@ tr:last-child {
 
 .custom-paginator {
   margin-top: 0 !important;
+}
+
+.details-mobile-toolbar {
+  width: 100%;
+  margin-bottom: 12px;
+  .details-mobile-toolbar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    width: 100%;
+    .custom-button {
+      margin: 0 !important;
+      min-width: 70px;
+      height: 40px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .mobile-toggle-group {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      .mat-button-toggle {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 0 8px;
+        .mat-icon {
+          margin: 0 auto;
+        }
+      }
+    }
+    .filtros-toggle-btn {
+      min-width: 40px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #f4f7fa;
+      color: #1976d2;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+      border: none;
+      margin-right: 8px;
+    }
+    .cuotas-pendientes-btn {
+      flex: 1 1 0;
+      min-width: 0;
+      margin: 0;
+      height: 40px;
+      font-size: 1em;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+      background: #f4f7fa;
+      color: #1976d2;
+      border: none;
+    }
+  }
 }

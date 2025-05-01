@@ -1,13 +1,27 @@
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { take, map } from 'rxjs/operators';
 
-export const authGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-  
-  if (authService.isAuthenticated.value) return true;
-  
-  router.navigate(['/login']);
-  return false;
-};
+// Guard único configurable: protected=true (requiere login), protected=false (solo para no logueados)
+export function accessGuard(protectedRoute: boolean): CanActivateFn {
+  return () => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.isAuthenticated.pipe(
+      take(1),
+      map((isAuth) => {
+        if (protectedRoute) {
+          if (isAuth) return true;
+          router.navigate(['/login']);
+          return false;
+        } else {
+          if (!isAuth) return true;
+          router.navigate(['/']);
+          return false;
+        }
+      })
+    );
+  };
+}

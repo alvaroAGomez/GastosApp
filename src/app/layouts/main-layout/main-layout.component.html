@@ -1,6 +1,7 @@
 <mat-sidenav-container class="categories-sidenav-container">
-  <mat-sidenav #drawer mode="side" [(opened)]="isSidenavOpen">
-    <mat-nav-list [class.sidenav-mobile]="isMobile$ | async">
+  <mat-sidenav #drawer [mode]="(isMobile$ | async) ? 'over' : 'side'" [(opened)]="isSidenavOpen"
+    (closedStart)="isSidenavOpen = false" [fixedInViewport]="(isMobile$ | async) ? true : false">
+    <mat-nav-list>
       <a mat-list-item routerLink="/" routerLinkActive="active-link" (click)="closeMenuIfMobile()">
         <mat-icon>dashboard</mat-icon>
         <span>Dashboard</span>
@@ -21,15 +22,30 @@
         <mat-icon>category</mat-icon>
         <span>Categorías</span>
       </a>
+      <!-- Botón cerrar sesión solo visible en mobile -->
+      <div class="logout-mobile" *ngIf="isMobile$ | async">
+        <a mat-list-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar sesión</span>
+        </a>
+      </div>
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="main-toolbar">
-      <button mat-icon-button (click)="toggleMenu()">
+      <button mat-icon-button (click)="toggleMenu()" *ngIf="isMobile$ | async">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleMenu()" *ngIf="!(isMobile$ | async)">
         <mat-icon>menu</mat-icon>
       </button>
       <span class="logo" routerLink="/" style="cursor:pointer;">GASTOSAPP</span>
+      <span class="spacer"></span>
+      <button mat-button *ngIf="!(isMobile$ | async)" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Cerrar sesión
+      </button>
     </mat-toolbar>
     <main class="main-content">
       <router-outlet></router-outlet>

@@ -7,7 +7,7 @@ import { CategoriesComponent } from './features/categories/categories.component'
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { UpcomingExpensesComponent } from './features/expenses/upcoming-expenses/upcoming-expenses.component';
 import { ReportsComponent } from './features/reports/reports.component';
-import { authGuard } from './guards/auth.guard';
+import { accessGuard } from './guards/auth.guard';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { DetailsComponent } from './features/cards/credit-card-form/credit-card-details/details.component';
 
@@ -15,7 +15,7 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
-    canActivate: [authGuard],
+    canActivate: [accessGuard(true)],
     children: [
       { path: '', component: DashboardComponent },
       { path: 'credit-cards', component: CreditCardFormComponent },
@@ -26,7 +26,14 @@ export const routes: Routes = [
       { path: 'categories', component: CategoriesComponent },
     ],
   },
-  // Rutas de autenticación
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [accessGuard(false)],
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [accessGuard(false)],
+  },
 ];

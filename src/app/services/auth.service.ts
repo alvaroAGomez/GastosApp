@@ -19,7 +19,9 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {}
+  constructor() {
+    this.checkAuthStatus();
+  }
 
   login(credentials: { email: string; password: string }) {
     return this.http
@@ -44,8 +46,8 @@ export class AuthService {
     this.isAuthenticated.next(false);
   }
 
-  /*   private checkAuthStatus() {
+  private checkAuthStatus() {
     const token = localStorage.getItem('token');
     this.isAuthenticated.next(!!token);
-  } */
+  }
 }

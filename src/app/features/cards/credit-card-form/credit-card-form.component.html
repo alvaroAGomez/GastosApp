@@ -1,9 +1,18 @@
-<div class="header">
-  <button mat-raised-button color="primary" class="custom-button" (click)="openNewCardDialog()">Nueva Tarjeta</button>
-  <button mat-raised-button color="accent" class="custom-button-info" (click)="openEditCardDialog()">Editar
-    Tarjeta</button>
-  <button mat-raised-button color="warn" class="custom-button-cancelar" (click)="openDeleteCardDialog()">Eliminar
-    Tarjeta</button>
+<h1 class="page-title">Tarjetas de Crédito</h1>
+
+<div class="header desktop-buttons">
+  <button mat-raised-button color="primary" class="custom-button" (click)="openNewCardDialog()">
+    <mat-icon>add</mat-icon>
+    Nueva Tarjeta
+  </button>
+  <button mat-raised-button color="accent" class="custom-button-info" (click)="openEditCardDialog()">
+    <mat-icon>edit</mat-icon>
+    Editar Tarjeta
+  </button>
+  <button mat-raised-button color="warn" class="custom-button-cancelar" (click)="openDeleteCardDialog()">
+    <mat-icon>delete</mat-icon>
+    Eliminar Tarjeta
+  </button>
 </div>
 
 <div class="year-selector">
@@ -14,6 +23,19 @@
     </mat-option>
   </mat-select>
 </div>
+<div class="action-buttons mobile-buttons">
+  <button mat-mini-fab class="custom-button" matTooltip="Nueva Tarjeta" (click)="openNewCardDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button mat-mini-fab class="custom-button-info" matTooltip="Editar Tarjeta" (click)="openEditCardDialog()">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-mini-fab class="custom-button-cancelar" matTooltip="Eliminar Tarjeta" (click)="openDeleteCardDialog()">
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
+
+
 
 <div class="credit-cards-container">
   <div class="summary-card-modern">

@@ -1,5 +1,1 @@
-<nav *ngIf="authService.isAuthenticated$ | async" class="nav-container">
-  <button mat-raised-button routerLink="/">Dashboard</button>
-  <button mat-raised-button (click)="authService.logout()">Cerrar Sesión</button>
-</nav>
 <router-outlet></router-outlet>

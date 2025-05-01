@@ -42,7 +42,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: auto; // <-- Asegura que el scroll sea solo en body
+  overflow: auto;
 }
 
 .auth-form {
@@ -157,7 +157,7 @@ body {
 }
 
 button.mat-raised-button {
-  white-space: nowrap; /* Evita que el texto del botón se corte */
+  white-space: nowrap;
   background-color: $primary-color !important;
   color: #f5f5f6 !important;
 }
@@ -172,7 +172,7 @@ button.mat-raised-button.mat-button-disabled {
 }
 
 .custom-button-cancelar {
-  white-space: nowrap; /* Evita que el texto del botón se corte */
+  white-space: nowrap;
   background-color: $complement-color !important;
   color: #f5f5f6 !important;
   border: none;
@@ -183,25 +183,42 @@ button.mat-raised-button.mat-button-disabled {
 }
 
 .custom-button-info {
-  white-space: nowrap; /* Evita que el texto del botón se corte */
+  white-space: nowrap;
   background-color: $secondary-color-2 !important;
   color: #f5f5f6 !important;
   border: none;
   border-radius: 25px;
   height: 40px;
   cursor: pointer;
+  min-width: 100px;
 }
 
 .custom-button {
-  white-space: nowrap; /* Evita que el texto del botón se corte */
-  background-color: $primary-color !important;
+  white-space: nowrap;
+  background: $primary-color !important;
   color: #f5f5f6 !important;
   border: none;
-  border-radius: 25px;
+  border-radius: 24px;
   height: 40px;
   min-width: 100px;
+  font-size: 1.08rem;
+  box-shadow: 0 2px 8px #0001;
+  padding: 10px 28px;
+  transition: box-shadow 0.2s, background 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 10px 8px;
+  box-sizing: border-box;
   cursor: pointer;
-  margin: 10px;
+}
+
+.custom-button:hover,
+button.custom-button:hover {
+  background: $primary-color !important;
+  box-shadow: 0 4px 16px #1976d233;
+  transform: translateY(-2px) scale(1.03);
+  color: #fff !important;
 }
 
 .custom-button[disabled] {
@@ -217,14 +234,13 @@ button.mat-raised-button.mat-button-disabled {
 
 .headerBuscador {
   display: flex;
-  align-items: center; /* Alinea verticalmente los elementos */
-  justify-content: flex-start; /* Alinea horizontalmente sin espacios innecesarios */
+  align-items: center;
+  justify-content: flex-start;
   gap: 10px;
   margin-bottom: 16px;
 
-  /* Para que el campo de búsqueda y el botón estén alineados */
   mat-form-field {
-    flex-grow: 1; /* Hace que el input ocupe el espacio disponible */
+    flex-grow: 1;
     min-width: 250px;
   }
 }
@@ -308,4 +324,24 @@ button.mat-raised-button.mat-button-disabled {
     font-size: 0.98em;
     padding: 6px 4px;
   }
+}
+
+@media (max-width: 600px) {
+  .global-table {
+    min-width: 0 !important;
+    width: 100% !important;
+    overflow-x: auto;
+    display: block;
+  }
+  .table-scroll-x {
+    max-width: 100vw;
+    overflow-x: auto;
+  }
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 16px 0 15px 16px; /* top, right, bottom, left */
+  color: $table-header-color; // #1e88e5; /* mismo azul del resto */
 }
