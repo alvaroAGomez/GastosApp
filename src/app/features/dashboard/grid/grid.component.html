@@ -2,61 +2,108 @@
   <div class="headerBuscador">
     <mat-form-field>
       <mat-label>Buscar</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar gasto">
-      <button mat-button *ngIf="searchValue" matSuffix mat-icon-button (click)="clearFilter()">
+      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar gasto" [value]="searchValue">
+      <button *ngIf="searchValue" matSuffix mat-icon-button (click)="clearFilter()">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
   </div>
 
-  <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
-    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 global-table"
-      style="min-width:600px; width:100%;">
-      <ng-container matColumnDef="tarjeta">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tarjeta de Crédito </th>
-        <td mat-cell *matCellDef="let expense"> {{ expense.tarjeta }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="categoria">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </th>
-        <td mat-cell *matCellDef="let expense"> {{ expense.categoria }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="monto">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto </th>
-        <td mat-cell *matCellDef="let expense"> {{ expense.monto | customCurrency }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="fecha">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
-        <td mat-cell *matCellDef="let expense"> {{ expense.fecha | date:'dd/MM/yyyy' }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
-        <td mat-cell *matCellDef="let expense"> {{ expense.descripcion }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="acciones">
-        <th mat-header-cell *matHeaderCellDef> Acciones </th>
-        <td mat-cell *matCellDef="let expense">
-          <div class="acciones-btn-group">
-            <button mat-icon-button color="primary" (click)="editExpense(expense)" class="icon-action-btn edit-btn">
-              <mat-icon fontIcon="edit"></mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteExpense(expense)" class="icon-action-btn delete-btn">
+  <!-- MOBILE CARDS VIEW -->
+  <div *ngIf="isMobile; else desktopTable" class="mobile-cards-scroll" (scroll)="onMobileScroll($event)">
+    <ng-container *ngFor="let expense of mobileExpenses">
+      <mat-card class="mobile-expense-card">
+        <div class="card-header-row">
+          <div class="card-amount">
+            <span class="amount-icon">🧾</span>
+            <span class="amount-value">{{ expense.monto | customCurrency }}</span>
+          </div>
+          <div class="card-actions">
+            <button mat-icon-button class="icon-btn icon-eliminar" (click)="deleteExpense(expense)"
+              matTooltip="Eliminar gasto">
               <mat-icon fontIcon="delete"></mat-icon>
             </button>
+            <button mat-icon-button class="icon-btn icon-editar" (click)="editExpense(expense)"
+              matTooltip="Editar gasto">
+              <mat-icon fontIcon="edit"></mat-icon>
+            </button>
           </div>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    </table>
+        </div>
+        <div class="card-info-row">
+          <span class="info-icon">💳</span>
+          <span class="info-value">{{ expense.tarjeta }}</span>
+          <span class="info-separator">•</span>
+          <span class="info-icon">📂</span>
+          <span class="info-value">{{ expense.categoria }}</span>
+        </div>
+        <div class="card-info-row">
+          <span class="info-icon">📅</span>
+          <span class="info-value">{{ expense.fecha | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="card-info-row">
+          <span class="info-icon">📝</span>
+          <span class="info-value">{{ expense.descripcion }}</span>
+        </div>
+      </mat-card>
+    </ng-container>
+    <div *ngIf="mobileLoading" class="mobile-loading">Cargando...</div>
+    <div *ngIf="mobileAllLoaded && mobileExpenses.length === 0" class="mobile-no-data">No hay gastos.</div>
+    <div *ngIf="mobileAllLoaded && mobileExpenses.length > 0" class="mobile-no-more">No hay más gastos.</div>
   </div>
 
-  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
-    class="custom-paginator"></mat-paginator>
+  <!-- DESKTOP TABLE VIEW -->
+  <ng-template #desktopTable>
+    <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 global-table"
+        style="min-width:600px; width:100%;">
+        <ng-container matColumnDef="tarjeta">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Tarjeta de Crédito </th>
+          <td mat-cell *matCellDef="let expense"> {{ expense.tarjeta }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoria">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </th>
+          <td mat-cell *matCellDef="let expense"> {{ expense.categoria }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="monto">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto </th>
+          <td mat-cell *matCellDef="let expense"> {{ expense.monto | customCurrency }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+          <td mat-cell *matCellDef="let expense"> {{ expense.fecha | date:'dd/MM/yyyy' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+          <td mat-cell *matCellDef="let expense"> {{ expense.descripcion }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+          <td mat-cell *matCellDef="let expense">
+            <div class="acciones-btn-group">
+              <button mat-icon-button color="primary" (click)="editExpense(expense)" class="icon-action-btn edit-btn"
+                matTooltip="Editar gasto">
+                <mat-icon fontIcon="edit"></mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteExpense(expense)" class="icon-action-btn delete-btn"
+                matTooltip="Eliminar gasto">
+                <mat-icon fontIcon="delete"></mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+    </div>
+
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+      class="custom-paginator"></mat-paginator>
+  </ng-template>
 </div>
