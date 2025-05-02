@@ -11,6 +11,7 @@
 
   <!-- MOBILE CARDS VIEW -->
   <div *ngIf="isMobile; else desktopTable" class="mobile-cards-scroll" (scroll)="onMobileScroll($event)">
+    <h3>Gastos Realizados</h3>
     <ng-container *ngFor="let expense of mobileExpenses">
       <mat-card class="mobile-expense-card">
         <div class="card-header-row">

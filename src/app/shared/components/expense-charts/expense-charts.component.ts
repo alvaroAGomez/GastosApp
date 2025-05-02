@@ -1,7 +1,12 @@
 import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ChartData, ChartConfiguration } from 'chart.js';
+import {
+  ChartData,
+  ChartConfiguration,
+  ChartDataset,
+  ChartOptions,
+} from 'chart.js';
 import { ExpenseChartsService } from './expense-charts.service';
 import { ExpenseChartFilters, ExpenseChartData } from './expense-charts.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -38,12 +43,12 @@ interface LocalExpenseChartFilters extends ExpenseChartFilters {
     MatInputModule,
     MatDatepickerModule,
     MatOptionModule,
-    NgChartsModule, // <-- asegúrate de que sea exactamente así
+    NgChartsModule,
     MatCheckboxModule,
-    // CustomCurrencyPipe,
   ],
   templateUrl: './expense-charts.component.html',
   providers: [ExpenseChartsService],
+  styleUrl: './expense-charts.component.scss',
 })
 export class ExpenseChartsComponent implements OnInit {
   @Input() initialFilters?: Partial<ExpenseChartFilters>;
@@ -63,16 +68,13 @@ export class ExpenseChartsComponent implements OnInit {
       tooltip: {
         callbacks: {
           label: (ctx: any) => {
-            // Asegura que ctx.dataset.data es un array de números
             const dataArr = Array.isArray(ctx.dataset.data)
               ? ctx.dataset.data
               : [];
             const total = dataArr.reduce((a: number, b: number) => a + b, 0);
             const value = ctx.dataset.data[ctx.dataIndex];
             const pct = total ? ((value / total) * 100).toFixed(1) : 0;
-            // Usa el pipe para el formato de monto
             const formatted = this.customCurrency.transform(value, 0);
-            // Muestra el nombre de la categoría, el monto y el porcentaje
             return `${ctx.label}: ${formatted} (${pct}%)`;
           },
         },

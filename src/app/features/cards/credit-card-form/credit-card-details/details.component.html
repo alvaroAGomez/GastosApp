@@ -127,6 +127,7 @@
 
   <!-- MOBILE CARDS VIEW -->
   <div *ngIf="isMobile; else desktopTable" class="mobile-cards-scroll">
+    <h3>Gastos Realizados</h3>
     <ng-container *ngFor="let gasto of dataSource.filteredData">
       <mat-card class="mobile-expense-card">
         <div class="card-header-row">

@@ -1,0 +1,25 @@
+@media (max-width: 600px) {
+  .filter-form {
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      mat-form-field:nth-child(1) {
+        grid-column: span 1;
+      }
+
+      mat-form-field:nth-child(2) {
+        grid-column: span 1;
+      }
+
+      mat-form-field:nth-child(3) {
+        grid-column: span 2; // ocupa toda la fila
+      }
+    }
+  }
+}
