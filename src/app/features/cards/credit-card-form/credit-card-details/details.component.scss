@@ -310,124 +310,11 @@ mat-paginator {
   }
 }
 
-@media (max-width: 700px) {
-  .details-toolbar-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    padding: 0;
-    width: 100%;
-    max-width: 100vw;
-  }
-  .toolbar-left,
-  .toolbar-right {
-    width: 100%;
-    justify-content: stretch;
-    flex-direction: row;
-    gap: 8px;
-  }
-  .details-toolbar-row .mat-button-toggle-group {
-    margin-left: 0;
-    width: 100%;
-    justify-content: stretch;
-  }
-  .filter-form.compact-filter-form {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-  }
-  .filter-form.compact-filter-form mat-form-field {
-    min-width: 100%;
-    max-width: 100%;
-  }
-  // NUEVO: Botones ocupan todo el ancho
-  .toolbar-left button,
-  .toolbar-right button,
-  .details-toolbar-row .mat-button-toggle-group {
-    width: 100%;
-    min-width: 0;
-    margin: 0 0 8px 0;
-    box-sizing: border-box;
-  }
-  .toolbar-left,
-  .toolbar-right {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .details-toolbar-row {
-    display: none !important;
-  }
-  .details-mobile-toolbar {
-    display: block;
-  }
-}
-
 @media (min-width: 700px) {
   .details-mobile-toolbar {
     display: none !important;
-  }
-}
-
-@media (max-width: 600px) {
-  .card-name {
-    font-size: 22px;
-    margin-bottom: 14px;
-  }
-  .card-limits {
-    flex-direction: column;
-    gap: 10px;
-    max-width: 100vw;
-  }
-  .limit-item {
-    padding: 0 4px;
-    min-width: 0;
-  }
-  .limit-label {
-    font-size: 0.98em;
-  }
-  .limit-value {
-    font-size: 1.05em;
-    padding: 2px 6px;
-    min-width: 70px;
-  }
-  .filter-form {
-    flex-direction: column;
-    gap: 4px;
-  }
-  .filter-form mat-form-field {
-    min-width: 100%;
-  }
-  // NUEVO: Botones en mobile ocupan todo el ancho y se apilan
-  .details-toolbar-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    width: 100%;
-    max-width: 100vw;
-    padding: 0;
-  }
-  .toolbar-left,
-  .toolbar-right {
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-    align-items: stretch;
-  }
-  .toolbar-left button,
-  .toolbar-right button,
-  .details-toolbar-row .mat-button-toggle-group {
-    width: 100%;
-    min-width: 0;
-    margin: 0 0 8px 0;
-    box-sizing: border-box;
-  }
-  .table-scroll-x {
-    max-width: 100vw;
-    overflow-x: auto;
-  }
-  .global-table {
-    min-width: 600px;
-    width: 100%;
+    margin-top: 0;
+    padding-top: 0;
   }
 }
 
@@ -507,6 +394,85 @@ tr:last-child {
       background: #f4f7fa;
       color: #1976d2;
       border: none;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .card-details-header {
+    background-color: #f0f2f4; /* restaurá el color si era solo debug */
+    padding: 0px 12px;
+    border-radius: 12px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+    margin: 0 0 20px 0;
+    width: 100%;
+    box-sizing: border-box; /* asegurás que el padding no expanda el ancho */
+  }
+
+  .card-name {
+    font-size: 1.4rem;
+  }
+
+  .card-limits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .limit-item {
+    align-items: flex-start;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .limit-label {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .limit-value {
+    font-size: 1.05rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .filter-form.compact-filter-form {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px 8px !important;
+    padding: 0 4px !important;
+    margin-top: 8px !important;
+
+    mat-form-field {
+      width: 100% !important;
+      grid-column: span 1 !important;
+      margin: 0 !important;
+    }
+
+    button {
+      flex: 1 1 0 !important;
+      height: 44px !important;
+      font-size: 1rem !important;
+      font-weight: 600 !important;
+      border-radius: 22px !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      margin: 0 !important;
+      padding: 0 12px !important;
+      margin-bottom: 15px !important;
+    }
+
+    .buscar-btn {
+      background-color: #00796b !important;
+      color: white !important;
+    }
+
+    .limpiar-btn {
+      background-color: #e57373 !important;
+      color: white !important;
     }
   }
 }

@@ -13,7 +13,7 @@
 .pending-installments-modal-title {
   font-size: 2em;
   font-weight: bold;
-  color: #222;
+  color: #1976d2;
   margin: 0 0 18px 0;
   padding: 32px 32px 0 32px;
   letter-spacing: -0.5px;
@@ -50,4 +50,31 @@
 
 .footer-total-row {
   padding: 12px 18px 12px 0 !important;
+}
+
+.total-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 6px;
+}
+
+.total-icon {
+  color: #206d37; // gris azulado sobrio
+  font-size: 20px;
+}
+
+.amount-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #cf3a3a !important; // azul confiable que resalta pero no alarma
+}
+
+.info-label {
+  font-weight: 500;
+  color: #333;
+  margin-right: 4px;
+  font-size: 1rem;
 }

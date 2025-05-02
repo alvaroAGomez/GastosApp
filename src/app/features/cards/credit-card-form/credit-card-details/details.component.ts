@@ -106,7 +106,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   ];
 
   // Fuente de datos para la tabla
-  dataSource = new MatTableDataSource<Expense>([]);
+  dataSource = new MatTableDataSource<Expense | any>([]);
 
   filterForm: FormGroup;
   totalExpenses = 0;
@@ -252,6 +252,8 @@ export class DetailsComponent implements OnInit, AfterViewInit {
           fecha: item.fecha ? new Date(item.fecha) : null,
         }));
         this.totalExpenses = res.total;
+        console.log('Datasourse', this.dataSource);
+        console.log('Datasourse.data', this.dataSource.data);
       });
   }
 
@@ -259,8 +261,6 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   loadMovimientos() {
     if (!this.selectedCardId) return;
     this.cardService.getCardMovements(this.selectedCardId).subscribe((res) => {
-      console.log(res);
-
       // res debe venir ya con los campos: fecha, descripcion, cuotasPendientes, montoCuota, total
       this.movimientosDataSource.data = res || [];
       // Sumar el total de cuotas pendientes (sumar total de cada gasto)

@@ -1,37 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { RouterModule } from '@angular/router';
-import { NgChartsModule } from 'ng2-charts';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pipe';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-pending-installments-modal',
   standalone: true,
   imports: [
     CommonModule,
-    CommonModule,
     CustomCurrencyPipe,
     MatTableModule,
     MatIconModule,
+    MatCardModule,
   ],
   templateUrl: './pending-installments-modal.component.html',
   styleUrls: ['./pending-installments-modal.component.scss'],
 })
 export class PendingInstallmentsModalComponent {
+  isMobile: boolean = false;
+
   constructor(
     public dialogRef: MatDialogRef<PendingInstallmentsModalComponent>,
     @Inject(MAT_DIALOG_DATA)
@@ -39,6 +30,14 @@ export class PendingInstallmentsModalComponent {
       movimientos: any[];
       totalCuotasPendientes: number;
       displayedColumns: string[];
-    }
-  ) {}
+    },
+    private breakpointObserver: BreakpointObserver
+  ) {
+    // Detectar si está en mobile
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .subscribe((result) => {
+        this.isMobile = result.matches;
+      });
+  }
 }
