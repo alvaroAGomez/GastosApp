@@ -1,25 +1,48 @@
-// login.component.ts
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatInputModule, MatButtonModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    RouterLink,
+    CommonModule,
+  ],
   templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   fb = inject(FormBuilder);
   authService = inject(AuthService);
   router = inject(Router);
+  breakpointObserver = inject(BreakpointObserver);
+
+  isMobile = false;
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
+
+  ngOnInit(): void {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .subscribe((result) => {
+        this.isMobile = result.matches;
+      });
+  }
 
   onSubmit() {
     if (this.loginForm.valid) {
@@ -30,12 +53,9 @@ export class LoginComponent {
         })
         .subscribe({
           next: (res) => {
-            // Guarda el token en localStorage
             localStorage.setItem('token', res.access_token);
-            // Redirige o realiza otra acción si es necesario
-            this.router.navigate(['/']); // Cambia la ruta según tu app
+            this.router.navigate(['/']);
           },
-          // Puedes agregar manejo de error aquí si lo deseas
         });
     }
   }

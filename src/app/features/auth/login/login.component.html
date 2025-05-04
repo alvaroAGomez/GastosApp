@@ -1,31 +1,65 @@
-<div class="auth-container">
-  <div class="image-section">
-    <div class="content">
+<ng-container *ngIf="isMobile; else desktopView">
+  <!-- MOBILE LOGIN -->
+  <div class="mobile-login-wrapper">
+    <div class="mobile-login-header">
       <h1>Control de Gastos</h1>
-      <p>Mantén un seguimiento detallado de tus tarjetas y mejora tu gestión financiera</p>
+      <p>Gestioná tus tarjetas y finanzas personales al detalle</p>
     </div>
-  </div>
 
-  <div class="form-section">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
-      <h2>Bienvenido</h2>
-
-      <mat-form-field>
-        <input matInput placeholder="Email" formControlName="email">
-        <mat-icon matPrefix></mat-icon>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mobile-login-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" required />
       </mat-form-field>
 
-      <mat-form-field>
-        <input matInput type="password" placeholder="Contraseña" formControlName="password">
+      <mat-form-field appearance="fill">
+        <mat-label>Contraseña</mat-label>
+        <input matInput formControlName="password" type="password" required />
       </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit" class="full-width-btn">
+      <button mat-raised-button color="primary" type="submit" class="custom-button">
         Ingresar
       </button>
 
-      <div class="auth-footer">
-        <p>¿No tienes cuenta? <a routerLink="/register" class="accent-link">Regístrate</a></p>
+      <div class="mobile-auth-footer">
+        <p>¿No tenés cuenta? <a routerLink="/register">Registrate</a></p>
       </div>
     </form>
   </div>
-</div>
+</ng-container>
+
+<!-- DESKTOP LOGIN -->
+<ng-template #desktopView>
+  <div class="auth-container">
+    <div class="image-section">
+      <div class="content">
+        <h1>Control de Gastos</h1>
+        <p>Mantén un seguimiento detallado de tus tarjetas y mejora tu gestión financiera</p>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <h2>Bienvenido</h2>
+
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" required />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Contraseña</mat-label>
+          <input matInput formControlName="password" type="password" required />
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" class="custom-button">
+          Ingresar
+        </button>
+
+        <div class="auth-footer">
+          <p>¿No tienes cuenta? <a routerLink="/register" class="accent-link">Regístrate</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
