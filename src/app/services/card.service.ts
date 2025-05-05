@@ -47,48 +47,9 @@ export class CardService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  getAnnualSummary(anio?: number): Observable<any> {
-    let url = `${environment.apiUrl}Cuota/resumen-anual`;
-    if (anio) {
-      url += `?anio=${anio}`;
-    }
-    return this.http.get<any>(url);
-  }
-
-  getAnnualGeneralSummary(anio?: number) {
-    let url = `${environment.apiUrl}Cuota/resumen-general-anual`;
-    if (anio) url += `?anio=${anio}`;
-    return this.http.get<CreditCardAnnualGeneralSummary>(url);
-  }
-
-  getMonthlyDetailByCard(tarjetaId: number, anio?: number) {
-    let url = `${environment.apiUrl}Cuota/resumen-tarjeta/${tarjetaId}`;
-    if (anio) url += `?anio=${anio}`;
-    return this.http.get<CreditCardMonthlyDetailSummary>(url);
-  }
-
   getCreditCardHeaderDetail(id: number) {
     return this.http.get<CreditCardDetailHeader>(
       `${this.apiUrl}/${id}/detalle`
-    );
-  }
-
-  getCardExpensesPaged(
-    tarjetaId: number,
-    params: {
-      page?: number;
-      limit?: number;
-      fechaDesde?: string;
-      fechaHasta?: string;
-      categoria?: string;
-      cuotasRestantes?: number;
-      sortField?: string;
-      sortDirection?: 'ASC' | 'DESC';
-    }
-  ) {
-    return this.http.get<{ data: Expense[]; total: number }>(
-      `${environment.apiUrl}gastos/por-tarjeta/${tarjetaId}`,
-      { params: { ...params } }
     );
   }
 
@@ -97,7 +58,6 @@ export class CardService {
   }
 
   getCardMovements(tarjetaId: number) {
-    // Espera array de { fecha, descripcion, cuotasPendientes, montoCuota, total }
     return this.http.get<any[]>(`${this.apiUrl}/${tarjetaId}/movimientos`);
   }
 }

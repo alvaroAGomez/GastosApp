@@ -15,12 +15,13 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { CardService } from '../../../services/card.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { DeleteCardModalComponent } from './delete-card-modal/delete-card-modal.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CustomCurrencyPipe } from '../../../shared/pipes/custom-currency.pipe';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CuotaService } from '../../../services/cuota.service';
 
 @Component({
   selector: 'app-credit-card-form',
@@ -69,7 +70,8 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private cardService: CardService,
-    private router: Router // agrega el router
+    private router: Router,
+    private cuotaService: CuotaService
   ) {
     const currentYear = new Date().getFullYear();
     this.availableYears = Array.from(
@@ -90,23 +92,25 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
 
   loadAnnualGeneralSummary(year: number) {
     this.subscriptions.add(
-      this.cardService.getAnnualGeneralSummary(year).subscribe((summary) => {
+      this.cuotaService.getAnnualGeneralSummary(year).subscribe((summary) => {
         this.annualGeneralSummary = summary;
       })
     );
   }
 
   loadAllCardMonthlyDetails(year: number) {
-    this.cardMonthlyDetails = [];
-    this.creditCards.forEach((card) => {
-      this.subscriptions.add(
-        this.cardService
-          .getMonthlyDetailByCard(card.id, year)
-          .subscribe((detail) => {
-            this.cardMonthlyDetails.push(detail);
-          })
-      );
-    });
+    const requests = this.creditCards.map((card) =>
+      this.cuotaService.getMonthlyDetailByCard(card.id, year)
+    );
+
+    this.subscriptions.add(
+      forkJoin(requests).subscribe((results) => {
+        // Ordenar de mayor a menor por totalAnual
+        this.cardMonthlyDetails = results.sort(
+          (a, b) => b.totalAnual - a.totalAnual
+        );
+      })
+    );
   }
 
   ngOnDestroy() {

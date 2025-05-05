@@ -23,4 +23,23 @@ export class ExpenseService {
   eliminarGasto(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
+
+  getCardExpensesPaged(
+    tarjetaId: number,
+    params: {
+      page?: number;
+      limit?: number;
+      fechaDesde?: string;
+      fechaHasta?: string;
+      categoria?: string;
+      cuotasRestantes?: number;
+      sortField?: string;
+      sortDirection?: 'ASC' | 'DESC';
+    }
+  ) {
+    return this.http.get<{ data: Expense[]; total: number }>(
+      `${environment.apiUrl}gastos/por-tarjeta/${tarjetaId}`,
+      { params: { ...params } }
+    );
+  }
 }

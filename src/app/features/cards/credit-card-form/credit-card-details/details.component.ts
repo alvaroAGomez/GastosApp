@@ -219,8 +219,8 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     this.filterForm.reset({
       fechaDesde: '',
       fechaHasta: '',
-      categoria: '',
-      cuotasRestantes: '',
+      categoria: 'Todas',
+      cuotasRestantes: null,
     });
     this.pageIndex = 0;
     this.loadExpenses();
@@ -238,7 +238,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       filters.fechaHasta = filters.fechaHasta.toISOString().slice(0, 10);
     }
 
-    this.cardService
+    this.expenseService
       .getCardExpensesPaged(+cardId, {
         page: this.pageIndex + 1,
         limit: this.pageSize,
@@ -252,8 +252,6 @@ export class DetailsComponent implements OnInit, AfterViewInit {
           fecha: item.fecha ? new Date(item.fecha) : null,
         }));
         this.totalExpenses = res.total;
-        console.log('Datasourse', this.dataSource);
-        console.log('Datasourse.data', this.dataSource.data);
       });
   }
 

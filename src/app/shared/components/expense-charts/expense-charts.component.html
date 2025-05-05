@@ -1,5 +1,5 @@
 <form [formGroup]="filterForm" class="filter-form">
-    <div class="filter-row">
+    <div class="filter-row" *ngIf="chartType !== 'line'">
         <mat-checkbox formControlName="anioTotal" class="anio-checkbox">
             Año Completo
         </mat-checkbox>
@@ -9,7 +9,7 @@
             <mat-label>Año</mat-label>
             <input matInput type="number" formControlName="anio" min="2000" max="2100">
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field *ngIf="chartType !== 'line'">
             <mat-label>Mes</mat-label>
             <mat-select formControlName="mes" [disabled]="filterForm.value.anioTotal">
                 <mat-option *ngFor="let m of months" [value]="m.value">{{ m.name }}</mat-option>
