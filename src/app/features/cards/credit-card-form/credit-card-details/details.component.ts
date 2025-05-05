@@ -36,6 +36,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ExpenseService } from '../../../../services/expense.service';
 import { PendingInstallmentsModalComponent } from './pending-installments-modal.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CuotaService } from '../../../../services/cuota.service';
+import { GastoMensual } from '../interfaces';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -101,7 +103,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     'categoria',
     'monto',
     'cuotas',
-    'cuotasRestantes',
+    // 'cuotasRestantes',
     'acciones',
   ];
 
@@ -115,7 +117,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   sortField = 'fecha';
   sortDirection: 'asc' | 'desc' = 'desc';
   categories: { id: number; nombre: string }[] = [];
-  selectedCardId: number | null = null;
+  selectedCardId!: number;
   showCharts = false;
   showFilters = false;
 
@@ -139,7 +141,8 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     private categoryService: CategoryService,
     private dialog: MatDialog,
     private toastr: ToastrService,
-    private expenseService: ExpenseService
+    private expenseService: ExpenseService,
+    private cuotaService: CuotaService
   ) {
     this.filterForm = this.fb.group({
       fechaDesde: [''],
@@ -225,8 +228,15 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     this.pageIndex = 0;
     this.loadExpenses();
   }
-
+  gastosmensualesporTarjeta: GastoMensual[] = [];
   loadExpenses() {
+    this.expenseService
+      .getGastosMensualesPorTarjeta(this.selectedCardId)
+      .subscribe((res) => {
+        console.log(res);
+        this.gastosmensualesporTarjeta = res;
+      });
+
     const cardId = this.route.snapshot.paramMap.get('id');
     if (!cardId) return;
     const filters = { ...this.filterForm.value };
@@ -247,6 +257,8 @@ export class DetailsComponent implements OnInit, AfterViewInit {
         sortDirection: this.sortDirection.toUpperCase(),
       })
       .subscribe((res) => {
+        console.log(res);
+
         this.dataSource.data = res.data.map((item: any) => ({
           ...item,
           fecha: item.fecha ? new Date(item.fecha) : null,
@@ -336,7 +348,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       .subscribe((result) => {
         if (result) {
           this.loadExpenses();
-          this.loadMovimientos(); // <-- Actualiza cuotas pendientes también
+          this.loadMovimientos();
         }
       });
   }
@@ -359,7 +371,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
         if (result && result.updated) {
           this.toastr.success('Gasto actualizado con éxito', 'Éxito');
           this.loadHeaderAndExpenses();
-          this.loadMovimientos(); // <-- Actualiza cuotas pendientes también
+          this.loadMovimientos();
         }
       });
   }
@@ -379,7 +391,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
             next: () => {
               this.toastr.success('Gasto eliminado con éxito', 'Éxito');
               this.loadHeaderAndExpenses();
-              this.loadMovimientos(); // <-- Actualiza cuotas pendientes también
+              this.loadMovimientos();
             },
             error: () => {
               this.toastr.error('Error al eliminar gasto', 'Error');
@@ -408,14 +420,20 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   openPendingInstallmentsModal() {
-    this.dialog.open(PendingInstallmentsModalComponent, {
-      width: '900px',
-      maxWidth: '98vw',
-      data: {
-        movimientos: this.movimientosDataSource.data,
-        totalCuotasPendientes: this.totalCuotasPendientes,
-        displayedColumns: this.movimientosDisplayedColumns,
-      },
-    });
+    this.cuotaService
+      .getCuotasPendientesFuturasPorTarjeta(this.selectedCardId)
+      .subscribe((res) => {
+        console.log(res);
+
+        this.dialog.open(PendingInstallmentsModalComponent, {
+          width: '900px',
+          maxWidth: '98vw',
+          data: {
+            tarjetaId: this.selectedCardId,
+            movimientos: res.detalles,
+            totalCuotasPendientes: res.totalGeneral,
+          },
+        });
+      });
   }
 }

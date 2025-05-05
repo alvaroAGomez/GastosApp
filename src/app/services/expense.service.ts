@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Expense } from '../models/expense.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { GastoMensual } from '../features/cards/credit-card-form/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -41,5 +42,9 @@ export class ExpenseService {
       `${environment.apiUrl}gastos/por-tarjeta/${tarjetaId}`,
       { params: { ...params } }
     );
+  }
+
+  getGastosMensualesPorTarjeta(tarjetaId: number): Observable<GastoMensual[]> {
+    return this.http.get<GastoMensual[]>(`${this.apiUrl}/mensual/${tarjetaId}`);
   }
 }
