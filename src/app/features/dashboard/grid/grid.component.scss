@@ -29,3 +29,54 @@
 h3 {
   color: #1976d2;
 }
+
+.filter-form-responsive {
+  margin-bottom: 16px;
+
+  .filtros-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    mat-form-field {
+      flex: 1;
+    }
+  }
+
+  .botones-fila {
+    display: flex;
+    gap: 8px;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+.custom-button {
+  margin: 0%;
+}
+
+@media (min-width: 701px) {
+  .filter-form-responsive {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .filtros-row {
+      flex-direction: row;
+      margin: 0;
+      gap: 16px;
+    }
+
+    .botones-fila {
+      //margin-left: auto;
+      gap: 16px;
+    }
+  }
+}
+
+.oculto-mobile {
+  display: none;
+}

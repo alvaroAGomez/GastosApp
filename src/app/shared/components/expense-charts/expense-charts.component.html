@@ -15,7 +15,7 @@
                 <mat-option *ngFor="let m of months" [value]="m.value">{{ m.name }}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field *ngIf="chartType !== 'doughnut' && chartType !== 'bar'">
             <mat-label>Categoría</mat-label>
             <mat-select formControlName="categoria" multiple>
                 <mat-option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</mat-option>

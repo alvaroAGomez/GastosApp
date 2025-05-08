@@ -148,7 +148,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       fechaDesde: [''],
       fechaHasta: [''],
       categoria: ['Todas'],
-      cuotasRestantes: [null],
+      //cuotasRestantes: [null],
     });
   }
 
@@ -377,6 +377,8 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   deleteExpense(expense: any) {
+    console.log(expense);
+
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
@@ -387,7 +389,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.expenseService.eliminarGasto(expense.id).subscribe({
+          this.expenseService.eliminarGasto(expense.gastoId).subscribe({
             next: () => {
               this.toastr.success('Gasto eliminado con éxito', 'Éxito');
               this.loadHeaderAndExpenses();

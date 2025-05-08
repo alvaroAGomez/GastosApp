@@ -23,6 +23,15 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 import { ToastrService } from 'ngx-toastr';
 import { ExpenseService } from '../../../services/expense.service';
 import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
+import {
+  MatDatepicker,
+  MatDatepickerModule,
+} from '@angular/material/datepicker';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CategoryService } from '../../../services/category.service';
+import { CardService } from '../../../services/card.service';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-grid',
@@ -38,6 +47,11 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     CustomCurrencyPipe,
     MatCardModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    FormsModule,
+    MatDatepicker,
+    MatNativeDateModule,
   ],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss',
@@ -65,19 +79,66 @@ export class GridComponent implements OnInit, AfterViewInit {
   mobileLoading = false;
   mobileAllLoaded = false;
   allMobileExpenses: DashboardExpense[] = [];
+  filtros: {
+    fechaDesde?: string;
+    fechaHasta?: string;
+    categoriaId?: number;
+    tarjetaId?: number;
+  } = {};
+
+  mostrarFiltrosMobile = false;
+  categorias: any[] = []; // deberías cargarlas con CategoryService
+  tarjetas: any[] = []; // deberías cargarlas con CardService
+  showFilters = false;
 
   constructor(
     private dashboardExpenseService: DashboardExpenseService,
     private dialog: MatDialog,
     private toastr: ToastrService,
-    private expenseService: ExpenseService
+    private expenseService: ExpenseService,
+    private categoriaService: CategoryService,
+    private cardService: CardService
   ) {}
+
+  toggleFiltrosMobile() {
+    this.showFilters = !this.showFilters;
+    this.mostrarFiltrosMobile = !this.mostrarFiltrosMobile;
+  }
+  applyFilters() {
+    this.reloadData();
+  }
+
   ngOnInit(): void {
-    this.checkMobile(); // 👈 ejecutarlo antes del render
+    this.checkMobile();
+    this.loadCategorias();
+    this.loadTarjetas();
+  }
+
+  loadCategorias() {
+    this.categoriaService.getCategories().subscribe({
+      next: (res) => {
+        this.categorias = res;
+      },
+      error: () => {
+        this.toastr.error('Error al cargar categorías');
+      },
+    });
+  }
+
+  loadTarjetas() {
+    this.cardService.getCards().subscribe({
+      next: (res) => {
+        console.log(res);
+
+        this.tarjetas = res;
+      },
+      error: () => {
+        this.toastr.error('Error al cargar tarjetas');
+      },
+    });
   }
 
   ngAfterViewInit(): void {
-    //this.checkMobile();
     this.reloadData();
     window.addEventListener('resize', this.checkMobile.bind(this));
   }
@@ -100,6 +161,29 @@ export class GridComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getFiltrosFormateados() {
+    return {
+      ...this.filtros,
+      fechaDesde: this.filtros.fechaDesde
+        ? new Date(this.filtros.fechaDesde).toISOString()
+        : undefined,
+      fechaHasta: this.filtros.fechaHasta
+        ? new Date(this.filtros.fechaHasta).toISOString()
+        : undefined,
+    };
+  }
+
+  limpiarFiltros() {
+    this.filtros = {
+      fechaDesde: undefined,
+      fechaHasta: undefined,
+      categoriaId: undefined,
+      tarjetaId: undefined,
+    };
+
+    this.reloadData();
+  }
+
   reloadData() {
     if (this.isMobile) {
       this.mobileExpenses = [];
@@ -109,7 +193,7 @@ export class GridComponent implements OnInit, AfterViewInit {
       return;
     }
     this.dashboardExpenseService
-      .getDashboardExpenses()
+      .getDashboardExpenses(this.getFiltrosFormateados())
       .subscribe((expenses) => {
         this.dataSource = new MatTableDataSource(expenses);
         this.dataSource.paginator = this.paginator;
@@ -122,7 +206,7 @@ export class GridComponent implements OnInit, AfterViewInit {
     this.mobileLoading = true;
 
     this.dashboardExpenseService
-      .getDashboardExpenses()
+      .getDashboardExpenses(this.getFiltrosFormateados())
       .subscribe((expenses) => {
         // Guardar todos solo la primera vez
         if (this.mobilePage === 0) {

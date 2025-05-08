@@ -1,6 +1,63 @@
 <div class="grid-container">
+
+  <div *ngIf="isMobile" class="filtro-icon-button">
+    <button mat-icon-button color="primary" (click)="toggleFiltrosMobile()" aria-label="Filtros">
+      <mat-icon>{{ showFilters ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
+    </button>
+  </div>
+
+  <form class="filter-form-responsive" [ngClass]="{ 'oculto-mobile': isMobile && !mostrarFiltrosMobile }"
+    (ngSubmit)="applyFilters()" #filterForm="ngForm">
+    <!-- Fila 1: Fecha desde y hasta -->
+    <div class="filtros-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Desde</mat-label>
+        <input matInput [matDatepicker]="pickerDesde" [(ngModel)]="filtros.fechaDesde" name="fechaDesde" />
+        <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDesde></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Hasta</mat-label>
+        <input matInput [matDatepicker]="pickerHasta" [(ngModel)]="filtros.fechaHasta" name="fechaHasta" />
+        <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+        <mat-datepicker #pickerHasta></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 2: Categoría y Tarjeta -->
+    <div class="filtros-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Categoría</mat-label>
+        <mat-select [(ngModel)]="filtros.categoriaId" name="categoriaId">
+          <mat-option [value]="null">Todas</mat-option>
+          <mat-option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Tarjeta</mat-label>
+        <mat-select [(ngModel)]="filtros.tarjetaId" name="tarjetaId">
+          <mat-option [value]="null">Todas</mat-option>
+          <mat-option *ngFor="let t of tarjetas" [value]="t.id">{{ t.nombreTarjeta }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 3: Botones -->
+    <div class="filtros-row botones-fila">
+      <button mat-raised-button color="primary" type="submit" class="custom-button">Aplicar filtros</button>
+      <button mat-raised-button color="warn" type="button" class="custom-button-cancelar"
+        (click)="limpiarFiltros()">Limpiar filtros</button>
+    </div>
+  </form>
+
+
   <div class="headerBuscador">
     <mat-form-field>
+
+
+
       <mat-label>Buscar</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Buscar gasto" [value]="searchValue">
       <button *ngIf="searchValue" matSuffix mat-icon-button (click)="clearFilter()">

@@ -8,9 +8,22 @@ import { environment } from '../../environments/environment';
 export class DashboardExpenseService {
   constructor(private http: HttpClient) {}
 
-  getDashboardExpenses(): Observable<DashboardExpense[]> {
+  getDashboardExpenses(filters?: {
+    fechaDesde?: string;
+    fechaHasta?: string;
+    categoriaId?: number;
+    tarjetaId?: number;
+  }): Observable<DashboardExpense[]> {
+    const params: any = {};
+
+    if (filters?.fechaDesde) params.fechaDesde = filters.fechaDesde;
+    if (filters?.fechaHasta) params.fechaHasta = filters.fechaHasta;
+    if (filters?.categoriaId) params.categoriaId = filters.categoriaId;
+    if (filters?.tarjetaId) params.tarjetaId = filters.tarjetaId;
+
     return this.http.get<DashboardExpense[]>(
-      `${environment.apiUrl}gastos/dashboard/tarjetas`
+      `${environment.apiUrl}gastos/dashboard/tarjetas`,
+      { params }
     );
   }
 

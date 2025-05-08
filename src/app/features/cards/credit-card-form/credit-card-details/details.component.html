@@ -107,10 +107,7 @@
         <mat-option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nombre }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Cuotas Restantes</mat-label>
-      <input matInput type="number" formControlName="cuotasRestantes" min="0">
-    </mat-form-field>
+
 
 
 
@@ -168,7 +165,7 @@
   <!-- DESKTOP TABLE VIEW -->
   <ng-template #desktopTable>
     <!-- tabla comentada hay q moverla y usarla para el historico -->
-    <!--     <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
+    <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
       <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)"
         class="mat-elevation-z8 global-table" style="min-width:600px; width:100%;">
         <ng-container matColumnDef="fecha">
@@ -226,7 +223,7 @@
     </div>
     <mat-paginator [length]="totalExpenses" [pageSize]="pageSize" [pageIndex]="pageIndex"
       [pageSizeOptions]="[5, 10, 20]" (page)="onPaginate($event)" class="custom-paginator">
-    </mat-paginator> -->
+    </mat-paginator>
 
 
     <!-- *********************************************************************************************************** -->
