@@ -1,39 +1,49 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
-import { CardService } from '../../services/card.service';
 import { DashboardExpenseService } from '../../services/dashboard-expense.service';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { CardsComponent } from './cards/cards.component';
-import { GridComponent } from './grid/grid.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { NgChartsModule } from 'ng2-charts';
+import { NgApexchartsModule } from 'ng-apexcharts';
+
+import { GridComponent } from './grid/grid.component';
+import { CardsComponent } from './cards/cards.component';
 import { DoughnutCategoryChartComponent } from './charts/doughnut-category-chart.component';
 import { BarMonthlyEvolutionChartComponent } from './charts/bar-monthly-evolution-chart.component';
 import { PieCardDistributionChartComponent } from './charts/pie-card-distribution-chart.component';
-import { ChartConfiguration } from 'chart.js';
-import { NgChartsModule } from 'ng2-charts';
-import { CustomCurrencyPipe } from '../../shared/pipes/custom-currency.pipe';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatDialog } from '@angular/material/dialog';
 import { UpcomingExpensesComponent } from '../expenses/upcoming-expenses/upcoming-expenses.component';
-import { MatIconModule } from '@angular/material/icon';
+import {
+  getBarChartOptions,
+  getDoughnutChartOptions,
+  getPieChartOptions,
+} from './charts/chart-config';
+import { ChartConfiguration } from 'chart.js';
+
+interface ChartDataWrapper {
+  chartData: { labels: string[]; datasets: { data: number[] }[] };
+  total?: number;
+  chartOptions: ChartConfiguration['options'];
+}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    NgApexchartsModule,
-    MatCardModule,
     CommonModule,
-    CardsComponent,
-    GridComponent,
+    MatCardModule,
     MatButtonToggleModule,
+    MatExpansionModule,
+    MatIconModule,
+    NgChartsModule,
+    NgApexchartsModule,
+    GridComponent,
+    CardsComponent,
     DoughnutCategoryChartComponent,
     BarMonthlyEvolutionChartComponent,
     PieCardDistributionChartComponent,
-    NgChartsModule,
-    MatExpansionModule,
-    MatIconModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
@@ -42,24 +52,14 @@ export class DashboardComponent {
   showCharts = false;
   isMobile = false;
   cardsExpanded = false;
+  private chartsLoaded = false;
 
   @ViewChild('grid') gridComponent?: GridComponent;
   @ViewChild('cards') cardsComponent?: CardsComponent;
 
-  doughnutData: any = {
-    chartData: { labels: [], datasets: [{ data: [] }] },
-    total: 0,
-    chartOptions: {},
-  };
-  barData: any = {
-    chartData: { labels: [], datasets: [{ data: [] }] },
-    chartOptions: {},
-  };
-  pieData: any = {
-    chartData: { labels: [], datasets: [{ data: [] }] },
-    chartOptions: {},
-  };
-  private customCurrency = new CustomCurrencyPipe();
+  doughnutData: ChartDataWrapper = this.getEmptyChartData();
+  barData: ChartDataWrapper = this.getEmptyChartData();
+  pieData: ChartDataWrapper = this.getEmptyChartData();
 
   constructor(
     private dashboardExpenseService: DashboardExpenseService,
@@ -67,119 +67,26 @@ export class DashboardComponent {
   ) {}
 
   ngOnInit() {
-    this.checkMobile();
-    this.loadCharts();
+    this.updateIsMobile();
   }
 
   @HostListener('window:resize')
   onResize() {
-    this.checkMobile();
+    this.updateIsMobile();
   }
 
-  checkMobile() {
+  private updateIsMobile() {
+    const wasMobile = this.isMobile;
     this.isMobile = window.innerWidth < 700;
     if (!this.isMobile) this.cardsExpanded = false;
   }
 
-  loadCharts() {
-    this.dashboardExpenseService.getDoughnutCategoryChart().subscribe((res) => {
-      const total =
-        res.chartData.datasets[0]?.data?.reduce(
-          (a: number, b: number) => a + b,
-          0
-        ) || 0;
-      this.doughnutData = {
-        chartData: res.chartData,
-        total,
-        chartOptions: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: true, position: 'right' },
-            tooltip: {
-              callbacks: {
-                label: (ctx: any) => {
-                  const dataArr = Array.isArray(ctx.dataset.data)
-                    ? ctx.dataset.data
-                    : [];
-                  const total = dataArr.reduce(
-                    (a: number, b: number) => a + b,
-                    0
-                  );
-                  const value = ctx.dataset.data[ctx.dataIndex];
-                  const pct = total ? ((value / total) * 100).toFixed(1) : 0;
-                  return `${this.customCurrency.transform(value)} (${pct}%)`;
-                },
-              },
-            },
-          },
-        } as ChartConfiguration['options'],
-      };
-    });
-
-    this.dashboardExpenseService
-      .getBarMonthlyEvolutionChart()
-      .subscribe((res) => {
-        this.barData = {
-          chartData: res.chartData,
-          chartOptions: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: (ctx: any) =>
-                    this.customCurrency.transform(ctx.parsed.y ?? ctx.parsed.x),
-                },
-              },
-            },
-            scales: {
-              x: { grid: { display: false }, ticks: { font: { size: 13 } } },
-              y: {
-                grid: { display: false },
-                beginAtZero: true,
-                ticks: { font: { size: 13 } },
-              },
-            },
-          } as ChartConfiguration['options'],
-        };
-      });
-
-    this.dashboardExpenseService
-      .getPieCardDistributionChart()
-      .subscribe((res) => {
-        this.pieData = {
-          chartData: res.chartData,
-          chartOptions: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: true, position: 'right' },
-              tooltip: {
-                callbacks: {
-                  label: (ctx: any) => {
-                    const dataArr = Array.isArray(ctx.dataset.data)
-                      ? ctx.dataset.data
-                      : [];
-                    const total = dataArr.reduce(
-                      (a: number, b: number) => a + b,
-                      0
-                    );
-                    const value = ctx.dataset.data[ctx.dataIndex];
-                    const pct = total ? ((value / total) * 100).toFixed(1) : 0;
-                    return `${this.customCurrency.transform(value)} (${pct}%)`;
-                  },
-                },
-              },
-            },
-          } as ChartConfiguration['options'],
-        };
-      });
-  }
-
   toggleView(event: any) {
     this.showCharts = event.value === 'charts';
+    if (this.showCharts && !this.chartsLoaded) {
+      this.loadCharts();
+      this.chartsLoaded = true;
+    }
   }
 
   onNewExpense() {
@@ -189,25 +96,77 @@ export class DashboardComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (this.gridComponent) {
-          this.gridComponent.reloadData();
-        }
-        if (this.cardsComponent) {
-          this.cardsComponent.reload();
-        }
-        this.loadCharts();
-      }
+      if (result) this.reloadDashboard();
     });
   }
 
   onExpenseAdded() {
-    if (this.gridComponent) {
-      this.gridComponent.reloadData();
-    }
-    if (this.cardsComponent) {
-      this.cardsComponent.reload();
-    }
-    this.loadCharts(); // <-- Actualiza los gráficos
+    this.reloadDashboard();
+  }
+
+  private reloadDashboard() {
+    this.gridComponent?.reloadData();
+    this.cardsComponent?.reload();
+    this.loadCharts();
+  }
+
+  // ============================
+  // 📊 CARGA DE GRÁFICOS
+  // ============================
+
+  private loadCharts() {
+    this.loadDoughnutChartData();
+    this.loadBarChartData();
+    this.loadPieChartData();
+  }
+
+  private loadDoughnutChartData() {
+    this.dashboardExpenseService.getDoughnutCategoryChart().subscribe((res) => {
+      const total = this.sumArray(res.chartData.datasets[0]?.data ?? []);
+      this.doughnutData = {
+        chartData: res.chartData,
+        total,
+        chartOptions: getDoughnutChartOptions(total),
+      };
+    });
+  }
+
+  private loadBarChartData() {
+    this.dashboardExpenseService
+      .getBarMonthlyEvolutionChart()
+      .subscribe((res) => {
+        this.barData = {
+          chartData: res.chartData,
+          chartOptions: getBarChartOptions(),
+        };
+      });
+  }
+
+  private loadPieChartData() {
+    this.dashboardExpenseService
+      .getPieCardDistributionChart()
+      .subscribe((res) => {
+        const total = this.sumArray(res.chartData.datasets[0]?.data ?? []);
+        this.pieData = {
+          chartData: res.chartData,
+          total,
+          chartOptions: getPieChartOptions(),
+        };
+      });
+  }
+
+  // ============================
+  // 🧰 HELPERS
+  // ============================
+
+  private sumArray(arr: number[]): number {
+    return arr.reduce((a, b) => a + b, 0);
+  }
+
+  private getEmptyChartData(): ChartDataWrapper {
+    return {
+      chartData: { labels: [], datasets: [{ data: [] }] },
+      chartOptions: {} as ChartConfiguration['options'],
+    };
   }
 }

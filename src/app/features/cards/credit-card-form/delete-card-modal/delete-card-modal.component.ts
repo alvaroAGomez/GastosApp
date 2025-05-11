@@ -62,7 +62,6 @@ export class DeleteCardModalComponent {
           this.cardService.deleteCreditCard(cardToDelete).subscribe({
             next: () => {
               this.toast.success('Tarjeta eliminada exitosamente', 'Éxito');
-              // Cerrar el diálogo e indicar éxito para que el padre refresque el resumen
               this.dialogRef.close({ deleted: true });
             },
             error: (err) => {

@@ -80,3 +80,84 @@ h3 {
 .oculto-mobile {
   display: none;
 }
+
+.mobile-bank-list {
+  padding: 8px 16px;
+}
+
+.expense-line {
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 8px;
+}
+
+/* Fila 1 */
+.line-main {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.line-title {
+  max-width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line-amount {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Fila 2 */
+.line-sub-acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.line-fecha {
+  font-size: 0.85rem;
+}
+
+.line-actions button {
+  padding: 0;
+  margin-left: 4px;
+}
+
+.icon-edit {
+  color: #1976d2;
+}
+
+.icon-delete {
+  color: #d32f2f;
+}
+
+/* Fila 3 */
+.line-sub-info {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #666;
+  display: flex;
+  gap: 4px;
+}
+
+.line-separator {
+  margin: 0 4px;
+  color: #aaa;
+}
+
+.line-fecha-cuota {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}

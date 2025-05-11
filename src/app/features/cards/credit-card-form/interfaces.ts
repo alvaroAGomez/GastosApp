@@ -28,3 +28,8 @@ export interface GastoMensual {
   monto: number;
   cuota: string;
 }
+
+export interface GastoTarjeta {
+  month: string;
+  amount: number;
+}

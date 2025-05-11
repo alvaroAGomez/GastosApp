@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, LOCALE_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   CreditCard,
   CreditCardAnnualGeneralSummary,
@@ -22,6 +22,7 @@ import { CustomCurrencyPipe } from '../../../shared/pipes/custom-currency.pipe';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CuotaService } from '../../../services/cuota.service';
+import { CARD_COLORS } from '../../../shared/constants/theme.constants';
 
 @Component({
   selector: 'app-credit-card-form',
@@ -44,68 +45,60 @@ import { CuotaService } from '../../../services/cuota.service';
 })
 export class CreditCardFormComponent implements OnInit, OnDestroy {
   creditCards: CreditCard[] = [];
-  expensesSummary!: CreditCardSummary;
-  cardDetails: CreditCardSummary[] = [];
-  selectedYear: number = new Date().getFullYear();
-  availableYears: number[] = [];
-  annualSummary: any[] = [];
-  annualGeneralSummary?: CreditCardAnnualGeneralSummary;
   cardMonthlyDetails: CreditCardMonthlyDetailSummary[] = [];
+  annualGeneralSummary?: CreditCardAnnualGeneralSummary;
+  selectedYear = new Date().getFullYear();
+  availableYears: number[] = [];
+
   showGeneralSummary = true;
+  private subscriptions = new Subscription();
 
-  // Paleta de colores suaves y modernos
-  cardColors = [
-    '#f8fafc', // gris muy claro
-    '#e3e8f0', // gris azulado claro
-    '#f1f5f9', // gris azulado más claro
-    '#e9f1fb', // azul muy claro
-    '#e0e7ef', // gris azulado intermedio
-    '#dbeafe', // azul pastel claroption = new Subscription();
-    '#e0ecf7', // azul grisáceo claro
-    '#f3f6fb', // gris azulado extra claro
-  ];
-
-  private subscriptions: Subscription = new Subscription();
+  readonly cardColors = CARD_COLORS;
 
   constructor(
-    public dialog: MatDialog,
+    private dialog: MatDialog,
     private cardService: CardService,
-    private router: Router,
-    private cuotaService: CuotaService
+    private cuotaService: CuotaService,
+    private router: Router
   ) {
-    const currentYear = new Date().getFullYear();
     this.availableYears = Array.from(
       { length: 8 },
-      (_, index) => currentYear + 2 - index
+      (_, i) => this.selectedYear + 2 - i
     );
   }
 
   ngOnInit() {
+    this.loadData();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  private loadData() {
     this.subscriptions.add(
       this.cardService.getCards().subscribe((cards) => {
         this.creditCards = cards;
-        this.loadAllCardMonthlyDetails(this.selectedYear);
+        this.loadMonthlyDetails(this.selectedYear);
       })
     );
-    this.loadAnnualGeneralSummary(this.selectedYear);
+    this.loadAnnualSummary(this.selectedYear);
   }
 
-  loadAnnualGeneralSummary(year: number) {
+  private loadAnnualSummary(year: number) {
     this.subscriptions.add(
-      this.cuotaService.getAnnualGeneralSummary(year).subscribe((summary) => {
-        this.annualGeneralSummary = summary;
+      this.cuotaService.getAnnualGeneralSummary(year).subscribe((res) => {
+        this.annualGeneralSummary = res;
       })
     );
   }
 
-  loadAllCardMonthlyDetails(year: number) {
+  private loadMonthlyDetails(year: number) {
     const requests = this.creditCards.map((card) =>
       this.cuotaService.getMonthlyDetailByCard(card.id, year)
     );
-
     this.subscriptions.add(
       forkJoin(requests).subscribe((results) => {
-        // Ordenar de mayor a menor por totalAnual
         this.cardMonthlyDetails = results.sort(
           (a, b) => b.totalAnual - a.totalAnual
         );
@@ -113,77 +106,48 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
-
-  openNewCardDialog() {
-    const dialogRef = this.dialog.open(CreditCardFormModalComponent, {
-      width: '600px',
-      maxWidth: '90vw',
-      height: 'auto',
-      disableClose: false,
-      data: {},
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.cardService.getCards().subscribe((cards) => {
-          this.creditCards = cards;
-          this.loadAllCardMonthlyDetails(this.selectedYear);
-        });
-        this.loadAnnualGeneralSummary(this.selectedYear);
-      }
-    });
-  }
-
-  openEditCardDialog() {
-    const dialogRef = this.dialog.open(CreditCardFormModalComponent, {
-      width: '600px',
-      maxWidth: '100vw',
-      disableClose: false,
-      data: {
-        mode: 'edit',
-        cards: this.creditCards,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.cardService.getCards().subscribe((cards) => {
-          this.creditCards = cards;
-          this.loadAllCardMonthlyDetails(this.selectedYear);
-        });
-        this.loadAnnualGeneralSummary(this.selectedYear);
-      }
-    });
-  }
-
-  openDeleteCardDialog() {
-    const dialogRef = this.dialog.open(DeleteCardModalComponent, {
-      width: '500px',
-      maxWidth: '90vw',
-      disableClose: false,
-      data: {
-        cards: this.creditCards,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && result.deleted) {
-        this.cardService.getCards().subscribe((cards) => {
-          this.creditCards = cards;
-          this.loadAllCardMonthlyDetails(this.selectedYear);
-        });
-        this.loadAnnualGeneralSummary(this.selectedYear);
-      }
-    });
-  }
-
   onYearChange(event: any) {
     this.selectedYear = event.value;
-    this.loadAnnualGeneralSummary(this.selectedYear);
-    this.loadAllCardMonthlyDetails(this.selectedYear);
+    this.loadAnnualSummary(this.selectedYear);
+    this.loadMonthlyDetails(this.selectedYear);
+  }
+
+  openCardDialog(mode: 'create' | 'edit' | 'delete') {
+    let component: any;
+    let data: any = {};
+
+    if (mode === 'create') {
+      component = CreditCardFormModalComponent;
+    } else if (mode === 'edit') {
+      component = CreditCardFormModalComponent;
+      data = { mode: 'edit', cards: this.creditCards };
+    } else {
+      component = DeleteCardModalComponent;
+      data = { cards: this.creditCards };
+    }
+
+    const dialogRef = this.dialog.open(component, {
+      width: mode === 'delete' ? '500px' : '600px',
+      maxWidth: '90vw',
+      disableClose: false,
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
+    });
+  }
+
+  toggleGeneralSummary() {
+    this.showGeneralSummary = !this.showGeneralSummary;
+  }
+
+  onDetailsClick(card: any) {
+    this.router.navigate(['/credit-cards', card.Id || card.tarjetaId], {
+      state: { cardDetails: card },
+    });
   }
 
   getCardName(card: any): string {
@@ -211,22 +175,10 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
   }
 
   getTotal(card: any): number {
-    if (card?.Total !== undefined) return card.Total;
-    if (card?.totalAnual !== undefined) return card.totalAnual;
-    return 0;
-  }
-
-  onDetailsClick(card: any) {
-    this.router.navigate(['/credit-cards', card.Id || card.tarjetaId], {
-      state: { cardDetails: card },
-    });
+    return card?.Total ?? card?.totalAnual ?? 0;
   }
 
   getCardColor(index: number): string {
     return this.cardColors[index % this.cardColors.length];
-  }
-
-  toggleGeneralSummary() {
-    this.showGeneralSummary = !this.showGeneralSummary;
   }
 }

@@ -10,22 +10,22 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
 import { CategoryService } from '../../services/category.service';
 import { ToastrService } from 'ngx-toastr';
+import { Categoria } from './ICategoria';
 
-interface Category {
+/* interface Category {
   id?: number;
   name: string;
   usuarioId?: number | null;
-}
-
+} */
 @Component({
   selector: 'app-categories',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule,
     MatTableModule,
     MatIconModule,
   ],
@@ -33,12 +33,11 @@ interface Category {
   styleUrls: ['./categories.component.scss'],
 })
 export class CategoriesComponent {
-  newCategory: Category = { name: '' };
-  categories: Category[] = [];
-  dataSource = new MatTableDataSource<Category>(this.categories);
-  displayedColumns: string[] = ['name', 'actions'];
-
-  editingCategory: Category | null = null; // <-- Para saber si estamos editando
+  newCategory: Categoria = { name: '' };
+  editingCategory: Categoria | null = null;
+  categories: Categoria[] = [];
+  dataSource = new MatTableDataSource<Categoria>([]);
+  displayedColumns = ['name', 'actions'];
 
   constructor(
     private categoryService: CategoryService,
@@ -59,84 +58,96 @@ export class CategoriesComponent {
     });
   }
 
-  addOrUpdateCategory(form: NgForm) {
+  submitCategory(form: NgForm) {
     const name = this.newCategory.name.trim();
     if (!name) return;
 
-    // Validar unicidad (no case sensitive)
-    if (
-      this.categories.some(
-        (c) =>
-          c.name.trim().toLowerCase() === name.toLowerCase() &&
-          (!this.editingCategory || c.id !== this.editingCategory.id)
-      )
-    ) {
+    if (this.isDuplicateName(name)) {
       this.toast.info('Ya existe una categoría con ese nombre');
       return;
     }
 
     if (this.editingCategory) {
-      // Actualizar
-      this.categoryService
-        .updateCategory(this.editingCategory.id!, { nombre: name })
-        .subscribe({
-          next: () => {
-            this.loadCategories();
-            this.toast.success('Categoría actualizada con éxito', 'Éxito');
-            this.editingCategory = null;
-            this.newCategory = { name: '' };
-            form.resetForm();
-          },
-          error: (err) =>
-            this.toast.error(err.error?.message || 'Error al editar categoría'),
-        });
+      this.updateCategory(name, form);
     } else {
-      // Agregar
-      this.categoryService.createCategory({ nombre: name }).subscribe({
-        next: () => {
-          this.loadCategories();
-          form.resetForm();
-          this.toast.success('Categoría creada con éxito', 'Éxito');
-        },
-        error: (err) =>
-          this.toast.error(err.error?.message || 'Error al crear categoría'),
-      });
+      this.addCategory(name, form);
     }
   }
 
-  startEditCategory(category: Category, form: NgForm) {
-    this.editingCategory = category;
-    this.newCategory = { ...category };
-    form.controls['name']?.setValue(category.name);
+  private addCategory(name: string, form: NgForm) {
+    this.categoryService.createCategory({ nombre: name }).subscribe({
+      next: () => {
+        this.toast.success('Categoría creada con éxito', 'Éxito');
+        this.afterSuccess(form);
+      },
+      error: (err) => this.showError(err, 'crear categoría'),
+    });
+  }
+
+  private updateCategory(name: string, form: NgForm) {
+    this.categoryService
+      .updateCategory(this.editingCategory!.id!, { nombre: name })
+      .subscribe({
+        next: () => {
+          this.toast.success('Categoría actualizada con éxito', 'Éxito');
+          this.afterSuccess(form);
+        },
+        error: (err) => this.showError(err, 'editar categoría'),
+      });
+  }
+
+  private isDuplicateName(name: string): boolean {
+    return this.categories.some(
+      (c) =>
+        c.name.trim().toLowerCase() === name.toLowerCase() &&
+        (!this.editingCategory || c.id !== this.editingCategory.id)
+    );
+  }
+
+  private afterSuccess(form: NgForm) {
+    this.loadCategories();
+    this.resetForm(form);
+  }
+
+  private showError(error: any, context: string) {
+    this.toast.error(error?.error?.message || `Error al ${context}`);
+  }
+
+  startEditCategory(categoria: Categoria, form: NgForm) {
+    this.editingCategory = categoria;
+    this.newCategory = { ...categoria };
+    form.controls['categoryName']?.setValue(categoria.name);
   }
 
   cancelEdit(form: NgForm) {
-    this.editingCategory = null;
+    this.resetForm(form);
+  }
+
+  private resetForm(form: NgForm) {
     this.newCategory = { name: '' };
+    this.editingCategory = null;
     form.resetForm();
   }
 
-  deleteCategory(category: Category) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Eliminar categoría',
-        message: '¿Seguro que desea eliminar la categoría?',
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === true) {
-        this.categoryService.deleteCategory(category.id!).subscribe({
-          next: () => {
-            this.loadCategories();
-            this.toast.success('Categoría eliminada con éxito', 'Éxito');
-          },
-          error: (err) =>
-            this.toast.error(
-              err.error?.message || 'Error al eliminar categoría'
-            ),
-        });
-      }
-    });
+  deleteCategory(categoria: Categoria) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Eliminar categoría',
+          message: '¿Seguro que desea eliminar la categoría?',
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.categoryService.deleteCategory(categoria.id!).subscribe({
+            next: () => {
+              this.loadCategories();
+              this.toast.success('Categoría eliminada con éxito', 'Éxito');
+            },
+            error: (err) => this.showError(err, 'eliminar categoría'),
+          });
+        }
+      });
   }
 }

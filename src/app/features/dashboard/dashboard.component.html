@@ -55,19 +55,19 @@
     <div class="dashboard-charts-col">
       <h2 class="chart-title">Gastos por Categoría</h2>
       <p class="chart-desc">Distribución de los gastos del mes actual agrupados por categoría.</p>
-      <app-doughnut-category-chart [chartData]="doughnutData.chartData"
+      <app-doughnut-category-chart [chartData]="doughnutData.chartData" *ngIf="doughnutData.chartOptions"
         [chartOptions]="doughnutData.chartOptions"></app-doughnut-category-chart>
     </div>
     <div class="dashboard-charts-col">
       <h2 class="chart-title">Evolución Mensual</h2>
       <p class="chart-desc">Total gastado mes a mes durante el último año.</p>
-      <app-bar-monthly-evolution-chart [chartData]="barData.chartData"
+      <app-bar-monthly-evolution-chart [chartData]="barData.chartData" *ngIf="barData.chartOptions"
         [chartOptions]="barData.chartOptions"></app-bar-monthly-evolution-chart>
     </div>
     <div class="dashboard-charts-col" style="grid-column: 1 / span 2;">
       <h2 class="chart-title">Gastos por Tarjeta de Crédito</h2>
       <p class="chart-desc">Proporción de gastos del mes actual por cada tarjeta de crédito.</p>
-      <app-pie-card-distribution-chart [chartData]="pieData.chartData"
+      <app-pie-card-distribution-chart [chartData]="pieData.chartData" *ngIf="pieData.chartOptions"
         [chartOptions]="pieData.chartOptions"></app-pie-card-distribution-chart>
     </div>
   </div>

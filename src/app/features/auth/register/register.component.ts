@@ -48,7 +48,6 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      // Usar type assertion y non-null operator
       const { nombre, email, password } = this.registerForm.value as {
         nombre: string;
         email: string;

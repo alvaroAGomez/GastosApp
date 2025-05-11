@@ -1,7 +1,5 @@
 import { Expense } from './expense.model';
 
-// ...existing code...
-
 export interface CreditCard {
   id: number;
   nombreTarjeta: string;

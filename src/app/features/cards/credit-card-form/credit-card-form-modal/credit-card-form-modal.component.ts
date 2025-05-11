@@ -46,12 +46,11 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
   styleUrl: './credit-card-form-modal.component.scss',
 })
 export class CreditCardFormModalComponent {
-  cardForm: FormGroup;
+  cardForm!: FormGroup;
   bancos: BancoDto[] = [];
-  mode: 'create' | 'edit' = 'create';
   cards: CreditCard[] = [];
+  mode: 'create' | 'edit' = 'create';
   selectedCardId: number | null = null;
-  confirmUpdate: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -64,111 +63,107 @@ export class CreditCardFormModalComponent {
   ) {
     this.mode = data?.mode || 'create';
     this.cards = data?.cards || [];
-    const cardData =
-      data?.mode === 'edit' && data?.cards?.length ? data.cards[0] : data;
 
-    // Normaliza fechas: si null o 1969-12-29 => null
-    const normalizeDate = (date: any) => {
-      if (!date) return null;
-      // Puede venir como string o Date
-      const d = typeof date === 'string' ? date.substring(0, 10) : '';
-      if (d === '1969-12-29') return null;
-      return date;
-    };
+    this.buildForm(this.getInitialCardData());
+    this.loadBancos();
+  }
 
+  private getInitialCardData(): Partial<CreditCard> {
+    if (this.mode === 'edit' && this.cards.length) {
+      return this.cards[0];
+    }
+    return this.data || {};
+  }
+
+  private normalizeDate(date: any): Date | null {
+    if (!date) return null;
+    const value = typeof date === 'string' ? date.substring(0, 10) : '';
+    return value === '1969-12-29' ? null : new Date(date);
+  }
+
+  private buildForm(card: Partial<CreditCard>) {
     this.cardForm = this.fb.group({
-      nombreTarjeta: [cardData?.nombreTarjeta || '', Validators.required],
+      nombreTarjeta: [card.nombreTarjeta || '', Validators.required],
       numeroTarjeta: [
-        cardData?.numeroTarjeta ? cardData.numeroTarjeta.slice(-4) : '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(4),
-          Validators.pattern(/^\d{4}$/),
-        ],
+        card.numeroTarjeta ? card.numeroTarjeta.slice(-4) : '',
+        [Validators.required, Validators.pattern(/^\d{4}$/)],
       ],
-      limiteCredito: [cardData?.limiteCredito || '', Validators.required],
-      cierreCiclo: [normalizeDate(cardData?.cierreCiclo)],
-      fechaVencimiento: [normalizeDate(cardData?.fechaVencimiento)],
-      bancoId: [cardData?.banco?.id || '', Validators.required],
+      limiteCredito: [card.limiteCredito || '', Validators.required],
+      cierreCiclo: [this.normalizeDate(card.cierreCiclo)],
+      fechaVencimiento: [this.normalizeDate(card.fechaVencimiento)],
+      bancoId: [card.banco?.id || '', Validators.required],
     });
 
-    this.selectedCardId = cardData?.id || null;
+    this.selectedCardId = card.id || null;
+  }
 
-    this.bancosService.getBancos().subscribe((bancos) => {
-      this.bancos = bancos;
-    });
+  private loadBancos() {
+    this.bancosService.getBancos().subscribe((b) => (this.bancos = b));
   }
 
   onCardSelect(cardId: number) {
     const card = this.cards.find((c) => c.id === +cardId);
     if (card) {
-      // Normaliza fechas: si null o 1969-12-29 => null
-      const normalizeDate = (date: any) => {
-        if (!date) return null;
-        const d = typeof date === 'string' ? date.substring(0, 10) : '';
-        if (d === '1969-12-29') return null;
-        return date;
-      };
-
       this.selectedCardId = card.id;
       this.cardForm.patchValue({
         nombreTarjeta: card.nombreTarjeta,
-        numeroTarjeta: card.numeroTarjeta ? card.numeroTarjeta.slice(-4) : '',
+        numeroTarjeta: card.numeroTarjeta?.slice(-4) || '',
         limiteCredito: card.limiteCredito,
-        cierreCiclo: normalizeDate(card.cierreCiclo),
-        fechaVencimiento: normalizeDate(card.fechaVencimiento),
+        cierreCiclo: this.normalizeDate(card.cierreCiclo),
+        fechaVencimiento: this.normalizeDate(card.fechaVencimiento),
         bancoId: card.banco?.id || '',
       });
     }
-    this.confirmUpdate = false;
   }
 
   save() {
-    if (this.cardForm.valid) {
-      const formValue = {
-        ...this.cardForm.value,
-        limiteCredito: Number(this.cardForm.value.limiteCredito),
-      };
+    if (this.cardForm.invalid) return;
 
-      if (this.mode === 'edit' && this.selectedCardId) {
-        const cardId = this.selectedCardId;
-        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-          data: {
-            title: 'Actualizar Tarjeta de Crédito',
-            message: '¿Seguro que desea actualizar la tarjeta?',
-          },
-        });
+    const dto = {
+      ...this.cardForm.value,
+      limiteCredito: Number(this.cardForm.value.limiteCredito),
+    };
 
-        dialogRef.afterClosed().subscribe((result) => {
-          if (result === true) {
-            const dto = { ...formValue };
-            this.cardService.updateCreditCard(cardId, dto).subscribe({
+    this.mode === 'edit' && this.selectedCardId
+      ? this.confirmAndUpdate(dto)
+      : this.createCard(dto);
+  }
+
+  private confirmAndUpdate(dto: any) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Actualizar Tarjeta de Crédito',
+          message: '¿Seguro que desea actualizar la tarjeta?',
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.cardService
+            .updateCreditCard(this.selectedCardId!, dto)
+            .subscribe({
               next: (updatedCard) => {
                 this.toast.success('Tarjeta actualizada exitosamente', 'Éxito');
-                this.dialogRef.close(updatedCard);
+                this.dialogRef.close({ updated: true, card: updatedCard });
               },
-              error: (err) => {
+              error: () => {
                 this.toast.error('Error al actualizar tarjeta', 'Error');
-                this.confirmUpdate = false;
-                console.error('Error al actualizar tarjeta', err);
               },
             });
-          }
-        });
-      } else {
-        const dto: CreateCreditCardDTO = formValue;
-        this.cardService.createCreditCard(dto).subscribe({
-          next: (createdCard) => {
-            this.toast.success('Tarjeta creada exitosamente', 'Éxito');
-            this.dialogRef.close(createdCard);
-          },
-          error: (err) => {
-            this.toast.error('Error al crear tarjeta', 'Error');
-            console.error('Error al crear tarjeta', err);
-          },
-        });
-      }
-    }
+        }
+      });
+  }
+
+  private createCard(dto: CreateCreditCardDTO) {
+    this.cardService.createCreditCard(dto).subscribe({
+      next: (createdCard) => {
+        this.toast.success('Tarjeta creada exitosamente', 'Éxito');
+        this.dialogRef.close({ created: true, card: createdCard });
+      },
+      error: () => {
+        this.toast.error('Error al crear tarjeta', 'Error');
+      },
+    });
   }
 }

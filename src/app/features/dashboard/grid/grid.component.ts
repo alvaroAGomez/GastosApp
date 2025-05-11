@@ -32,7 +32,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from '../../../services/category.service';
 import { CardService } from '../../../services/card.service';
 import { MatNativeDateModule } from '@angular/material/core';
-
 @Component({
   selector: 'app-grid',
   standalone: true,
@@ -57,39 +56,40 @@ import { MatNativeDateModule } from '@angular/material/core';
   styleUrl: './grid.component.scss',
 })
 export class GridComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  @Output() expenseAdded = new EventEmitter<void>();
+
   displayedColumns: string[] = [
     'tarjeta',
     'categoria',
     'monto',
     'fecha',
+    'cutoa',
     'descripcion',
     'acciones',
   ];
   dataSource!: MatTableDataSource<DashboardExpense>;
-  searchValue = '';
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  @Output() expenseAdded = new EventEmitter<void>();
 
   isMobile = false;
   mobileExpenses: DashboardExpense[] = [];
+  allMobileExpenses: DashboardExpense[] = [];
+  searchValue = '';
   mobilePage = 0;
   mobilePageSize = 10;
   mobileLoading = false;
   mobileAllLoaded = false;
-  allMobileExpenses: DashboardExpense[] = [];
+
   filtros: {
     fechaDesde?: string;
     fechaHasta?: string;
     categoriaId?: number;
     tarjetaId?: number;
   } = {};
-
-  mostrarFiltrosMobile = false;
-  categorias: any[] = []; // deberías cargarlas con CategoryService
-  tarjetas: any[] = []; // deberías cargarlas con CardService
+  categorias: any[] = [];
+  tarjetas: any[] = [];
   showFilters = false;
+  mostrarFiltrosMobile = false;
 
   constructor(
     private dashboardExpenseService: DashboardExpenseService,
@@ -100,42 +100,11 @@ export class GridComponent implements OnInit, AfterViewInit {
     private cardService: CardService
   ) {}
 
-  toggleFiltrosMobile() {
-    this.showFilters = !this.showFilters;
-    this.mostrarFiltrosMobile = !this.mostrarFiltrosMobile;
-  }
-  applyFilters() {
-    this.reloadData();
-  }
-
+  // Inicialización
   ngOnInit(): void {
     this.checkMobile();
     this.loadCategorias();
     this.loadTarjetas();
-  }
-
-  loadCategorias() {
-    this.categoriaService.getCategories().subscribe({
-      next: (res) => {
-        this.categorias = res;
-      },
-      error: () => {
-        this.toastr.error('Error al cargar categorías');
-      },
-    });
-  }
-
-  loadTarjetas() {
-    this.cardService.getCards().subscribe({
-      next: (res) => {
-        console.log(res);
-
-        this.tarjetas = res;
-      },
-      error: () => {
-        this.toastr.error('Error al cargar tarjetas');
-      },
-    });
   }
 
   ngAfterViewInit(): void {
@@ -143,22 +112,23 @@ export class GridComponent implements OnInit, AfterViewInit {
     window.addEventListener('resize', this.checkMobile.bind(this));
   }
 
+  // Mobile detection
   checkMobile() {
     const wasMobile = this.isMobile;
     this.isMobile = window.innerWidth < 700;
 
-    if (this.isMobile && !wasMobile) {
-      // Cambió de web a mobile
-      this.mobileExpenses = [];
-      this.mobilePage = 0;
-      this.mobileAllLoaded = false;
-      this.loadMoreMobileExpenses();
-    }
+    if (this.isMobile && !wasMobile) this.resetMobileState();
+    if (!this.isMobile && wasMobile) this.reloadData();
+  }
 
-    if (!this.isMobile && wasMobile) {
-      // Cambió de mobile a web
-      this.reloadData(); // recarga la grilla (dataSource)
-    }
+  // Filtros
+  applyFilters() {
+    this.reloadData();
+  }
+
+  limpiarFiltros() {
+    this.filtros = {};
+    this.reloadData();
   }
 
   getFiltrosFormateados() {
@@ -173,25 +143,12 @@ export class GridComponent implements OnInit, AfterViewInit {
     };
   }
 
-  limpiarFiltros() {
-    this.filtros = {
-      fechaDesde: undefined,
-      fechaHasta: undefined,
-      categoriaId: undefined,
-      tarjetaId: undefined,
-    };
-
-    this.reloadData();
+  // Carga de datos
+  reloadData() {
+    this.isMobile ? this.resetMobileState() : this.loadTableExpenses();
   }
 
-  reloadData() {
-    if (this.isMobile) {
-      this.mobileExpenses = [];
-      this.mobilePage = 0;
-      this.mobileAllLoaded = false;
-      this.loadMoreMobileExpenses();
-      return;
-    }
+  loadTableExpenses() {
     this.dashboardExpenseService
       .getDashboardExpenses(this.getFiltrosFormateados())
       .subscribe((expenses) => {
@@ -208,78 +165,75 @@ export class GridComponent implements OnInit, AfterViewInit {
     this.dashboardExpenseService
       .getDashboardExpenses(this.getFiltrosFormateados())
       .subscribe((expenses) => {
-        // Guardar todos solo la primera vez
-        if (this.mobilePage === 0) {
-          this.allMobileExpenses = expenses;
-        }
+        if (this.mobilePage === 0) this.allMobileExpenses = expenses;
 
-        // Filtrado manual si hay búsqueda
         let filtered = this.allMobileExpenses;
         if (this.searchValue) {
           const filterValue = this.searchValue.toLowerCase();
-          filtered = this.allMobileExpenses.filter((e) =>
+          filtered = filtered.filter((e) =>
             [e.descripcion, e.categoria, e.tarjeta]
               .filter(Boolean)
               .some((val) => val.toLowerCase().includes(filterValue))
           );
         }
 
-        // Aplicar paginación
         const start = this.mobilePage * this.mobilePageSize;
         const next = filtered.slice(start, start + this.mobilePageSize);
         this.mobileExpenses = [...this.mobileExpenses, ...next];
 
-        if (start + this.mobilePageSize >= filtered.length) {
-          this.mobileAllLoaded = true;
-        }
-
+        this.mobileAllLoaded = start + this.mobilePageSize >= filtered.length;
         this.mobilePage++;
         this.mobileLoading = false;
       });
   }
 
-  onMobileScroll(event: any) {
-    const el = event.target;
-    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {
-      this.loadMoreMobileExpenses();
-    }
+  resetMobileState() {
+    this.mobileExpenses = [];
+    this.mobilePage = 0;
+    this.mobileAllLoaded = false;
+    this.loadMoreMobileExpenses();
   }
 
+  // Filtro texto
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value
+    this.searchValue = (event.target as HTMLInputElement).value
       .trim()
       .toLowerCase();
-    this.searchValue = filterValue;
 
-    if (this.isMobile) {
-      this.mobileExpenses = [];
-      this.mobilePage = 0;
-      this.mobileAllLoaded = false;
-      this.loadMoreMobileExpenses(); // filtrará usando searchValue
-    } else {
-      this.dataSource.filter = filterValue;
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
+    if (this.isMobile) this.resetMobileState();
+    else {
+      this.dataSource.filter = this.searchValue;
+      this.paginator?.firstPage();
     }
   }
 
   clearFilter() {
     this.searchValue = '';
-
-    if (this.isMobile) {
-      this.mobileExpenses = [];
-      this.mobilePage = 0;
-      this.mobileAllLoaded = false;
-      this.loadMoreMobileExpenses();
-    } else {
-      this.dataSource.filter = '';
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
-    }
+    this.isMobile ? this.resetMobileState() : (this.dataSource.filter = '');
   }
 
+  // Cargar opciones
+  loadCategorias() {
+    this.categoriaService.getCategories().subscribe({
+      next: (res) => (this.categorias = res),
+      error: () => this.toastr.error('Error al cargar categorías'),
+    });
+  }
+
+  loadTarjetas() {
+    this.cardService.getCards().subscribe({
+      next: (res) => (this.tarjetas = res),
+      error: () => this.toastr.error('Error al cargar tarjetas'),
+    });
+  }
+
+  // UI
+  toggleFiltrosMobile() {
+    this.showFilters = !this.showFilters;
+    this.mostrarFiltrosMobile = !this.mostrarFiltrosMobile;
+  }
+
+  // CRUD
   NewExpense() {
     const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
       disableClose: false,
@@ -287,8 +241,8 @@ export class GridComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result && (result.created || result.updated)) {
-        this.expenseAdded.emit(); // <-- Esto ya notifica al dashboard
+      if (result?.created || result?.updated) {
+        this.expenseAdded.emit();
         this.reloadData();
       }
     });
@@ -306,13 +260,14 @@ export class GridComponent implements OnInit, AfterViewInit {
         tarjetaCreditoId: expense.tarjetaCreditoId ?? expense.cardId ?? null,
         tarjetaDebitoId: expense.tarjetaDebitoId ?? null,
         cuotas: expense.cuotas ?? null,
-        esEnCuotas: expense.cuotas && Number(expense.cuotas) > 1 ? true : false,
+        esEnCuotas: expense.cuotas && Number(expense.cuotas) > 1,
       },
     });
+
     dialogRef.afterClosed().subscribe((result) => {
-      if (result && result.updated === true) {
+      if (result?.updated) {
         this.toastr.success('Gasto actualizado con éxito', 'Éxito');
-        this.expenseAdded.emit(); // <-- Esto ya notifica al dashboard
+        this.expenseAdded.emit();
         this.reloadData();
       }
     });
@@ -328,18 +283,24 @@ export class GridComponent implements OnInit, AfterViewInit {
       })
       .afterClosed()
       .subscribe((confirmed) => {
-        if (confirmed === true) {
+        if (confirmed) {
           this.expenseService.eliminarGasto(expense.id).subscribe({
             next: () => {
               this.toastr.success('Gasto eliminado con éxito', 'Éxito');
-              this.expenseAdded.emit(); // <-- Esto ya notifica al dashboard
+              this.expenseAdded.emit();
               this.reloadData();
             },
-            error: () => {
-              this.toastr.error('Error al eliminar gasto', 'Error');
-            },
+            error: () => this.toastr.error('Error al eliminar gasto', 'Error'),
           });
         }
       });
+  }
+
+  // Scroll en mobile
+  onMobileScroll(event: any) {
+    const el = event.target;
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {
+      this.loadMoreMobileExpenses();
+    }
   }
 }
