@@ -10,6 +10,7 @@ import { ReportsComponent } from './features/reports/reports.component';
 import { accessGuard } from './guards/auth.guard';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { DetailsComponent } from './features/cards/credit-card-form/credit-card-details/details.component';
+import { HistoricoComponent } from './features/expenses/historico/historico.component';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,7 @@ export const routes: Routes = [
       { path: '', component: DashboardComponent },
       { path: 'credit-cards', component: CreditCardFormComponent },
       { path: 'credit-cards/:id', component: DetailsComponent },
+      { path: 'historico', component: HistoricoComponent },
       { path: 'debit-cards', component: DebitCardFormComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'upcoming-expenses', component: UpcomingExpensesComponent },

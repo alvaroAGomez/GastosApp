@@ -63,7 +63,6 @@ export interface CreditCardDetailHeader {
     MatInputModule,
     MatCardModule,
     MatTableModule,
-    MatDatepicker,
     ReactiveFormsModule,
     MatDatepickerModule,
     MatNativeDateModule,

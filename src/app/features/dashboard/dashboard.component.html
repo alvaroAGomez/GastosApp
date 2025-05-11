@@ -13,45 +13,22 @@
       </mat-expansion-panel>
     </mat-accordion>
   </ng-container>
+  <!--   <ng-container *ngIf="isMobile; else desktopCards">
+    <div class="cards-carousel">
+      <app-cards #cards></app-cards>
+    </div>
+  </ng-container> -->
   <ng-template #desktopCards>
     <app-cards #cards></app-cards>
   </ng-template>
 
-  <!-- MOBILE TOOLBAR -->
-  <div *ngIf="isMobile" class="dashboard-toolbar-row mobile-toolbar">
+  <div class="dashboard-toolbar-row mobile-toolbar">
     <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto">
-      <mat-icon>add</mat-icon>
+      <mat-icon>add</mat-icon>Nuevo Gasto
     </button>
-    <span class="toolbar-spacer"></span>
-    <mat-button-toggle-group [value]="showCharts ? 'charts' : 'table'" (change)="toggleView($event)" exclusive
-      class="mobile-toggle-group">
-      <mat-button-toggle value="table" matTooltip="Ver como Tabla">
-        <mat-icon>table_view</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="charts" matTooltip="Ver como Gráficos">
-        <mat-icon>insert_chart</mat-icon>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
   </div>
 
-  <!-- DESKTOP TOOLBAR -->
-  <div *ngIf="!isMobile" class="dashboard-toolbar-row">
-    <button mat-raised-button color="primary" type="button" class="custom-button" (click)="onNewExpense()">
-      <mat-icon>add</mat-icon>
-      Nuevo Gasto
-    </button>
-    <span class="toolbar-spacer"></span>
-    <mat-button-toggle-group [value]="showCharts ? 'charts' : 'table'" (change)="toggleView($event)" exclusive>
-      <mat-button-toggle value="table">Ver como Tabla</mat-button-toggle>
-      <mat-button-toggle value="charts">Ver como Gráficos</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-
-  <div *ngIf="!showCharts">
-    <app-grid #grid (expenseAdded)="onExpenseAdded()"></app-grid>
-  </div>
-
-  <div *ngIf="showCharts" class="dashboard-charts-row">
+  <div class="dashboard-charts-row">
     <div class="dashboard-charts-col">
       <h2 class="chart-title">Gastos por Categoría</h2>
       <p class="chart-desc">Distribución de los gastos del mes actual agrupados por categoría.</p>

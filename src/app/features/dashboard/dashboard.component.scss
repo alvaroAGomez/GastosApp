@@ -80,25 +80,25 @@
   margin-bottom: 12px;
   .custom-button {
     margin: 0 !important;
-    min-width: 70px; // más alargado
-    //width: 64px; // más alargado
-    height: 40px;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    min-width: 70px !important;
   }
-  .mobile-toggle-group {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    .mat-button-toggle {
-      flex: 1 1 0;
-      min-width: 0;
-      padding: 0 8px;
-      .mat-icon {
-        margin: 0 auto;
-      }
-    }
+}
+
+.cards-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  padding: 8px 4px;
+
+  app-cards {
+    flex: 0 0 auto;
+  }
+
+  ::ng-deep .card {
+    scroll-snap-align: start;
+    min-width: 280px; // o lo que creas que se vea bien
+    max-width: 85vw;
   }
 }

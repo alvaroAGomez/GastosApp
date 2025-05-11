@@ -8,8 +8,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { NgChartsModule } from 'ng2-charts';
 import { NgApexchartsModule } from 'ng-apexcharts';
-
-import { GridComponent } from './grid/grid.component';
 import { CardsComponent } from './cards/cards.component';
 import { DoughnutCategoryChartComponent } from './charts/doughnut-category-chart.component';
 import { BarMonthlyEvolutionChartComponent } from './charts/bar-monthly-evolution-chart.component';
@@ -34,12 +32,10 @@ interface ChartDataWrapper {
   imports: [
     CommonModule,
     MatCardModule,
-    MatButtonToggleModule,
     MatExpansionModule,
     MatIconModule,
     NgChartsModule,
     NgApexchartsModule,
-    GridComponent,
     CardsComponent,
     DoughnutCategoryChartComponent,
     BarMonthlyEvolutionChartComponent,
@@ -49,12 +45,9 @@ interface ChartDataWrapper {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-  showCharts = false;
   isMobile = false;
   cardsExpanded = false;
-  private chartsLoaded = false;
 
-  @ViewChild('grid') gridComponent?: GridComponent;
   @ViewChild('cards') cardsComponent?: CardsComponent;
 
   doughnutData: ChartDataWrapper = this.getEmptyChartData();
@@ -67,6 +60,7 @@ export class DashboardComponent {
   ) {}
 
   ngOnInit() {
+    this.loadCharts();
     this.updateIsMobile();
   }
 
@@ -76,17 +70,8 @@ export class DashboardComponent {
   }
 
   private updateIsMobile() {
-    const wasMobile = this.isMobile;
     this.isMobile = window.innerWidth < 700;
     if (!this.isMobile) this.cardsExpanded = false;
-  }
-
-  toggleView(event: any) {
-    this.showCharts = event.value === 'charts';
-    if (this.showCharts && !this.chartsLoaded) {
-      this.loadCharts();
-      this.chartsLoaded = true;
-    }
   }
 
   onNewExpense() {
@@ -105,7 +90,6 @@ export class DashboardComponent {
   }
 
   private reloadDashboard() {
-    this.gridComponent?.reloadData();
     this.cardsComponent?.reload();
     this.loadCharts();
   }

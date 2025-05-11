@@ -1,4 +1,4 @@
-export interface DashboardExpense {
+export interface GastosHistorico {
   id: number;
   tarjeta: string;
   categoria: string;

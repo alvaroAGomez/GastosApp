@@ -479,3 +479,57 @@ tr:last-child {
 h3 {
   color: #1976d2;
 }
+
+.mobile-bank-list {
+  padding: 8px 16px;
+}
+
+.expense-line {
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 8px;
+}
+
+.line-main {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.line-title {
+  max-width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line-amount {
+  font-weight: bold;
+  color: #444;
+}
+
+.line-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.line-date {
+  color: #777;
+}
+
+.line-cuota {
+  color: #777;
+  white-space: nowrap;
+}
+
+.line-category {
+  margin-top: 2px;
+  font-size: 0.85rem;
+  color: #555;
+}

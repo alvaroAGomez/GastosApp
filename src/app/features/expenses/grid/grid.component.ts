@@ -6,7 +6,7 @@ import {
   EventEmitter,
   OnInit,
 } from '@angular/core';
-import { DashboardExpense } from '../../../models/dashboard-expense.model';
+import { GastosHistorico } from '../../../models/dashboard-expense.model';
 import { DashboardExpenseService } from '../../../services/dashboard-expense.service';
 import { CustomCurrencyPipe } from '../../../shared/pipes/custom-currency.pipe';
 import { CommonModule } from '@angular/common';
@@ -69,11 +69,11 @@ export class GridComponent implements OnInit, AfterViewInit {
     'descripcion',
     'acciones',
   ];
-  dataSource!: MatTableDataSource<DashboardExpense>;
+  dataSource!: MatTableDataSource<GastosHistorico>;
 
   isMobile = false;
-  mobileExpenses: DashboardExpense[] = [];
-  allMobileExpenses: DashboardExpense[] = [];
+  mobileExpenses: GastosHistorico[] = [];
+  allMobileExpenses: GastosHistorico[] = [];
   searchValue = '';
   mobilePage = 0;
   mobilePageSize = 10;

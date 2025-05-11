@@ -2,7 +2,7 @@
 
   <div *ngIf="isMobile" class="filtro-icon-button">
     <button mat-icon-button color="primary" (click)="toggleFiltrosMobile()" aria-label="Filtros">
-      <mat-icon>{{ showFilters ? 'filter_alt_off' : 'filter_alt' }}</mat-icon>
+      <mat-icon>{{ showFilters ? 'filter_alt_off' : 'filter_alt' }} </mat-icon>
     </button>
   </div>
 
@@ -66,50 +66,6 @@
     </mat-form-field>
   </div>
 
-  <!-- MOBILE CARDS VIEW -->
-  <!--   <div *ngIf="isMobile; else desktopTable" class="mobile-cards-scroll" (scroll)="onMobileScroll($event)">
-    <h3>Gastos Realizados</h3>
-    <ng-container *ngFor="let expense of mobileExpenses">
-      <mat-card class="mobile-expense-card">
-        <div class="card-header-row">
-          <div class="card-amount">
-            <span class="amount-icon">💸</span>
-            <span class="amount-value">{{ expense.monto | customCurrency }}</span>
-          </div>
-          <div class="card-actions">
-            <button mat-icon-button class="icon-btn icon-eliminar" (click)="deleteExpense(expense)"
-              matTooltip="Eliminar gasto">
-              <mat-icon fontIcon="delete"></mat-icon>
-            </button>
-            <button mat-icon-button class="icon-btn icon-editar" (click)="editExpense(expense)"
-              matTooltip="Editar gasto">
-              <mat-icon fontIcon="edit"></mat-icon>
-            </button>
-          </div>
-        </div>
-        <div class="card-info-row">
-          <span class="info-icon">💳</span>
-          <span class="info-value">{{ expense.tarjeta }}</span>
-          <span class="info-separator">•</span>
-          <span class="info-icon">📂</span>
-          <span class="info-value">{{ expense.categoria }}</span>
-        </div>
-        <div class="card-info-row">
-          <span class="info-icon">🗓️</span>
-          <span class="info-value">{{ expense.fecha | date:'dd/MM/yyyy' }}</span>
-        </div>
-        <div class="card-info-row">
-          <span class="info-icon">📝</span>
-          <span class="info-value">{{ expense.descripcion }}</span>
-        </div>
-      </mat-card>
-    </ng-container>
-    <div *ngIf="mobileLoading" class="mobile-loading">Cargando...</div>
-    <div *ngIf="mobileAllLoaded && mobileExpenses.length === 0" class="mobile-no-data">No hay gastos.</div>
-    <div *ngIf="mobileAllLoaded && mobileExpenses.length > 0" class="mobile-no-more">No hay más gastos.</div>
-  </div> -->
-
-  <!-- MOBILE BANK-LIKE LIST VIEW -->
   <!-- MOBILE BANK-LIKE LIST VIEW CON BOTONES -->
   <div *ngIf="isMobile; else desktopTable" class="mobile-bank-list" (scroll)="onMobileScroll($event)">
     <ng-container *ngFor="let expense of mobileExpenses">

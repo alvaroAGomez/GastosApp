@@ -4,6 +4,7 @@ import { Expense } from '../models/expense.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { GastoMensual } from '../features/cards/credit-card-form/interfaces';
+import { GastosHistorico } from '../models/dashboard-expense.model';
 
 @Injectable({
   providedIn: 'root',
@@ -46,5 +47,24 @@ export class ExpenseService {
 
   getGastosMensualesPorTarjeta(tarjetaId: number): Observable<GastoMensual[]> {
     return this.http.get<GastoMensual[]>(`${this.apiUrl}/mensual/${tarjetaId}`);
+  }
+
+  getDashboardExpenses(filters?: {
+    fechaDesde?: string;
+    fechaHasta?: string;
+    categoriaId?: number;
+    tarjetaId?: number;
+  }): Observable<GastosHistorico[]> {
+    const params: any = {};
+
+    if (filters?.fechaDesde) params.fechaDesde = filters.fechaDesde;
+    if (filters?.fechaHasta) params.fechaHasta = filters.fechaHasta;
+    if (filters?.categoriaId) params.categoriaId = filters.categoriaId;
+    if (filters?.tarjetaId) params.tarjetaId = filters.tarjetaId;
+
+    return this.http.get<GastosHistorico[]>(
+      `${environment.apiUrl}gastos/dashboard/tarjetas`,
+      { params }
+    );
   }
 }
