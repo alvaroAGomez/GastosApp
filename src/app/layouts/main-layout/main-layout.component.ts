@@ -75,11 +75,10 @@ export class MainLayoutComponent implements AfterViewInit {
   }
 
   closeMenuIfMobile() {
-    this.isMobile$
-      .subscribe((isMobile) => {
-        if (isMobile) this.drawer.close();
-      })
-      .unsubscribe();
+    // Usar BreakpointObserver para obtener el valor actual sincrónicamente
+    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
+      this.drawer.close();
+    }
   }
 
   logout() {
