@@ -84,7 +84,7 @@
   <!-- MOBILE CARDS VIEW -->
 
   <div *ngIf="isMobile; else desktopTable" class="mobile-bank-list">
-    <ng-container *ngFor="let expense of gastosmensualesporTarjeta">
+    <ng-container *ngFor="let expense of dataSource.data">
       <div class="expense-line">
         <!-- Fila 1: Descripción + Monto -->
         <div class="line-main">
@@ -112,7 +112,7 @@
 
     </ng-container>
 
-    <div *ngIf="gastosmensualesporTarjeta.length === 0" class="mobile-no-data">
+    <div *ngIf="dataSource.data.length === 0" class="mobile-no-data">
       No hay gastos registrados para esta tarjeta.
     </div>
   </div>
@@ -121,11 +121,9 @@
 
   <!-- DESKTOP TABLE VIEW -->
   <ng-template #desktopTable>
-
     <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
-      <table mat-table [dataSource]="gastosmensualesporTarjeta" matSort (matSortChange)="onSort($event)"
-        class="mat-elevation-z8 global-table" style="min-width:600px; width:100%;">
-
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 global-table"
+        style="min-width:600px; width:100%;">
         <ng-container matColumnDef="fecha">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
           <td mat-cell *matCellDef="let expense">
@@ -180,9 +178,8 @@
       </table>
     </div>
     <mat-paginator [length]="totalExpenses" [pageSize]="pageSize" [pageIndex]="pageIndex"
-      [pageSizeOptions]="[5, 10, 20]" (page)="onPaginate($event)" class="custom-paginator">
+      [pageSizeOptions]="[5, 10, 20]" class="custom-paginator">
     </mat-paginator>
-
   </ng-template>
 
 

@@ -92,7 +92,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   searchValue = '';
 
   // Referencias al sort y paginator
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   // Columnas a mostrar en la tabla
@@ -102,12 +102,11 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     'categoria',
     'monto',
     'cuotas',
-    // 'cuotasRestantes',
     'acciones',
   ];
 
   // Fuente de datos para la tabla
-  dataSource = new MatTableDataSource<Expense | any>([]);
+  dataSource = new MatTableDataSource<GastoMensual>([]);
 
   filterForm: FormGroup;
   totalExpenses = 0;
@@ -179,27 +178,16 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Espera al siguiente ciclo de detección de cambios para asegurar que ViewChilds estén definidos
-    setTimeout(() => {
-      if (this.sort && this.paginator) {
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sortingDataAccessor = (item, property) => {
-          switch (property) {
-            case 'fecha':
-              return new Date(item.fecha);
-            default:
-              return (item as any)[property];
-          }
-        };
-        this.sort.active = 'fecha';
-        this.sort.direction = 'desc';
-        this.sort.sortChange.emit({
-          active: 'fecha',
-          direction: 'desc',
-        });
+    // Asigna paginator y sort después de que estén disponibles
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    // Si necesitas ordenar por fecha como Date:
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      if (property === 'fecha') {
+        return item.fecha ? new Date(item.fecha) : 0;
       }
-    });
+      return (item as any)[property];
+    };
   }
 
   @HostListener('window:resize')
@@ -227,42 +215,15 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     this.pageIndex = 0;
     this.loadExpenses();
   }
-  gastosmensualesporTarjeta: GastoMensual[] = [];
+
   loadExpenses() {
     this.expenseService
       .getGastosMensualesPorTarjeta(this.selectedCardId)
       .subscribe((res) => {
-        console.log(res);
-        this.gastosmensualesporTarjeta = res;
-      });
-
-    const cardId = this.route.snapshot.paramMap.get('id');
-    if (!cardId) return;
-    const filters = { ...this.filterForm.value };
-
-    if (filters.fechaDesde instanceof Date && !isNaN(filters.fechaDesde)) {
-      filters.fechaDesde = filters.fechaDesde.toISOString().slice(0, 10);
-    }
-    if (filters.fechaHasta instanceof Date && !isNaN(filters.fechaHasta)) {
-      filters.fechaHasta = filters.fechaHasta.toISOString().slice(0, 10);
-    }
-
-    this.expenseService
-      .getCardExpensesPaged(+cardId, {
-        page: this.pageIndex + 1,
-        limit: this.pageSize,
-        ...filters,
-        sortField: this.sortField,
-        sortDirection: this.sortDirection.toUpperCase(),
-      })
-      .subscribe((res) => {
-        console.log(res);
-
-        this.dataSource.data = res.data.map((item: any) => ({
-          ...item,
-          fecha: item.fecha ? new Date(item.fecha) : null,
-        }));
-        this.totalExpenses = res.total;
+        // Asigna todos los datos a la dataSource
+        this.dataSource.data = res;
+        // Si quieres mostrar el total de gastos:
+        this.totalExpenses = res.length;
       });
   }
 
@@ -281,15 +242,11 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   onPaginate(event: any) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.loadExpenses();
+    // No necesitas recargar datos, el paginador funciona en memoria
   }
 
   onSort(event: any) {
-    this.sortField = event.active;
-    this.sortDirection = event.direction || 'asc';
-    this.loadExpenses();
+    // No necesitas recargar datos, el sort funciona en memoria
   }
 
   applyFilter(event: Event) {
