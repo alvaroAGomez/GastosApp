@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { CreditCardAnnualGeneralSummary } from '../../../../models/card.model';
 import { CreditCardSummary, GastoTarjeta } from '../interfaces';
 import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pipe';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-credit-card-summary',
@@ -24,6 +25,7 @@ import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pip
     MatFormFieldModule,
     CommonModule,
     CustomCurrencyPipe,
+    MatIconModule,
   ],
   templateUrl: './credit-card-summary.component.html',
   styleUrl: './credit-card-summary.component.scss',
@@ -33,6 +35,22 @@ export class CreditCardSummaryComponent implements OnInit, OnChanges {
 
   allExpenses: GastoTarjeta[] = [];
   total: number = 0;
+  emptyMonths: any[] = [];
+
+  readonly MONTHS = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+  ];
 
   ngOnInit(): void {
     this.loadExpensesData();
@@ -46,11 +64,44 @@ export class CreditCardSummaryComponent implements OnInit, OnChanges {
 
   loadExpensesData() {
     if (this.generalSummary) {
-      this.allExpenses = this.generalSummary.resumenMensual.map((row) => ({
-        month: row.mes,
-        amount: row.totalGasto,
+      // Mapear meses a su posición para ordenar y rellenar vacíos
+      const monthMap: { [key: string]: number } = {
+        ENERO: 0,
+        FEBRERO: 1,
+        MARZO: 2,
+        ABRIL: 3,
+        MAYO: 4,
+        JUNIO: 5,
+        JULIO: 6,
+        AGOSTO: 7,
+        SEPTIEMBRE: 8,
+        OCTUBRE: 9,
+        NOVIEMBRE: 10,
+        DICIEMBRE: 11,
+      };
+      const expensesByMonth: { [key: string]: number } = {};
+      this.generalSummary.resumenMensual.forEach((row) => {
+        expensesByMonth[row.mes.toUpperCase()] = row.totalGasto;
+      });
+      this.allExpenses = this.MONTHS.map((mes) => ({
+        month: mes,
+        amount: expensesByMonth[mes] ?? 0,
       }));
       this.total = this.generalSummary.totalAnual;
+      // Calcular tarjetas vacías si hay menos de 12 meses
+      this.emptyMonths = Array(12 - this.allExpenses.length).fill(0);
+    } else {
+      this.allExpenses = [];
+      this.emptyMonths = Array(12).fill(0);
+      this.total = 0;
     }
+  }
+
+  isHigh(amount: number): boolean {
+    // Puedes ajustar el umbral según tu lógica de "alto"
+    return amount > 0;
+  }
+  isLow(amount: number): boolean {
+    return amount <= 0;
   }
 }

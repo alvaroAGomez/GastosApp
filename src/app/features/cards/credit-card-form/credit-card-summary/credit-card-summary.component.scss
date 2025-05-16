@@ -1,121 +1,229 @@
-.summary-grid {
-  display: block;
+.summary-dashboard {
   width: 100%;
-  max-width: 700px; // ancho máximo para centrar el contenido
-  margin: 0 auto !important; // centra horizontalmente
-  background: transparent !important;
-  border-radius: 0 0 12px 12px;
+  padding: 24px 24px 16px 24px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.summary-dashboard-title {
+  font-size: 1.7rem;
+  font-weight: bold;
+  margin-bottom: 22px;
+  margin-left: 4px;
+  color: #222;
+}
+
+.summary-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 28px;
+  width: 100%;
+  margin-bottom: 0;
+  align-items: stretch;
+}
+
+.summary-dashboard-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px #0001;
+  padding: 22px 12px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 110px;
+  height: 110px;
+  transition: box-shadow 0.2s, background 0.2s;
+  border: 1.5px solid #e3e8f0;
+  position: relative;
+  justify-content: flex-start;
+  font-size: 1.25rem;
+  border-left: 20px solid #3b8386 !important;
+}
+
+.summary-dashboard-card.high {
+  border-color: #43a047;
+  background: #e8f5e9;
+}
+
+.summary-dashboard-card.empty {
+  background: transparent;
+  border: none;
   box-shadow: none;
-  padding: 12px 32px 0 32px !important; // padding lateral generoso
-  box-sizing: border-box;
+  pointer-events: none;
 }
 
-mat-table {
-  width: 100%;
-  min-width: 0;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 0 12px 12px;
-  padding: 0 !important;
-  margin: 0 !important;
+.summary-dashboard-card.total-card {
+  background: #1976d2;
+  color: #fff;
   border: none !important;
-  table-layout: fixed;
+  box-shadow: 0 2px 8px #0002;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  grid-column: span 3;
+  border-left: 0px solid #1976d2 !important;
 }
 
-mat-header-cell,
-mat-cell,
-mat-footer-cell {
-  padding: 8px 6px !important;
-  text-align: center;
-  background: transparent !important;
-  border-bottom: 1px solid #e0e4ea !important; // línea divisoria clara
-  box-sizing: border-box;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-mat-header-cell {
-  font-weight: bold;
-  border-bottom: 2px solid #b0b8c9 !important; // línea más fuerte para header
-}
-
-mat-footer-cell {
-  font-weight: bold;
-}
-
-mat-footer-row {
-  font-size: 1.2rem;
-}
-
-.total-footer {
-  margin-top: 0;
-  text-align: right;
-  font-size: 1.15rem;
-  font-weight: bold;
-  background: transparent !important;
-  border-radius: 0 0 12px 12px;
-  padding: 12px 18px 18px 0 !important;
+.summary-dashboard-month {
+  font-size: 1.35rem;
+  font-weight: 700;
   color: #1976d2;
-  box-shadow: none !important;
-  width: 100%;
-  box-sizing: border-box;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
 }
 
-@media (max-width: 900px) {
-  .summary-grid {
-    max-width: 100vw;
-    padding: 10px 4vw 0 4vw !important;
-  }
+.summary-dashboard-card.total-card .summary-dashboard-month {
+  color: #fff;
+  font-size: 1.45rem;
+  margin-bottom: 16px;
 }
 
-@media (max-width: 768px) {
-  .summary-grid {
-    padding: 8px 2vw 0 2vw !important;
-  }
-  .total-footer {
-    font-size: 1rem;
-    padding: 8px 4px 12px 0 !important;
-  }
-  mat-header-cell,
-  mat-cell,
-  mat-footer-cell {
-    padding: 6px 2px !important;
-  }
-}
-
-@media (max-width: 600px) {
-  .summary-grid {
-    max-width: 100vw;
-    padding: 8px 2vw 0 2vw !important;
-  }
-  .total-footer {
-    font-size: 1rem;
-    padding: 8px 2vw 12px 0 !important;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  mat-header-cell,
-  mat-cell,
-  mat-footer-cell {
-    padding: 6px 2px !important;
-  }
-}
-
-.year-selector {
+.summary-dashboard-row {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  font-size: 1.2rem;
+  gap: 18px;
+  justify-content: center;
+  width: 100%;
 }
 
-mat-select {
-  width: 200px;
-  margin-left: 10px;
+.summary-dashboard-icon {
+  color: #43a047;
 }
 
-mat-label {
+.summary-dashboard-amount {
+  font-size: 1.55rem;
   font-weight: bold;
+  color: #222;
+}
+
+.summary-dashboard-card.total-card .summary-dashboard-total-icon {
+  color: #fff;
+}
+
+.summary-dashboard-card.total-card .summary-dashboard-total-amount {
+  font-size: 2.1rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 1100px) {
+  .summary-dashboard {
+    padding: 18px 10px 12px 10px;
+  }
+  .summary-dashboard-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px 8px;
+  }
+  .summary-dashboard-card.total-card {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 700px) {
+  .summary-dashboard {
+    padding: 12px 4px 8px 4px;
+  }
+  .summary-dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 4px;
+  }
+  .summary-dashboard-card.total-card {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 500px) {
+  .summary-dashboard {
+    padding: 6px 2px 4px 2px;
+  }
+  .summary-dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+  }
+
+  .summary-dashboard-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    box-shadow: none;
+    border-radius: 10px;
+    padding: 10px 8px;
+    margin: 0 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    transition: all 0.2s;
+    height: auto;
+    border-left: 12px solid #3b8386 !important;
+  }
+
+  .summary-dashboard-month {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+  }
+
+  .summary-dashboard-row {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .summary-dashboard-icon {
+    font-size: 18px;
+    color: #4caf50;
+  }
+
+  .summary-dashboard-amount {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .summary-dashboard-card.total-card {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 8px;
+    margin: 6px 4px 0 4px;
+    font-size: 0.95rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    height: 56px;
+  }
+
+  .summary-dashboard-card.total-card .summary-dashboard-month {
+    font-size: 0.85rem;
+    margin: 0;
+    color: #fff;
+  }
+
+  .summary-dashboard-card.total-card .summary-dashboard-row {
+    justify-content: flex-end;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .summary-dashboard-card.total-card .summary-dashboard-total-amount {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: #fff;
+  }
+
+  .summary-dashboard-card.total-card .summary-dashboard-total-icon {
+    font-size: 18px;
+    color: #fff;
+  }
 }

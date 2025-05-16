@@ -14,7 +14,6 @@ button {
   display: flex;
   justify-content: flex-start;
   gap: 24px;
-  margin-bottom: 28px;
   flex-wrap: wrap;
 }
 
@@ -235,6 +234,7 @@ mat-label {
   background: #f8fafc;
   border-radius: 12px;
   margin-bottom: 32px;
+  margin-top: 24px; // <-- agrega espacio superior
   padding: 0; // sin padding para que la grilla quede alineada
   color: #222;
   box-shadow: 0 1px 6px #0001;
