@@ -374,3 +374,13 @@ button.custom-button:hover {
 .mobile-cards-scroll::-webkit-scrollbar {
   display: none; /* Chrome, Safari y Opera */
 }
+
+// Manipulate initial background color
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: transparent !important;
+}
+
+// Manipulate background color on hover and focus
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}

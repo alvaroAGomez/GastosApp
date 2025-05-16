@@ -533,3 +533,48 @@ h3 {
   font-size: 0.85rem;
   color: #555;
 }
+
+.dashboard-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.dashboard-charts-col {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 10px 8px 8px 8px;
+  min-width: 0;
+}
+
+.chart-title {
+  margin-bottom: 10px;
+  font-size: 1.25em;
+  font-weight: 600;
+  color: #1976d2;
+  text-align: center;
+}
+
+.chart-desc {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1em;
+  color: #666;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .dashboard-charts-row {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .dashboard-charts-col {
+    padding: 10px 4px 8px 4px;
+  }
+  .dashboard-charts-col {
+    grid-column: auto !important;
+  }
+}

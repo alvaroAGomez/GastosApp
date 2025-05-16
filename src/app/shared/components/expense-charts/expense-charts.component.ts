@@ -1,12 +1,7 @@
 import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {
-  ChartData,
-  ChartConfiguration,
-  ChartDataset,
-  ChartOptions,
-} from 'chart.js';
+import { ChartData, ChartConfiguration } from 'chart.js';
 import { ExpenseChartsService } from './expense-charts.service';
 import { ExpenseChartFilters, ExpenseChartData } from './expense-charts.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -97,6 +92,15 @@ export class ExpenseChartsComponent implements OnInit {
             return this.customCurrency.transform(value, 0);
           },
         },
+      },
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 13 } } },
+      y: {
+        grid: { display: false },
+        beginAtZero: true,
+        min: 0,
+        ticks: { font: { size: 13 } },
       },
     },
   };
