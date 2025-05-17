@@ -84,6 +84,7 @@
   <!-- MOBILE CARDS VIEW -->
 
   <div *ngIf="isMobile; else desktopTable" class="mobile-bank-list">
+    <h4>Gastos del Mes</h4>
     <ng-container *ngFor="let expense of dataSource.data">
       <div class="expense-line">
         <!-- Fila 1: Descripción + Monto -->

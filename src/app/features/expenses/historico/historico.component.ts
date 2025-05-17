@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { GridComponent } from '../grid/grid.component';
+import { UpcomingExpensesComponent } from '../upcoming-expenses/upcoming-expenses.component';
 
 @Component({
   selector: 'app-historico',
@@ -18,4 +19,20 @@ import { GridComponent } from '../grid/grid.component';
   styleUrl: './historico.component.scss',
   standalone: true,
 })
-export class HistoricoComponent {}
+export class HistoricoComponent {
+  @ViewChild('grid') gridComponent!: GridComponent;
+  constructor(private dialog: MatDialog) {}
+
+  onNewExpense() {
+    const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
+      disableClose: false,
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.created || result?.updated) {
+        this.gridComponent.reloadData();
+      }
+    });
+  }
+}

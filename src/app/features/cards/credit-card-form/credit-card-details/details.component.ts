@@ -186,6 +186,13 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       if (property === 'fecha') {
         return item.fecha ? new Date(item.fecha) : 0;
       }
+      if (property === 'cuotas') {
+        if (typeof item.cuota === 'string') {
+          const match = item.cuota.match(/^(\d+)/);
+          return match ? Number(match[1]) : 0;
+        }
+        return Number(item.cuota ?? 0);
+      }
       return (item as any)[property];
     };
   }

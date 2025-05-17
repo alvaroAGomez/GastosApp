@@ -14,6 +14,7 @@ import { CreditCardAnnualGeneralSummary } from '../../../../models/card.model';
 import { CreditCardSummary, GastoTarjeta } from '../interfaces';
 import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-credit-card-summary',
@@ -26,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     CustomCurrencyPipe,
     MatIconModule,
+    MatCardModule,
   ],
   templateUrl: './credit-card-summary.component.html',
   styleUrl: './credit-card-summary.component.scss',
@@ -103,5 +105,17 @@ export class CreditCardSummaryComponent implements OnInit, OnChanges {
   }
   isLow(amount: number): boolean {
     return amount <= 0;
+  }
+
+  // Devuelve true si la pantalla es mobile (igual que en el HTML)
+  isMobileView(): boolean {
+    return window.innerWidth < 700;
+  }
+
+  // Promedio de gastos para el color del ícono en mobile
+  getMobilePromedio(): number {
+    if (!this.allExpenses.length) return 0;
+    const sum = this.allExpenses.reduce((acc, e) => acc + (e.amount || 0), 0);
+    return sum / this.allExpenses.length;
   }
 }

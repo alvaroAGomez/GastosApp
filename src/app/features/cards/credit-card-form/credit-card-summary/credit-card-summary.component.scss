@@ -128,7 +128,12 @@
 
 @media (max-width: 700px) {
   .summary-dashboard {
-    padding: 12px 4px 8px 4px;
+    padding: 0;
+    background: #f4f6fa;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   .summary-dashboard-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -136,6 +141,108 @@
   }
   .summary-dashboard-card.total-card {
     grid-column: span 2;
+  }
+  .summary-dashboard-mobile {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 16px 0 24px 0; // solo padding vertical
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #f4f6fa;
+    min-height: 100px;
+    border-radius: 0;
+    box-sizing: border-box;
+  }
+  .mobile-summary-card {
+    width: calc(100% - 32px);
+    margin: 0 auto 14px auto;
+    border-radius: 12px;
+    background: #f4f6fa !important;
+    box-shadow: none;
+    padding: 14px 12px 12px 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    transition: none;
+    box-sizing: border-box;
+  }
+  .mobile-summary-card.alt-bg {
+    background: #f4f6fa !important;
+    box-shadow: none;
+  }
+  .mobile-summary-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.08rem;
+    font-weight: 500;
+    color: #333;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .mobile-summary-icon {
+    font-size: 1.3em;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+  .icon-green {
+    color: #43a047;
+  }
+  .icon-red {
+    color: #e53935;
+  }
+  .mobile-summary-month {
+    flex: 1 1 0;
+    font-weight: 700;
+    color: #1976d2;
+    font-size: 1.08em;
+    margin-left: 4px;
+    letter-spacing: 0.5px;
+  }
+  .mobile-summary-amount {
+    font-weight: bold;
+    color: #222;
+    font-size: 1.08em;
+    margin-left: 8px;
+  }
+  .mobile-summary-total-card {
+    width: calc(100% - 32px);
+    margin: 24px auto 0 auto;
+    border-radius: 12px;
+    background-color: #1976d2;
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 0 14px 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+    box-sizing: border-box;
+  }
+  .mobile-summary-total-label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    opacity: 0.92;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+  .mobile-summary-total-value {
+    font-size: 1.7rem;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mobile-summary-total-icon {
+    font-size: 1.3em;
+    margin-right: 4px;
+    color: #fff;
   }
 }
 

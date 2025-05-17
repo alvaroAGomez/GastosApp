@@ -1,5 +1,5 @@
 <div class="summary-dashboard">
-  <div class="summary-dashboard-grid">
+  <div class="summary-dashboard-grid" *ngIf="!isMobileView()">
     <ng-container *ngFor="let row of allExpenses; let i = index">
       <div class="summary-dashboard-card" [ngClass]="{'high': isHigh(row.amount), 'low': isLow(row.amount)}">
         <div class="summary-dashboard-month">{{ row.month | uppercase }}</div>
@@ -19,5 +19,29 @@
         <span class="summary-dashboard-total-amount">{{ total | customCurrency:0 }}</span>
       </div>
     </div>
+  </div>
+  <!-- MOBILE VERSION -->
+  <div class="summary-dashboard-mobile" *ngIf="isMobileView()">
+    <ng-container *ngFor="let row of allExpenses; let i = index">
+      <mat-card class="mobile-summary-card" [ngClass]="{'alt-bg': i % 2 === 1}">
+        <div class="mobile-summary-row">
+          <mat-icon class="mobile-summary-icon" [ngClass]="{
+              'icon-green': row.amount <= getMobilePromedio(),
+              'icon-red': row.amount > getMobilePromedio()
+            }">
+            {{ row.amount > getMobilePromedio() ? 'trending_up' : 'trending_down' }}
+          </mat-icon>
+          <span class="mobile-summary-month">{{ row.month | uppercase }}</span>
+          <span class="mobile-summary-amount">{{ row.amount | customCurrency:0 }}</span>
+        </div>
+      </mat-card>
+    </ng-container>
+    <mat-card class="mobile-summary-total-card" *ngIf="allExpenses.length">
+      <div class="mobile-summary-total-label">TOTAL</div>
+      <div class="mobile-summary-total-value">
+        <mat-icon class="mobile-summary-total-icon">receipt_long</mat-icon>
+        {{ total | customCurrency:0 }}
+      </div>
+    </mat-card>
   </div>
 </div>

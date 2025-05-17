@@ -33,10 +33,10 @@ import { NgxCurrencyDirective } from 'ngx-currency';
 // Definir los formatos de fecha si es necesario
 const MY_DATE_FORMAT = {
   parse: {
-    dateInput: 'DD/MM/YYYY', // this is how your date will be parsed from Input
+    dateInput: 'DD/MM/YYYY',
   },
   display: {
-    dateInput: 'DD/MM/YYYY', // this is how your date will get displayed on the Input
+    dateInput: 'DD/MM/YYYY',
     monthYearLabel: 'MMMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -89,6 +89,14 @@ export class UpcomingExpensesComponent implements OnInit {
     this.createForm();
     this.loadCombos();
     this.initializeFormIfEdit();
+
+    // Si viene tarjetaCreditoId y NO es edición, setear y deshabilitar el campo
+    if (!this.data?.isEdit && this.data?.tarjetaCreditoId) {
+      this.upcomingExpenseForm.patchValue({
+        tarjetaCreditoId: this.data.tarjetaCreditoId,
+      });
+      this.upcomingExpenseForm.get('tarjetaCreditoId')?.disable();
+    }
   }
 
   private createForm() {

@@ -53,7 +53,7 @@
                 <ng-container matColumnDef="fechaCompra">
                     <th mat-header-cell *matHeaderCellDef>Fecha de Compra</th>
                     <td mat-cell *matCellDef="let mov">
-                        {{ mov.fecha | date: 'dd/MM/yyyy':'':'es-ES' }}
+                        {{ mov.fechaGasto | date: 'dd/MM/yyyy':'':'es-ES' }}
                     </td>
                     <td mat-footer-cell *matFooterCellDef class="footer-label"></td>
                 </ng-container>
