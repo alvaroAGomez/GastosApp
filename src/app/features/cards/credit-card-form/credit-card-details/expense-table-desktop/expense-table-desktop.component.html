@@ -1,0 +1,45 @@
+<div class="table-scroll-x">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 global-table">
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+            <td mat-cell *matCellDef="let expense">{{ expense.fecha | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Movimiento</th>
+            <td mat-cell *matCellDef="let expense">{{ expense.descripcion }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoria">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoría</th>
+            <td mat-cell *matCellDef="let expense">{{ expense.categoria }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
+            <td mat-cell *matCellDef="let expense">{{ expense.monto | customCurrency }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="cuotas">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cuotas</th>
+            <td mat-cell *matCellDef="let expense">{{ expense.cuota }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let expense">
+                <button mat-icon-button color="primary" (click)="onEdit(expense)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="onDelete(expense)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+</div>
+<mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" showFirstLastButtons class="custom-paginator">
+</mat-paginator>

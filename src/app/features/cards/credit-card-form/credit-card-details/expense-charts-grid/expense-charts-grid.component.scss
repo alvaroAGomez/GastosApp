@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.chart-cell {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &.large {
+    grid-column: 1 / span 2;
+  }
+
+  .chart-title {
+    margin-bottom: 8px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1976d2;
+    text-align: center;
+  }
+  .chart-desc {
+    margin: 0 0 16px;
+    font-size: 1rem;
+    color: #666;
+    text-align: center;
+  }
+}
+
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}

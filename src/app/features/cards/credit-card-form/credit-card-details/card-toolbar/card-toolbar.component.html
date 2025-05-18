@@ -1,0 +1,50 @@
+<ng-container *ngIf="isMobile; else desktopTpl">
+    <div class="details-mobile-toolbar">
+        <div class="details-mobile-toolbar-row">
+            <button mat-mini-fab color="primary" class="custom-button" matTooltip="Nuevo Gasto"
+                (click)="newExpense.emit()">
+                <mat-icon>add</mat-icon>
+            </button>
+            <span class="toolbar-spacer"></span>
+            <mat-button-toggle-group [value]="showCharts ? 'charts' : 'table'" (change)="onToggle($event)" exclusive
+                class="mobile-toggle-group">
+                <mat-button-toggle value="table" matTooltip="Ver como Tabla">
+                    <mat-icon>table_view</mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle value="charts" matTooltip="Ver como Gráficos">
+                    <mat-icon>insert_chart</mat-icon>
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <div class="details-mobile-toolbar-row">
+            <button mat-stroked-button color="primary" class="cuotas-pendientes-btn" [disabled]="!hasPending"
+                (click)="openPendings.emit()">
+                <mat-icon style="margin-right:8px;">list_alt</mat-icon>
+                Ver cuotas pendientes
+            </button>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #desktopTpl>
+    <div class="details-toolbar-row">
+        <div class="toolbar-left">
+            <button mat-raised-button color="primary" class="custom-button" (click)="newExpense.emit()">
+                <mat-icon>add</mat-icon>
+                Nuevo Gasto
+            </button>
+        </div>
+        <span class="toolbar-spacer"></span>
+        <div class="toolbar-right">
+            <button mat-stroked-button color="primary" class="cuotas-pendientes-btn" [disabled]="!hasPending"
+                (click)="openPendings.emit()">
+                <mat-icon style="margin-right:8px;">list_alt</mat-icon>
+                Ver cuotas pendientes
+            </button>
+            <mat-button-toggle-group [value]="showCharts ? 'charts' : 'table'" (change)="onToggle($event)" exclusive>
+                <mat-button-toggle value="table">Ver como Tabla</mat-button-toggle>
+                <mat-button-toggle value="charts">Ver como Gráficos</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+</ng-template>

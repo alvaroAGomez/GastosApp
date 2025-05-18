@@ -1,0 +1,19 @@
+<div class="card-details-header" *ngIf="cardHeaderDetail">
+    <h1 class="card-name">
+        {{ cardHeaderDetail.nombreTarjeta }}
+        <span class="bank-name" *ngIf="cardHeaderDetail.banco">
+            - {{ cardHeaderDetail.banco }}
+        </span>
+    </h1>
+
+    <div class="card-limits">
+        <ng-container *ngFor="let item of limitItems">
+            <div class="limit-item">
+                <span class="limit-label">{{ item.label }}</span>
+                <span class="limit-value" [ngClass]="item.cssClass">
+                    {{ item.value | customCurrency }}
+                </span>
+            </div>
+        </ng-container>
+    </div>
+</div>

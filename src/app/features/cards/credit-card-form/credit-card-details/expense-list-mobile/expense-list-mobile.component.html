@@ -1,0 +1,35 @@
+<div class="mobile-bank-list">
+    <h4>Gastos del Mes</h4>
+
+    <ng-container *ngIf="data.length; else noData">
+        <div *ngFor="let exp of data" class="expense-line">
+            <!-- Fila 1: Descripción + Monto -->
+            <div class="line-main">
+                <div class="line-title">{{ exp.descripcion }}</div>
+                <div class="line-amount">{{ exp.monto | customCurrency }}</div>
+            </div>
+            <!-- Fila 2: Fecha + Cuota -->
+            <div class="line-row">
+                <div class="line-date">{{ exp.fecha | date:'dd/MM/yyyy' }}</div>
+                <div class="line-cuota" *ngIf="exp.cuota">Cuota {{ exp.cuota }}</div>
+            </div>
+            <!-- Fila 3: Categoría -->
+            <div class="line-category">{{ exp.categoria }}</div>
+            <!-- Acciones -->
+            <div class="expense-actions">
+                <button mat-icon-button color="primary" (click)="edit.emit(exp)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="delete.emit(exp)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-template #noData>
+        <div class="mobile-no-data">
+            No hay gastos registrados para esta tarjeta.
+        </div>
+    </ng-template>
+</div>

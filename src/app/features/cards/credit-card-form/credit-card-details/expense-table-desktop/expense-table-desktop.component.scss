@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.table-scroll-x {
+  overflow-x: auto;
+  max-width: 100vw;
+}
+
+.global-table {
+  min-width: 600px;
+  width: 100%;
+}
+
+.custom-paginator {
+  margin-top: 16px;
+}

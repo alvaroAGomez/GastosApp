@@ -1,5 +1,5 @@
 <div class="card-details-container">
-  <!-- CABECERA CON DATOS DE LA TARJETA -->
+
   <div class="card-details-header" *ngIf="cardHeaderDetail">
     <h1 class="card-name">
       {{ cardHeaderDetail.nombreTarjeta }}
@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <!-- TOOLBAR MOBILE (dos filas) -->
+
   <div *ngIf="isMobile" class="details-mobile-toolbar">
     <div class="details-mobile-toolbar-row">
       <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto">
@@ -54,7 +54,7 @@
     </div>
   </div>
 
-  <!-- TOOLBAR DESKTOP (original) -->
+
   <div *ngIf="!isMobile" class="details-toolbar-row">
     <div class="toolbar-left">
       <button mat-raised-button color="primary" type="button" class="custom-button" (click)="onNewExpense()">
@@ -81,19 +81,17 @@
 <div *ngIf="!showCharts">
 
 
-  <!-- MOBILE CARDS VIEW -->
 
   <div *ngIf="isMobile; else desktopTable" class="mobile-bank-list">
     <h4>Gastos del Mes</h4>
     <ng-container *ngFor="let expense of dataSource.data">
       <div class="expense-line">
-        <!-- Fila 1: Descripción + Monto -->
+
         <div class="line-main">
           <div class="line-title">{{ expense.descripcion }}</div>
           <div class="line-amount">{{ expense.monto | customCurrency }}</div>
         </div>
 
-        <!-- Fila 2: Fecha + Cuota -->
         <div class="line-row">
           <div class="line-date">{{ expense.fecha | date:'dd/MM/yyyy' }}</div>
           <div class="line-cuota" *ngIf="expense.cuota">
@@ -101,7 +99,7 @@
           </div>
         </div>
 
-        <!-- Fila 3: Categoría -->
+
         <div class="line-category">
           {{ expense.categoria }}
         </div>
@@ -120,7 +118,7 @@
 
 
 
-  <!-- DESKTOP TABLE VIEW -->
+
   <ng-template #desktopTable>
     <div class="table-scroll-x" style="overflow-x:auto; max-width:100vw;">
       <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 global-table"
@@ -213,3 +211,34 @@
 </div>
 
 <br>
+
+
+
+
+<!-- <app-card-header *ngIf="cardHeaderDetail" [cardHeaderDetail]="cardHeaderDetail">
+</app-card-header>
+
+<app-card-toolbar [isMobile]="isMobile" [hasPending]="movimientosDataSource.data.length > 0" [showCharts]="showCharts"
+  (newExpense)="onNewExpense()" (openPendings)="openPendingInstallmentsModal()" (viewChange)="toggleView($event)">
+</app-card-toolbar>
+
+<ng-container *ngIf="!showCharts; else chartsTpl">
+  <app-expense-list-mobile *ngIf="isMobile; else tableTpl" [data]="dataSource.data" (edit)="editExpense($event)"
+    (delete)="deleteExpense($event)">
+  </app-expense-list-mobile>
+
+  <ng-template #tableTpl>
+    <app-expense-table-desktop [data]="dataSource.data" [displayedColumns]="displayedColumns"
+      [pageSizeOptions]="[5,10,20]" [pageSize]="pageSize" (edit)="editExpense($event)" (delete)="deleteExpense($event)"
+      (pageEvent)="onPaginate($event)" (sortEvent)="($event)">
+    </app-expense-table-desktop>
+  </ng-template>
+</ng-container>
+
+<ng-template #chartsTpl>
+  <app-expense-charts-grid [categorias]="categories" [tarjetaId]="selectedCardId"
+    [initialPieChartFilters]="initialPieChartFilters" [initialBarChartFilters]="initialBarChartFilters"
+    [initialLineChartFilters]="initialLineChartFilters">
+  </app-expense-charts-grid>
+</ng-template>
+ -->

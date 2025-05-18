@@ -1,0 +1,23 @@
+<div class="charts-grid">
+    <div class="chart-cell">
+        <h2 class="chart-title">Gastos por Categoría</h2>
+        <p class="chart-desc">Distribución de los gastos del mes actual agrupados por categoría.</p>
+        <app-expense-charts [categorias]="categorias" [tarjetas]="tarjetas" [initialFilters]="initialPieChartFilters"
+            [allowedCharts]="pieCharts">
+        </app-expense-charts>
+    </div>
+    <div class="chart-cell">
+        <h2 class="chart-title">Comparación por Categoría</h2>
+        <p class="chart-desc">Compara cuánto se gasta por cada categoría en el período seleccionado.</p>
+        <app-expense-charts [categorias]="categorias" [tarjetas]="tarjetas" [initialFilters]="initialBarChartFilters"
+            [allowedCharts]="barCharts">
+        </app-expense-charts>
+    </div>
+    <div class="chart-cell large">
+        <h2 class="chart-title">Tendencia de Gastos</h2>
+        <p class="chart-desc">Evolución mensual de los gastos de la tarjeta en el período seleccionado.</p>
+        <app-expense-charts [categorias]="categorias" [tarjetas]="tarjetas" [initialFilters]="initialLineChartFilters"
+            [allowedCharts]="lineCharts">
+        </app-expense-charts>
+    </div>
+</div>
