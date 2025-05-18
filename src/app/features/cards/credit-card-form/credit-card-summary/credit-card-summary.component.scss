@@ -1,336 +1,257 @@
-.summary-dashboard {
-  width: 100%;
-  padding: 24px 24px 16px 24px;
-  background: transparent;
+//─────────────────────────────────────────────────────────────────
+//  Variables
+//─────────────────────────────────────────────────────────────────
+$break-mobile: 700px;
+$break-small: 480px;
+
+$grid-gap-desktop: 28px;
+$grid-gap-tablet: 12px;
+$grid-min: 350px;
+$grid-max: 450px;
+
+$color-bg-web: #ecf6ed;
+$color-bg-hover: #dcedd1;
+$color-bg-mobile: #f4f6fa;
+$color-border-low: #43a047;
+$color-border-high: #c62828;
+$color-total-bg: #1976d2;
+$color-text: #222;
+$color-title: #1976d2;
+
+//─────────────────────────────────────────────────────────────────
+//  Mixins
+//─────────────────────────────────────────────────────────────────
+/// Flex shorthand
+@mixin flex($dir: row, $jc: center, $ai: center) {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: $dir;
+  justify-content: $jc;
+  align-items: $ai;
+}
+
+/// Box reset
+@mixin box-reset {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-.summary-dashboard-title {
-  font-size: 1.7rem;
-  font-weight: bold;
-  margin-bottom: 22px;
-  margin-left: 4px;
-  color: #222;
-}
-
-.summary-dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 28px;
+//─────────────────────────────────────────────────────────────────
+//  Styles
+//─────────────────────────────────────────────────────────────────
+.summary-dashboard {
+  @include box-reset;
   width: 100%;
-  margin-bottom: 0;
-  align-items: stretch;
-}
-
-.summary-dashboard-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 6px #0001;
-  padding: 22px 12px 18px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 110px;
-  height: 110px;
-  transition: box-shadow 0.2s, background 0.2s;
-  border: 1.5px solid #e3e8f0;
-  position: relative;
-  justify-content: flex-start;
-  font-size: 1.25rem;
-  border-left: 20px solid #3b8386 !important;
-}
-
-.summary-dashboard-card.high {
-  border-color: #43a047;
-  background: #e8f5e9;
-}
-
-.summary-dashboard-card.empty {
+  padding: 24px;
+  overflow-x: hidden;
   background: transparent;
-  border: none;
-  box-shadow: none;
-  pointer-events: none;
-}
+  @include flex(column, flex-start, stretch);
 
-.summary-dashboard-card.total-card {
-  background: #1976d2;
-  color: #fff;
-  border: none !important;
-  box-shadow: 0 2px 8px #0002;
-  height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.45rem;
-  grid-column: span 3;
-  border-left: 0px solid #1976d2 !important;
-}
-
-.summary-dashboard-month {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #1976d2;
-  margin-bottom: 16px;
-  letter-spacing: 0.5px;
-}
-
-.summary-dashboard-card.total-card .summary-dashboard-month {
-  color: #fff;
-  font-size: 1.45rem;
-  margin-bottom: 16px;
-}
-
-.summary-dashboard-row {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  justify-content: center;
-  width: 100%;
-}
-
-.summary-dashboard-icon {
-  color: #43a047;
-}
-
-.summary-dashboard-amount {
-  font-size: 1.55rem;
-  font-weight: bold;
-  color: #222;
-}
-
-.summary-dashboard-card.total-card .summary-dashboard-total-icon {
-  color: #fff;
-}
-
-.summary-dashboard-card.total-card .summary-dashboard-total-amount {
-  font-size: 2.1rem;
-  font-weight: bold;
-  color: #fff;
-  letter-spacing: 1px;
-}
-
-@media (max-width: 1100px) {
-  .summary-dashboard {
-    padding: 18px 10px 12px 10px;
-  }
-  .summary-dashboard-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px 8px;
-  }
-  .summary-dashboard-card.total-card {
-    grid-column: span 3;
-  }
-}
-
-@media (max-width: 700px) {
-  .summary-dashboard {
-    padding: 0;
-    background: #f4f6fa;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
-  .summary-dashboard-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px 4px;
-  }
-  .summary-dashboard-card.total-card {
-    grid-column: span 2;
-  }
-  .summary-dashboard-mobile {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 16px 0 24px 0; // solo padding vertical
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    background: #f4f6fa;
-    min-height: 100px;
-    border-radius: 0;
-    box-sizing: border-box;
-  }
-  .mobile-summary-card {
-    width: calc(100% - 32px);
-    margin: 0 auto 14px auto;
-    border-radius: 12px;
-    background: #f4f6fa !important;
-    box-shadow: none;
-    padding: 14px 12px 12px 12px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border: none;
-    transition: none;
-    box-sizing: border-box;
-  }
-  .mobile-summary-card.alt-bg {
-    background: #f4f6fa !important;
-    box-shadow: none;
-  }
-  .mobile-summary-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.08rem;
-    font-weight: 500;
-    color: #333;
-    justify-content: space-between;
-    width: 100%;
-  }
-  .mobile-summary-icon {
-    font-size: 1.3em;
-    vertical-align: middle;
-    margin-right: 4px;
-  }
-  .icon-green {
-    color: #43a047;
-  }
-  .icon-red {
-    color: #e53935;
-  }
-  .mobile-summary-month {
-    flex: 1 1 0;
-    font-weight: 700;
-    color: #1976d2;
-    font-size: 1.08em;
-    margin-left: 4px;
-    letter-spacing: 0.5px;
-  }
-  .mobile-summary-amount {
-    font-weight: bold;
-    color: #222;
-    font-size: 1.08em;
-    margin-left: 8px;
-  }
-  .mobile-summary-total-card {
-    width: calc(100% - 32px);
-    margin: 24px auto 0 auto;
-    border-radius: 12px;
-    background-color: #1976d2;
-    color: #fff;
-    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 18px 0 14px 0;
-    font-size: 1.4rem;
-    font-weight: bold;
-    letter-spacing: 0.01em;
-    box-sizing: border-box;
-  }
-  .mobile-summary-total-label {
-    font-size: 1.1rem;
-    font-weight: 500;
-    opacity: 0.92;
-    margin-bottom: 6px;
-    letter-spacing: 0.01em;
-  }
-  .mobile-summary-total-value {
+  &-title {
     font-size: 1.7rem;
     font-weight: bold;
-    letter-spacing: 0.01em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .mobile-summary-total-icon {
-    font-size: 1.3em;
-    margin-right: 4px;
-    color: #fff;
-  }
-}
-
-@media (max-width: 500px) {
-  .summary-dashboard {
-    padding: 6px 2px 4px 2px;
-  }
-  .summary-dashboard-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
-  }
-
-  .summary-dashboard-card {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    box-shadow: none;
-    border-radius: 10px;
-    padding: 10px 8px;
-    margin: 0 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    transition: all 0.2s;
-    height: auto;
-    border-left: 12px solid #3b8386 !important;
-  }
-
-  .summary-dashboard-month {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #555;
-    margin-bottom: 4px;
-  }
-
-  .summary-dashboard-row {
-    justify-content: flex-start;
-    gap: 6px;
-  }
-
-  .summary-dashboard-icon {
-    font-size: 18px;
-    color: #4caf50;
-  }
-
-  .summary-dashboard-amount {
-    font-size: 1.05rem;
-    font-weight: 600;
+    margin: 0 0 22px 4px;
     color: #222;
   }
 
-  .summary-dashboard-card.total-card {
-    background: #1976d2;
-    color: #fff;
-    border: none;
+  &-grid {
+    @include box-reset;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax($grid-min, $grid-max));
+    gap: $grid-gap-desktop;
+    width: 100%;
+    margin-bottom: 0;
+
+    // Total ocupa toda la fila
+    .total-card {
+      grid-column: 1 / -1;
+    }
+  }
+
+  //─────────────────────────────────────────────────────────────
+  //  Card común (desktop)
+  //─────────────────────────────────────────────────────────────
+  .summary-dashboard-card {
+    @include flex(column, flex-start, center);
+    background: $color-bg-web;
+    border-left: 8px solid $color-border-low;
     border-radius: 8px;
-    padding: 6px 8px;
-    margin: 6px 4px 0 4px;
-    font-size: 0.95rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    height: 56px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    padding: 16px;
+    min-height: 80px;
+    color: $color-text;
+    transition: background 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      background: $color-bg-hover;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    &.low {
+      border-left-color: $color-border-low;
+    }
+    &.high {
+      border-left-color: $color-border-high;
+    }
+
+    &.alt-bg {
+      background: lighten($color-bg-web, 4%);
+    }
+
+    &.total-card {
+      background: $color-total-bg !important;
+      border-left: none !important;
+      color: #fff;
+
+      .summary-dashboard-month {
+        color: #fff;
+      }
+      .summary-dashboard-row {
+        gap: 8px;
+      }
+      .summary-dashboard-amount {
+        font-size: 1.4rem;
+        color: #fff;
+      }
+    }
+
+    &-month {
+      flex-shrink: 0;
+      margin-bottom: 8px;
+      font-size: clamp(0.8rem, 1.5vw, 1rem);
+      font-weight: 600;
+      text-transform: uppercase;
+      color: $color-title;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &-row {
+      @include flex(row, center, center);
+      gap: 6px;
+      width: 100%;
+      flex-shrink: 1;
+      min-width: 0; // para que text-overflow funcione
+
+      &-top {
+        @include flex(row, center, center);
+        gap: 6px;
+        margin-bottom: 4px;
+      }
+      &-bottom {
+        @include flex(row, center, center);
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+
+      .summary-dashboard-icon {
+        font-size: 1.2em;
+      }
+      .summary-dashboard-amount {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 
-  .summary-dashboard-card.total-card .summary-dashboard-month {
-    font-size: 0.85rem;
-    margin: 0;
-    color: #fff;
-  }
+  //─────────────────────────────────────────────────────────────
+  //  Versión Móvil
+  //─────────────────────────────────────────────────────────────
+  &-mobile {
+    display: none;
 
-  .summary-dashboard-card.total-card .summary-dashboard-row {
-    justify-content: flex-end;
-    gap: 4px;
-    flex: 1;
-  }
+    @media (max-width: $break-mobile) {
+      @include box-reset;
+      background: $color-bg-mobile;
+      width: 100%;
+      padding: 16px 0 24px;
+      display: flex;
+      flex-direction: column;
 
-  .summary-dashboard-card.total-card .summary-dashboard-total-amount {
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    color: #fff;
-  }
+      .mobile-summary-card {
+        @include box-reset;
+        width: calc(100% - 32px);
+        margin: 0 auto 14px;
+        border-radius: 12px;
+        background: $color-bg-mobile;
+        padding: 14px 12px;
+        @include flex(row, space-between, center);
 
-  .summary-dashboard-card.total-card .summary-dashboard-total-icon {
-    font-size: 18px;
-    color: #fff;
+        &.alt-bg {
+          background: $color-bg-mobile;
+        }
+
+        .mobile-summary-row {
+          @include flex(row, space-between, center);
+          gap: 10px;
+          font-size: 1.08rem;
+          font-weight: 500;
+          color: #333;
+
+          .mobile-summary-icon {
+            font-size: 1.3em;
+          }
+          .icon-green {
+            color: $color-border-low;
+          }
+          .icon-red {
+            color: $color-border-high;
+          }
+
+          .mobile-summary-month,
+          .mobile-summary-amount {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+
+      .mobile-summary-total-card {
+        @include box-reset;
+        width: calc(100% - 32px);
+        margin: 24px auto 0;
+        border-radius: 12px;
+        background: $color-total-bg;
+        color: #fff;
+        padding: 18px 0 14px;
+        @include flex(column, center, center);
+        font-size: 1.4rem;
+        font-weight: bold;
+
+        .mobile-summary-total-label {
+          font-size: 1.1rem;
+          font-weight: 500;
+          opacity: 0.92;
+          margin-bottom: 6px;
+        }
+        .mobile-summary-total-value {
+          @include flex(row, center, center);
+          gap: 8px;
+          font-size: 1.7rem;
+        }
+        .mobile-summary-total-icon {
+          font-size: 1.3em;
+        }
+      }
+
+      // Ocultamos el grid desktop
+      .summary-dashboard-grid {
+        display: none;
+      }
+      display: block;
+    }
+  }
+}
+
+//─────────────────────────────────────────────────────────────────
+//  Ajustes para pantallas muy pequeñas
+//─────────────────────────────────────────────────────────────────
+@media (max-width: $break-small) {
+  .summary-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 }
