@@ -5,7 +5,7 @@ import { CreditCardFormComponent } from './features/cards/credit-card-form/credi
 import { DebitCardFormComponent } from './features/cards/debit-card-form/debit-card-form.component';
 import { CategoriaComponent } from './features/categoria/categoria.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { UpcomingExpensesComponent } from './features/expenses/upcoming-expenses/upcoming-expenses.component';
+import { NuevoGastoComponent } from './features/expenses/nuevo-gasto/nuevo-gasto.component';
 import { ReportsComponent } from './features/reports/reports.component';
 import { accessGuard } from './guards/auth.guard';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
@@ -24,7 +24,6 @@ export const routes: Routes = [
       { path: 'historico', component: HistoricoComponent },
       { path: 'debit-cards', component: DebitCardFormComponent },
       { path: 'reports', component: ReportsComponent },
-      { path: 'upcoming-expenses', component: UpcomingExpensesComponent },
       { path: 'categorias', component: CategoriaComponent },
     ],
   },

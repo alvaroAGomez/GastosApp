@@ -25,11 +25,11 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { NgChartsModule } from 'ng2-charts';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
-import { UpcomingExpensesComponent } from '../../../expenses/upcoming-expenses/upcoming-expenses.component';
+import { NuevoGastoComponent } from '../../../expenses/nuevo-gasto/nuevo-gasto.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
-import { ExpenseService } from '../../../../services/expense.service';
+import { GastoService } from '../../../../services/gasto.service';
 import { PendingInstallmentsModalComponent } from './pending-installments-modal.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CuotaService } from '../../../../services/cuota.service';
@@ -142,7 +142,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     private categoryService: CategoriaService,
     private dialog: MatDialog,
     private toastr: ToastrService,
-    private expenseService: ExpenseService,
+    private expenseService: GastoService,
     private cuotaService: CuotaService
   ) {
     this.filterForm = this.fb.group({
@@ -303,7 +303,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
 
   onNewExpense() {
     this.dialog
-      .open(UpcomingExpensesComponent, {
+      .open(NuevoGastoComponent, {
         disableClose: false,
         data: {
           tarjetaCreditoId: this.selectedCardId,
@@ -321,7 +321,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
 
   editExpense(expense: any) {
     this.dialog
-      .open(UpcomingExpensesComponent, {
+      .open(NuevoGastoComponent, {
         disableClose: false,
         data: {
           ...expense,

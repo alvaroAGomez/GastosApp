@@ -1,4 +1,4 @@
-import { Expense } from './expense.model';
+import { Gasto } from './gasto.model';
 
 export interface CreditCard {
   id: number;
@@ -8,7 +8,7 @@ export interface CreditCard {
   cierreCiclo?: string; // o Date, según lo que devuelva el backend
   fechaVencimiento?: string; // o Date
   banco: { id: number; nombre: string }; // ajusta según tu entidad Banco
-  gastos?: Expense[];
+  gastos?: Gasto[];
 }
 
 export interface CreditCardAnnualGeneralSummary {

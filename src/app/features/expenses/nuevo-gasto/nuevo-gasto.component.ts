@@ -17,8 +17,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CommonModule } from '@angular/common';
-import { ExpenseService } from '../../../services/expense.service';
-import { Expense } from '../../../models/expense.model';
+import { GastoService } from '../../../services/gasto.service';
+import { Gasto } from '../../../models/gasto.model';
 import { CategoriaService } from '../../../services/categoria.service';
 import { CardService } from '../../../services/card.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog.component';
@@ -43,10 +43,10 @@ const MY_DATE_FORMAT = {
   },
 };
 @Component({
-  selector: 'app-upcoming-expenses',
+  selector: 'app-nuevo-gasto',
   standalone: true,
-  templateUrl: './upcoming-expenses.component.html',
-  styleUrl: './upcoming-expenses.component.scss',
+  templateUrl: './nuevo-gasto.component.html',
+  styleUrl: './nuevo-gasto.component.scss',
   imports: [
     MatDialogModule,
     ReactiveFormsModule,
@@ -68,41 +68,41 @@ const MY_DATE_FORMAT = {
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
   ],
 })
-export class UpcomingExpensesComponent implements OnInit {
-  upcomingExpenseForm!: FormGroup;
+export class NuevoGastoComponent implements OnInit {
+  formularioGasto!: FormGroup;
   categorias: any[] = [];
   tarjetas: any[] = [];
-  todayDate: Date = new Date();
+  fechaHoy: Date = new Date();
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<UpcomingExpensesComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private expenseService: ExpenseService,
-    private categoryService: CategoriaService,
-    private cardService: CardService,
+    private dialogRef: MatDialogRef<NuevoGastoComponent>,
+    @Inject(MAT_DIALOG_DATA) public datos: any,
+    private gastoService: GastoService,
+    private categoriaService: CategoriaService,
+    private tarjetaService: CardService,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialogo: MatDialog
   ) {}
 
   ngOnInit() {
-    this.createForm();
-    this.loadCombos();
-    this.initializeFormIfEdit();
+    this.crearFormulario();
+    this.cargarCombos();
+    this.inicializarFormularioSiEdicion();
 
     // Si viene tarjetaCreditoId y NO es edición, setear y deshabilitar el campo
-    if (!this.data?.isEdit && this.data?.tarjetaCreditoId) {
-      this.upcomingExpenseForm.patchValue({
-        tarjetaCreditoId: this.data.tarjetaCreditoId,
+    if (!this.datos?.esEdicion && this.datos?.tarjetaCreditoId) {
+      this.formularioGasto.patchValue({
+        tarjetaCreditoId: this.datos.tarjetaCreditoId,
       });
-      this.upcomingExpenseForm.get('tarjetaCreditoId')?.disable();
+      this.formularioGasto.get('tarjetaCreditoId')?.disable();
     }
   }
 
-  private createForm() {
-    this.upcomingExpenseForm = this.fb.group({
+  private crearFormulario() {
+    this.formularioGasto = this.fb.group({
       monto: ['', Validators.required],
-      fecha: [this.todayDate, Validators.required],
+      fecha: [this.fechaHoy, Validators.required],
       descripcion: ['', Validators.required],
       categoriaGastoId: ['', Validators.required],
       tarjetaCreditoId: [''],
@@ -111,10 +111,10 @@ export class UpcomingExpensesComponent implements OnInit {
       numeroCuotas: [{ value: '', disabled: true }],
     });
 
-    this.upcomingExpenseForm
+    this.formularioGasto
       .get('esEnCuotas')
       ?.valueChanges.subscribe((enCuotas: boolean) => {
-        const cuotasCtrl = this.upcomingExpenseForm.get('numeroCuotas');
+        const cuotasCtrl = this.formularioGasto.get('numeroCuotas');
         if (enCuotas) {
           cuotasCtrl?.enable();
           cuotasCtrl?.setValidators([Validators.required, Validators.min(1)]);
@@ -127,71 +127,72 @@ export class UpcomingExpensesComponent implements OnInit {
       });
   }
 
-  private loadCombos() {
-    this.categoryService.getCategorias().subscribe({
+  private cargarCombos() {
+    this.categoriaService.getCategorias().subscribe({
       next: (res) => (this.categorias = res),
       error: () => (this.categorias = []),
     });
 
-    this.cardService.getCards().subscribe({
+    this.tarjetaService.getCards().subscribe({
       next: (res) => (this.tarjetas = res),
       error: () => (this.tarjetas = []),
     });
   }
 
-  private initializeFormIfEdit() {
-    if (!this.data?.isEdit) return;
+  private inicializarFormularioSiEdicion() {
+    if (!this.datos?.esEdicion) return;
 
-    this.upcomingExpenseForm.patchValue({
-      monto: Number(this.data.monto),
-      fecha: this.data.fecha ? new Date(this.data.fecha) : this.todayDate,
-      descripcion: this.data.descripcion,
-      categoriaGastoId: this.data.categoriaGastoId ?? this.data.categoria ?? '',
-      tarjetaCreditoId: this.data.tarjetaCreditoId ?? '',
-      tarjetaDebitoId: this.data.tarjetaDebitoId ?? '',
+    this.formularioGasto.patchValue({
+      monto: Number(this.datos.monto),
+      fecha: this.datos.fecha ? new Date(this.datos.fecha) : this.fechaHoy,
+      descripcion: this.datos.descripcion,
+      categoriaGastoId:
+        this.datos.categoriaGastoId ?? this.datos.categoria ?? '',
+      tarjetaCreditoId: this.datos.tarjetaCreditoId ?? '',
+      tarjetaDebitoId: this.datos.tarjetaDebitoId ?? '',
       esEnCuotas:
-        this.data.esEnCuotas ??
-        (this.data.cuotas && Number(this.data.cuotas) > 1),
-      numeroCuotas: this.data.cuotas ?? '',
+        this.datos.esEnCuotas ??
+        (this.datos.cuotas && Number(this.datos.cuotas) > 1),
+      numeroCuotas: this.datos.cuotas ?? '',
     });
 
-    if (this.data?.tarjetaCreditoDisabled) {
-      this.upcomingExpenseForm.get('tarjetaCreditoId')?.disable();
+    if (this.datos?.tarjetaCreditoDeshabilitada) {
+      this.formularioGasto.get('tarjetaCreditoId')?.disable();
     }
 
     if (
-      this.data.esEnCuotas ||
-      (this.data.cuotas && Number(this.data.cuotas) > 1)
+      this.datos.esEnCuotas ||
+      (this.datos.cuotas && Number(this.datos.cuotas) > 1)
     ) {
-      this.upcomingExpenseForm.get('esEnCuotas')?.setValue(true);
-      this.upcomingExpenseForm.get('numeroCuotas')?.enable();
+      this.formularioGasto.get('esEnCuotas')?.setValue(true);
+      this.formularioGasto.get('numeroCuotas')?.enable();
     }
   }
 
   onSubmit() {
-    if (this.upcomingExpenseForm.invalid) return;
+    if (this.formularioGasto.invalid) return;
 
     this.showConfirmation()
       .afterClosed()
-      .subscribe((confirmed) => {
-        if (confirmed !== true) return;
+      .subscribe((confirmado) => {
+        if (confirmado !== true) return;
 
-        const gasto = this.buildExpenseFromForm();
+        const gasto = this.construirGastoDesdeFormulario();
 
-        if (this.data?.isEdit && this.data?.id) {
-          this.expenseService.actualizarGasto(this.data.id, gasto).subscribe({
+        if (this.datos?.esEdicion && this.datos?.id) {
+          this.gastoService.actualizarGasto(this.datos.id, gasto).subscribe({
             next: () => {
               this.toastr.success('Gasto actualizado con éxito', 'Éxito');
-              this.dialogRef.close({ updated: true });
+              this.dialogRef.close({ actualizado: true });
             },
             error: () =>
               this.toastr.error('Error al actualizar gasto', 'Error'),
           });
         } else {
-          this.expenseService.crearGasto(gasto).subscribe({
+          this.gastoService.crearGasto(gasto).subscribe({
             next: () => {
               this.toastr.success('Gasto guardado con éxito', 'Éxito');
-              this.dialogRef.close({ created: true });
+              this.dialogRef.close({ creado: true });
             },
             error: () => this.toastr.error('Error al crear gasto', 'Error'),
           });
@@ -199,8 +200,8 @@ export class UpcomingExpensesComponent implements OnInit {
       });
   }
 
-  private buildExpenseFromForm(): Expense {
-    const raw = this.upcomingExpenseForm.getRawValue();
+  private construirGastoDesdeFormulario(): Gasto {
+    const raw = this.formularioGasto.getRawValue();
 
     return {
       monto: Number(raw.monto),
@@ -215,10 +216,10 @@ export class UpcomingExpensesComponent implements OnInit {
   }
 
   private showConfirmation() {
-    return this.dialog.open(ConfirmDialogComponent, {
+    return this.dialogo.open(ConfirmDialogComponent, {
       data: {
-        title: this.data?.isEdit ? 'Editar gasto' : 'Confirmar',
-        message: this.data?.isEdit
+        title: this.datos?.esEdicion ? 'Editar gasto' : 'Confirmar',
+        message: this.datos?.esEdicion
           ? '¿Está seguro que desea actualizar el gasto?'
           : '¿Está seguro que desea guardar el gasto?',
       },

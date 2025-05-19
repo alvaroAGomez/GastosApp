@@ -1,13 +1,7 @@
 <div class="grid-container">
 
-  <!--   <div *ngIf="isMobile" class="filtro-icon-button">
-    <button mat-icon-button color="primary" (click)="toggleFiltrosMobile()" aria-label="Filtros">
-      <mat-icon>{{ showFilters ? 'filter_alt_off' : 'filter_alt' }} </mat-icon>
-    </button>
-  </div> -->
-
-  <form class="filter-form-responsive" [ngClass]="{ 'oculto-mobile': isMobile && !mostrarFiltrosMobile }"
-    (ngSubmit)="applyFilters()" #filterForm="ngForm">
+  <form class="filter-form-responsive" [ngClass]="{ 'oculto-mobile': esMobile && !mostrarFiltrosMobile }"
+    (ngSubmit)="aplicarFiltros()" #filterForm="ngForm">
     <!-- Fila 1: Fecha desde y hasta -->
     <div class="filtros-row">
       <mat-form-field appearance="fill">
@@ -55,20 +49,17 @@
 
   <div class="headerBuscador">
     <mat-form-field>
-
-
-
       <mat-label>Buscar</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar gasto" [value]="searchValue">
-      <button *ngIf="searchValue" matSuffix mat-icon-button (click)="clearFilter()">
+      <input matInput (keyup)="aplicarFiltro($event)" placeholder="Buscar gasto" [value]="valorBusqueda">
+      <button *ngIf="valorBusqueda" matSuffix mat-icon-button (click)="limpiarFiltro()">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
   </div>
 
   <!-- MOBILE BANK-LIKE LIST VIEW CON BOTONES -->
-  <div *ngIf="isMobile; else desktopTable" class="mobile-bank-list" (scroll)="onMobileScroll($event)">
-    <ng-container *ngFor="let expense of mobileExpenses">
+  <div *ngIf="esMobile; else desktopTable" class="mobile-bank-list" (scroll)="onMobileScroll($event)">
+    <ng-container *ngFor="let expense of gastosMobile">
       <div class="expense-line">
 
         <!-- Fila 1: Descripción + Monto -->
@@ -85,10 +76,10 @@
             <span *ngIf="expense.cuotas">{{ expense.cuotas }} {{ expense.cuotas === 1 ? 'cuota' : 'cuotas' }}</span>
           </div>
           <div class="line-actions">
-            <button mat-icon-button (click)="editExpense(expense)" matTooltip="Editar gasto">
+            <button mat-icon-button (click)="editarGasto(expense)" matTooltip="Editar gasto">
               <mat-icon fontIcon="edit" class="icon-edit"></mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="deleteExpense(expense)" matTooltip="Eliminar gasto">
+            <button mat-icon-button color="warn" (click)="eliminarGasto(expense)" matTooltip="Eliminar gasto">
               <mat-icon fontIcon="delete" class="icon-delete"></mat-icon>
             </button>
           </div>
@@ -104,12 +95,10 @@
       </div>
     </ng-container>
 
-    <div *ngIf="mobileLoading" class="mobile-loading">Cargando...</div>
-    <div *ngIf="mobileAllLoaded && mobileExpenses.length === 0" class="mobile-no-data">No hay gastos.</div>
-    <div *ngIf="mobileAllLoaded && mobileExpenses.length > 0" class="mobile-no-more">No hay más gastos.</div>
+    <div *ngIf="cargandoMobile" class="mobile-loading">Cargando...</div>
+    <div *ngIf="todosCargadosMobile && gastosMobile.length === 0" class="mobile-no-data">No hay gastos.</div>
+    <div *ngIf="todosCargadosMobile && gastosMobile.length > 0" class="mobile-no-more">No hay más gastos.</div>
   </div>
-
-
 
   <!-- DESKTOP TABLE VIEW -->
   <ng-template #desktopTable>
@@ -131,7 +120,7 @@
           <td mat-cell *matCellDef="let expense"> {{ expense.monto | customCurrency }} </td>
         </ng-container>
 
-        <ng-container matColumnDef="cutoa">
+        <ng-container matColumnDef="cuotas">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Cuotas </th>
           <td mat-cell *matCellDef="let expense"> {{ expense.cuotas }} </td>
         </ng-container>
@@ -150,11 +139,11 @@
           <th mat-header-cell *matHeaderCellDef> Acciones </th>
           <td mat-cell *matCellDef="let expense">
             <div class="acciones-btn-group">
-              <button mat-icon-button color="primary" (click)="editExpense(expense)" class="icon-action-btn edit-btn"
+              <button mat-icon-button color="primary" (click)="editarGasto(expense)" class="icon-action-btn edit-btn"
                 matTooltip="Editar gasto">
                 <mat-icon fontIcon="edit"></mat-icon>
               </button>
-              <button mat-icon-button color="warn" (click)="deleteExpense(expense)" class="icon-action-btn delete-btn"
+              <button mat-icon-button color="warn" (click)="eliminarGasto(expense)" class="icon-action-btn delete-btn"
                 matTooltip="Eliminar gasto">
                 <mat-icon fontIcon="delete"></mat-icon>
               </button>
@@ -162,8 +151,8 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="columnasMostradas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnasMostradas;"></tr>
 
       </table>
     </div>

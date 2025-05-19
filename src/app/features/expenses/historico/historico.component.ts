@@ -3,8 +3,8 @@ import { Component, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { GridComponent } from '../grid/grid.component';
-import { UpcomingExpensesComponent } from '../upcoming-expenses/upcoming-expenses.component';
+import { GridComponent } from './grid/grid.component';
+import { NuevoGastoComponent } from '../nuevo-gasto/nuevo-gasto.component';
 
 @Component({
   selector: 'app-historico',
@@ -23,15 +23,15 @@ export class HistoricoComponent {
   @ViewChild('grid') gridComponent!: GridComponent;
   constructor(private dialog: MatDialog) {}
 
-  onNewExpense() {
-    const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
+  NuevoGasto() {
+    const dialogRef = this.dialog.open(NuevoGastoComponent, {
       disableClose: false,
       data: {},
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.created || result?.updated) {
-        this.gridComponent.reloadData();
+        this.gridComponent.recargarDatos();
       }
     });
   }

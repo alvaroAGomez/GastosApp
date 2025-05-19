@@ -3,7 +3,6 @@ import { DashboardExpenseService } from '../../services/dashboard-expense.servic
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { NgChartsModule } from 'ng2-charts';
@@ -12,7 +11,7 @@ import { CardsComponent } from './cards/cards.component';
 import { DoughnutCategoryChartComponent } from './charts/doughnut-category-chart.component';
 import { BarMonthlyEvolutionChartComponent } from './charts/bar-monthly-evolution-chart.component';
 import { PieCardDistributionChartComponent } from './charts/pie-card-distribution-chart.component';
-import { UpcomingExpensesComponent } from '../expenses/upcoming-expenses/upcoming-expenses.component';
+import { NuevoGastoComponent } from '../expenses/nuevo-gasto/nuevo-gasto.component';
 import {
   getBarChartOptions,
   getDoughnutChartOptions,
@@ -75,7 +74,7 @@ export class DashboardComponent {
   }
 
   onNewExpense() {
-    const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
+    const dialogRef = this.dialog.open(NuevoGastoComponent, {
       disableClose: false,
       data: {},
     });

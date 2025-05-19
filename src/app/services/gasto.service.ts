@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Expense } from '../models/expense.model';
+import { Gasto } from '../models/gasto.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { GastoMensual } from '../features/cards/credit-card-form/interfaces';
@@ -9,16 +9,16 @@ import { GastosHistorico } from '../models/dashboard-expense.model';
 @Injectable({
   providedIn: 'root',
 })
-export class ExpenseService {
+export class GastoService {
   private apiUrl = environment.apiUrl + 'gastos';
 
   constructor(private http: HttpClient) {}
 
-  crearGasto(gasto: Expense): Observable<any> {
+  crearGasto(gasto: Gasto): Observable<any> {
     return this.http.post<any>(this.apiUrl, gasto);
   }
 
-  actualizarGasto(id: number, gasto: Expense): Observable<any> {
+  actualizarGasto(id: number, gasto: Gasto): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}`, gasto);
   }
 
@@ -39,7 +39,7 @@ export class ExpenseService {
       sortDirection?: 'ASC' | 'DESC';
     }
   ) {
-    return this.http.get<{ data: Expense[]; total: number }>(
+    return this.http.get<{ data: Gasto[]; total: number }>(
       `${environment.apiUrl}gastos/por-tarjeta/${tarjetaId}`,
       { params: { ...params } }
     );

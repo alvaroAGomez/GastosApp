@@ -1,16 +1,15 @@
 <mat-dialog-content>
   <h2 class="modal-title">Nuevo Gasto</h2>
-  <form [formGroup]="upcomingExpenseForm" (ngSubmit)="onSubmit()" class="expense-form">
+  <form [formGroup]="formularioGasto" (ngSubmit)="onSubmit()" class="expense-form">
     <div class="form-row">
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Monto</mat-label>
         <input matInput formControlName="monto" currencyMask
           [options]="{ prefix: '$ ', thousands: ',', decimal: '.', align: 'left', allowNegative: false }" required>
-
       </mat-form-field>
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Fecha</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="fecha" [value]="todayDate" required>
+        <input matInput [matDatepicker]="picker" formControlName="fecha" [value]="fechaHoy" required>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
@@ -54,7 +53,7 @@
       <button mat-raised-button color="primary" class="custom-button-cancelar" type="button"
         (click)="onClose()">Cancelar</button>
       <button mat-raised-button color="primary" type="submit" class="custom-button"
-        [disabled]="upcomingExpenseForm.invalid">Guardar</button>
+        [disabled]="formularioGasto.invalid">Guardar</button>
     </div>
   </form>
 </mat-dialog-content>

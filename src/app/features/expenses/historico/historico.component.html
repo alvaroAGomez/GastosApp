@@ -1,22 +1,22 @@
 <h1 class="page-title">Histórico de Gastos</h1>
 
 <!-- Mobile header: + y filtro en la misma fila -->
-<div class="mobile-header-btns" *ngIf="grid?.isMobile">
-    <button mat-fab color="primary" class="mobile-add-btn custom-button" (click)="onNewExpense()"
+<div class="mobile-header-btns" *ngIf="grid?.esMobile">
+    <button mat-fab color="primary" class="mobile-add-btn custom-button" (click)="NuevoGasto()"
         matTooltip="Nuevo Gasto">
         <mat-icon>add</mat-icon>
     </button>
 
     <button mat-icon-button color="primary" class="mobile-filter-btn" (click)="grid.toggleFiltrosMobile()"
         aria-label="Filtros">
-        <mat-icon>{{ grid.showFilters ? 'filter_alt_off' : 'filter_alt' }} </mat-icon>
+        <mat-icon>{{ grid.mostrarFiltros ? 'filter_alt_off' : 'filter_alt' }} </mat-icon>
     </button>
 
 </div>
 
 <!-- Desktop header: botón "Nuevo Gasto" -->
-<div class="historico-header" *ngIf="!grid?.isMobile">
-    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto">
+<div class="historico-header" *ngIf="!grid?.esMobile">
+    <button mat-mini-fab color="primary" class="custom-button" (click)="NuevoGasto()" matTooltip="Nuevo Gasto">
         <mat-icon>add</mat-icon>Nuevo Gasto
     </button>
 </div>

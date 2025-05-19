@@ -1,5 +1,4 @@
-import { Category } from './category.model';
-export interface Expense {
+export interface Gasto {
   id?: number;
   monto: number;
   fecha: Date | string;
