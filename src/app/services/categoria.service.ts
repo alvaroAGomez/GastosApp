@@ -5,26 +5,26 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class CategoryService {
+export class CategoriaService {
   constructor(private http: HttpClient) {}
 
-  getCategories() {
+  getCategorias() {
     return this.http.get<any[]>(`${environment.apiUrl}CategoriaGasto/all`);
   }
 
-  getCategoriesforUser() {
+  getCategoriasPorUsuario() {
     return this.http.get<any[]>(`${environment.apiUrl}CategoriaGasto`);
   }
 
-  createCategory(data: { nombre: string }) {
+  nuevaCategoria(data: { nombre: string }) {
     return this.http.post(`${environment.apiUrl}CategoriaGasto`, data);
   }
 
-  updateCategory(id: number, data: { nombre: string }) {
+  actualizarCategoria(id: number, data: { nombre: string }) {
     return this.http.patch(`${environment.apiUrl}CategoriaGasto/${id}`, data);
   }
 
-  deleteCategory(id: number) {
+  eliminarCategoria(id: number) {
     return this.http.delete(`${environment.apiUrl}CategoriaGasto/${id}`);
   }
 }

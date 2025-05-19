@@ -19,7 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CommonModule } from '@angular/common';
 import { ExpenseService } from '../../../services/expense.service';
 import { Expense } from '../../../models/expense.model';
-import { CategoryService } from '../../../services/category.service';
+import { CategoriaService } from '../../../services/categoria.service';
 import { CardService } from '../../../services/card.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -79,7 +79,7 @@ export class UpcomingExpensesComponent implements OnInit {
     private dialogRef: MatDialogRef<UpcomingExpensesComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private expenseService: ExpenseService,
-    private categoryService: CategoryService,
+    private categoryService: CategoriaService,
     private cardService: CardService,
     private toastr: ToastrService,
     private dialog: MatDialog
@@ -128,7 +128,7 @@ export class UpcomingExpensesComponent implements OnInit {
   }
 
   private loadCombos() {
-    this.categoryService.getCategories().subscribe({
+    this.categoryService.getCategorias().subscribe({
       next: (res) => (this.categorias = res),
       error: () => (this.categorias = []),
     });

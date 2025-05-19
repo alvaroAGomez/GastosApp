@@ -18,7 +18,7 @@ import { CardService } from '../../../../services/card.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { CategoryService } from '../../../../services/category.service';
+import { CategoriaService } from '../../../../services/categoria.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
@@ -139,7 +139,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private cardService: CardService,
     private fb: FormBuilder,
-    private categoryService: CategoryService,
+    private categoryService: CategoriaService,
     private dialog: MatDialog,
     private toastr: ToastrService,
     private expenseService: ExpenseService,
@@ -210,7 +210,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   loadCategories() {
-    this.categoryService.getCategories().subscribe((cats: any[]) => {
+    this.categoryService.getCategorias().subscribe((cats: any[]) => {
       this.categories = cats;
     });
   }

@@ -3,7 +3,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { CreditCardFormComponent } from './features/cards/credit-card-form/credit-card-form.component';
 import { DebitCardFormComponent } from './features/cards/debit-card-form/debit-card-form.component';
-import { CategoriesComponent } from './features/categories/categories.component';
+import { CategoriaComponent } from './features/categoria/categoria.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { UpcomingExpensesComponent } from './features/expenses/upcoming-expenses/upcoming-expenses.component';
 import { ReportsComponent } from './features/reports/reports.component';
@@ -25,7 +25,7 @@ export const routes: Routes = [
       { path: 'debit-cards', component: DebitCardFormComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'upcoming-expenses', component: UpcomingExpensesComponent },
-      { path: 'categories', component: CategoriesComponent },
+      { path: 'categorias', component: CategoriaComponent },
     ],
   },
   {

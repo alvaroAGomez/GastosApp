@@ -29,7 +29,7 @@ import {
   MatDatepickerModule,
 } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CategoryService } from '../../../services/category.service';
+import { CategoriaService } from '../../../services/categoria.service';
 import { CardService } from '../../../services/card.service';
 import { MatNativeDateModule } from '@angular/material/core';
 @Component({
@@ -96,7 +96,7 @@ export class GridComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private toastr: ToastrService,
     private expenseService: ExpenseService,
-    private categoriaService: CategoryService,
+    private categoriaService: CategoriaService,
     private cardService: CardService
   ) {}
 
@@ -214,7 +214,7 @@ export class GridComponent implements OnInit, AfterViewInit {
 
   // Cargar opciones
   loadCategorias() {
-    this.categoriaService.getCategories().subscribe({
+    this.categoriaService.getCategorias().subscribe({
       next: (res) => (this.categorias = res),
       error: () => this.toastr.error('Error al cargar categorías'),
     });
