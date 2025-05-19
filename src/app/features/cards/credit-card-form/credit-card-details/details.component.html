@@ -191,23 +191,23 @@
     <div class="dashboard-charts-col">
       <h2 class="chart-title">Gastos por Categoría</h2>
       <p class="chart-desc">Distribución de los gastos del mes actual agrupados por categoría.</p>
-      <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialPieChartFilters"
-        [allowedCharts]="['doughnut']">
-      </app-expense-charts>
+      <app-grafico-de-gastos [categorias]="categories" [tarjetas]="[]" [filtrosIniciales]="initialPieChartFilters"
+        [graficosPermitidos]="['doughnut']">
+      </app-grafico-de-gastos>
     </div>
     <div class="dashboard-charts-col">
       <h2 class="chart-title">Comparación por Categoría</h2>
       <p class="chart-desc">Compara cuánto se gasta por cada categoría en el período seleccionado.</p>
-      <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialBarChartFilters"
-        [allowedCharts]="['bar']">
-      </app-expense-charts>
+      <app-grafico-de-gastos [categorias]="categories" [tarjetas]="[]" [filtrosIniciales]="initialBarChartFilters"
+        [graficosPermitidos]="['bar']">
+      </app-grafico-de-gastos>
     </div>
     <div class="dashboard-charts-col" style="grid-column: 1 / span 2;">
       <h2 class="chart-title">Tendencia de Gastos</h2>
       <p class="chart-desc">Evolución mensual de los gastos de la tarjeta en el período seleccionado.</p>
-      <app-expense-charts [categorias]="categories" [tarjetas]="[]" [initialFilters]="initialLineChartFilters"
-        [allowedCharts]="['line']">
-      </app-expense-charts>
+      <app-grafico-de-gastos [categorias]="categories" [tarjetas]="[]" [filtrosIniciales]="initialLineChartFilters"
+        [graficosPermitidos]="['line']">
+      </app-grafico-de-gastos>
     </div>
   </div>
 </div>

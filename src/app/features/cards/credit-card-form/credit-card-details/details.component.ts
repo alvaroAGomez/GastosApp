@@ -14,19 +14,15 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Expense } from '../../../../models/expense.model';
 import { CardService } from '../../../../services/card.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CategoryService } from '../../../../services/category.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { ExpenseChartsComponent } from '../../../../shared/components/expense-charts/expense-charts.component';
 import { NgChartsModule } from 'ng2-charts';
-import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pipe';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { UpcomingExpensesComponent } from '../../../expenses/upcoming-expenses/upcoming-expenses.component';
@@ -38,6 +34,8 @@ import { PendingInstallmentsModalComponent } from './pending-installments-modal.
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CuotaService } from '../../../../services/cuota.service';
 import { GastoMensual } from '../interfaces';
+import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pipe';
+import { GraficoDeGastosComponent } from '../../../../shared/components/grafico-de-gastos/grafico-de-gastos.component';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -69,11 +67,16 @@ export interface CreditCardDetailHeader {
     MatOptionModule,
     MatSelectModule,
     NgChartsModule,
-    ExpenseChartsComponent,
-    CustomCurrencyPipe,
     MatButtonToggleModule,
     MatIconModule,
     MatTooltipModule,
+    /*     CardHeaderComponent,
+    CardToolbarComponent,
+    ExpenseChartsGridComponent,
+    ExpenseListMobileComponent,
+    ExpenseTableDesktopComponent, */
+    CustomCurrencyPipe,
+    GraficoDeGastosComponent,
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   templateUrl: './details.component.html',

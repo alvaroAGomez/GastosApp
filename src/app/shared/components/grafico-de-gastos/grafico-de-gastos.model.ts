@@ -1,4 +1,4 @@
-export interface ExpenseChartFilters {
+export interface FiltrosGraficoGastos {
   fechaDesde?: string;
   fechaHasta?: string;
   categoria?: string | number;
@@ -6,7 +6,7 @@ export interface ExpenseChartFilters {
   anio?: number;
 }
 
-export interface ExpenseChartData {
+export interface DatosGraficoGastos {
   chartData: any;
   chartOptions: any;
 }

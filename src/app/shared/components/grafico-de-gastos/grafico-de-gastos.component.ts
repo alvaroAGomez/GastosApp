@@ -2,8 +2,11 @@ import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChartData, ChartConfiguration } from 'chart.js';
-import { ExpenseChartsService } from './expense-charts.service';
-import { ExpenseChartFilters, ExpenseChartData } from './expense-charts.model';
+import { GraficoDeGastosService } from './grafico-de-gastos.service';
+import {
+  FiltrosGraficoGastos,
+  DatosGraficoGastos,
+} from './grafico-de-gastos.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -22,13 +25,13 @@ import {
 import { CustomCurrencyPipe } from '../../pipes/custom-currency.pipe';
 
 // Extiende la interfaz para los filtros locales del componente
-interface LocalExpenseChartFilters extends ExpenseChartFilters {
+interface FiltrosLocalesGraficoGastos extends FiltrosGraficoGastos {
   anioTotal?: boolean;
   mes?: number;
 }
 
 @Component({
-  selector: 'app-expense-charts',
+  selector: 'app-grafico-de-gastos',
   standalone: true,
   imports: [
     CommonModule,
@@ -41,21 +44,21 @@ interface LocalExpenseChartFilters extends ExpenseChartFilters {
     NgChartsModule,
     MatCheckboxModule,
   ],
-  templateUrl: './expense-charts.component.html',
-  providers: [ExpenseChartsService],
-  styleUrl: './expense-charts.component.scss',
+  templateUrl: './grafico-de-gastos.component.html',
+  providers: [GraficoDeGastosService],
+  styleUrl: './grafico-de-gastos.component.scss',
 })
-export class ExpenseChartsComponent implements OnInit {
-  @Input() initialFilters?: Partial<ExpenseChartFilters>;
-  @Input() allowedCharts: string[] = ['doughnut'];
+export class GraficoDeGastosComponent implements OnInit {
+  @Input() filtrosIniciales?: Partial<FiltrosGraficoGastos>;
+  @Input() graficosPermitidos: string[] = ['doughnut'];
   @Input() categorias: { id: number; nombre: string }[] = [];
   @Input() tarjetas: { id: number; nombre: string }[] = [];
 
-  filterForm: FormGroup;
-  chartType: ChartType = 'doughnut';
-  chartData: ChartData = { labels: [], datasets: [] };
+  formularioFiltros: FormGroup;
+  tipoGrafico: ChartType = 'doughnut';
+  datosGrafico: ChartData = { labels: [], datasets: [] };
   private customCurrency = new CustomCurrencyPipe();
-  chartOptions: ChartConfiguration['options'] = {
+  opcionesGrafico: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -78,9 +81,9 @@ export class ExpenseChartsComponent implements OnInit {
   };
 
   // Opciones y datos para gráfico de barras
-  barChartType: ChartType = 'bar';
-  barChartData: ChartData = { labels: [], datasets: [] };
-  barChartOptions: ChartConfiguration['options'] = {
+  tipoGraficoBarra: ChartType = 'bar';
+  datosGraficoBarra: ChartData = { labels: [], datasets: [] };
+  opcionesGraficoBarra: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -106,9 +109,9 @@ export class ExpenseChartsComponent implements OnInit {
   };
 
   // Opciones y datos para gráfico de línea
-  lineChartType: ChartType = 'line';
-  lineChartData: ChartData = { labels: [], datasets: [] };
-  lineChartOptions: ChartConfiguration['options'] = {
+  tipoGraficoLinea: ChartType = 'line';
+  datosGraficoLinea: ChartData = { labels: [], datasets: [] };
+  opcionesGraficoLinea: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -124,7 +127,7 @@ export class ExpenseChartsComponent implements OnInit {
     },
   };
 
-  months = [
+  meses = [
     { value: 1, name: 'Enero' },
     { value: 2, name: 'Febrero' },
     { value: 3, name: 'Marzo' },
@@ -144,11 +147,11 @@ export class ExpenseChartsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private chartsService: ExpenseChartsService,
-    private cdr: ChangeDetectorRef // <-- agrega ChangeDetectorRef
+    private servicioGraficos: GraficoDeGastosService,
+    private cdr: ChangeDetectorRef
   ) {
     const now = new Date();
-    this.filterForm = this.fb.group({
+    this.formularioFiltros = this.fb.group({
       anio: [now.getFullYear()],
       mes: [now.getMonth() + 1],
       categoria: [[]],
@@ -159,7 +162,6 @@ export class ExpenseChartsComponent implements OnInit {
   ngOnInit(): void {
     Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
-    // Registra el plugin solo una vez (Chart.register es global)
     if (!(Chart as any)._doughnutCenterTextRegistered) {
       Chart.register({
         id: 'doughnutCenterText',
@@ -174,7 +176,6 @@ export class ExpenseChartsComponent implements OnInit {
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillStyle = '#333';
-          // Obtiene el total directamente del dataset actual del gráfico
           let total = 0;
           if (
             chart.data &&
@@ -187,7 +188,6 @@ export class ExpenseChartsComponent implements OnInit {
               0
             );
           }
-          //ctx.clearRect(centerX - 100, centerY - 30, 200, 60);
           ctx.fillText(`$${total.toLocaleString()}`, centerX, centerY);
           ctx.restore();
         },
@@ -195,70 +195,73 @@ export class ExpenseChartsComponent implements OnInit {
       (Chart as any)._doughnutCenterTextRegistered = true;
     }
 
-    if (this.allowedCharts.length === 1) {
-      this.chartType = this.allowedCharts[0] as ChartType;
+    if (this.graficosPermitidos.length === 1) {
+      this.tipoGrafico = this.graficosPermitidos[0] as ChartType;
     }
 
-    if (this.initialFilters) {
-      this.filterForm.patchValue(this.initialFilters, { emitEvent: false });
+    if (this.filtrosIniciales) {
+      this.formularioFiltros.patchValue(this.filtrosIniciales, {
+        emitEvent: false,
+      });
     }
-    this.filterForm.valueChanges.subscribe(() => {
-      this.loadChart();
+    this.formularioFiltros.valueChanges.subscribe(() => {
+      this.cargarGrafico();
     });
-    this.loadChart();
+    this.cargarGrafico();
   }
 
-  // Cambia chartData, barChartData y lineChartData a ser nuevos objetos para forzar el update del gráfico
-  loadChart() {
-    const filters: LocalExpenseChartFilters = { ...this.filterForm.value };
+  cargarGrafico() {
+    const filtros: FiltrosLocalesGraficoGastos = {
+      ...this.formularioFiltros.value,
+    };
 
-    if (!Array.isArray(filters.categoria) || filters.categoria.length === 0) {
-      delete filters.categoria;
+    if (!Array.isArray(filtros.categoria) || filtros.categoria.length === 0) {
+      delete filtros.categoria;
     }
 
-    if (this.initialFilters && this.initialFilters.tarjeta) {
-      filters.tarjeta = this.initialFilters.tarjeta;
+    if (this.filtrosIniciales && this.filtrosIniciales.tarjeta) {
+      filtros.tarjeta = this.filtrosIniciales.tarjeta;
     }
 
-    if (filters.anioTotal || filters.mes === 0) {
-      delete filters.mes;
+    if (filtros.anioTotal || filtros.mes === 0) {
+      delete filtros.mes;
     }
-    delete filters.anioTotal;
+    delete filtros.anioTotal;
 
-    const chartTypeToRequest = this.allowedCharts[0] as ChartType;
+    const tipoGraficoPeticion = this.graficosPermitidos[0] as ChartType;
 
-    this.chartsService
-      .getChartData(filters, chartTypeToRequest)
-      .subscribe((data: ExpenseChartData) => {
-        if (chartTypeToRequest === 'bar') {
-          this.barChartData = { ...data.chartData };
-          this.barChartOptions = {
-            ...this.barChartOptions,
+    this.servicioGraficos
+      .obtenerDatosGrafico(filtros, tipoGraficoPeticion)
+      .subscribe((data: DatosGraficoGastos) => {
+        if (tipoGraficoPeticion === 'bar') {
+          this.datosGraficoBarra = { ...data.chartData };
+          this.opcionesGraficoBarra = {
+            ...this.opcionesGraficoBarra,
             ...data.chartOptions,
             responsive: true,
             maintainAspectRatio: false,
           };
-        } else if (chartTypeToRequest === 'line') {
-          this.lineChartData = { ...data.chartData };
-          this.lineChartOptions = {
-            ...this.lineChartOptions,
+        } else if (tipoGraficoPeticion === 'line') {
+          this.datosGraficoLinea = { ...data.chartData };
+          this.opcionesGraficoLinea = {
+            ...this.opcionesGraficoLinea,
             ...data.chartOptions,
             responsive: true,
             maintainAspectRatio: false,
           };
         } else {
-          this.chartData = { ...data.chartData };
-          this.chartOptions = {
-            ...this.chartOptions,
+          this.datosGrafico = { ...data.chartData };
+          this.opcionesGrafico = {
+            ...this.opcionesGrafico,
             ...data.chartOptions,
             plugins: {
-              ...this.chartOptions?.plugins,
+              ...this.opcionesGrafico?.plugins,
               ...((data.chartOptions && data.chartOptions.plugins) || {}),
               tooltip: {
-                ...((this.chartOptions?.plugins &&
-                  this.chartOptions.plugins.tooltip) ||
+                ...((this.opcionesGrafico?.plugins &&
+                  this.opcionesGrafico.plugins.tooltip) ||
                   {}),
-                ...((data.chartOptions.plugins &&
+                ...((data.chartData.plugins &&
                   data.chartOptions.plugins.tooltip) ||
                   {}),
                 callbacks: {
@@ -281,8 +284,6 @@ export class ExpenseChartsComponent implements OnInit {
             responsive: true,
             maintainAspectRatio: false,
           };
-          // El total del centro se calcula en el plugin usando chart.data.datasets[0].data, así que no es necesario setear this.totalGasto aquí
-          // Pero si lo usas en otro lado, puedes mantenerlo actualizado:
           if (
             data.chartData &&
             data.chartData.datasets &&
@@ -294,7 +295,6 @@ export class ExpenseChartsComponent implements OnInit {
           } else {
             this.totalGasto = 0;
           }
-          // Fuerza la actualización del gráfico para que el centro se redibuje
           this.cdr.detectChanges();
         }
       });
