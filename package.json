@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+     // PRODUCCIÓN: Railway/Buildpack invoca `npm start`
+    "start": "serve -s dist/gastos-app -l ${PORT:-3000}",
+     // DESARROLLO LOCAL: levantás con live-reload y HMR
+    "start:dev": "ng serve --host 0.0.0.0 --port 4200",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
