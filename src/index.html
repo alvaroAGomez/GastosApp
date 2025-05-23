@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>GastosApp</title>
@@ -9,7 +10,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+
 <body class="mat-typography">
+  <!-- CARGA TU ENV EN RUNTIME -->
+  <script src="assets/env.js"></script>
+
   <app-root></app-root>
+
+  <!-- El bundle de Angular irá después -->
+  <script src="main.js" defer></script>
 </body>
+
 </html>
