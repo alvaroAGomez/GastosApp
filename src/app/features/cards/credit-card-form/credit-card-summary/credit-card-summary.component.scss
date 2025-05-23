@@ -95,7 +95,9 @@ $color-title: #1976d2;
     }
 
     &.alt-bg {
-      background: lighten($color-bg-web, 4%);
+     background: color.adjust($color-bg-web, $lightness: 4%);
+
+
     }
 
     &.total-card {

@@ -50,27 +50,17 @@
               "moment"
             ],
               "budgets": [
+               
                {
-                  "type": "initial",
-                  "maximumWarning": "3m",
-                  "maximumError": "5mb"
-                },
-               {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kb",
-                  "maximumError": "8kb"
-                },
-               {
-                 "type": "initial",
-                "maximumWarning": "2mb",                 "maximumError": "3mb"
-
-                },
-              {
-                "type": "anyComponentStyle",
-                "maximumWarning": "10kb",
-                 "maximumError": "20kb"
-
-                }
+              "type": "initial",
+              "maximumWarning": "2mb",
+              "maximumError": "5mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "10kb",
+              "maximumError": "12kb"
+            }
               ],
               "outputHashing": "all"
             },
