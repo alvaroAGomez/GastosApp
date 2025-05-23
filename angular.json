@@ -46,27 +46,30 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "allowedCommonJsDependencies": [
+              "moment"
+            ],
               "budgets": [
-                {
+               {
                   "type": "initial",
                   "maximumWarning": "500kb",
                   "maximumError": "1mb"
                 },
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "3mb"
-                },
-                {
+               {
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kb",
                   "maximumError": "8kb"
                 },
+               {
+                 "type": "initial",
+                "maximumWarning": "2mb",                 "maximumError": "3mb"
 
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "20kb"
+                },
+              {
+                "type": "anyComponentStyle",
+                "maximumWarning": "10kb",
+                 "maximumError": "20kb"
+
                 }
               ],
               "outputHashing": "all"
