@@ -39,9 +39,8 @@
 .dashboard-toolbar-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin: 16px 0 8px 0;
-  gap: 16px;
+  gap: 56px;
 }
 
 .toolbar-spacer {
@@ -58,7 +57,9 @@
 .dashboard-charts-row,
 .dashboard-toolbar-row {
   max-width: 100vw;
-  overflow-x: auto;
+  overflow: visible;
+  position: relative;
+  z-index: 10;
 }
 
 @media (max-width: 900px) {

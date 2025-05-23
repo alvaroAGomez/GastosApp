@@ -19,6 +19,7 @@ import {
   getPieChartOptions,
 } from './charts/chart-config';
 import { ChartConfiguration } from 'chart.js';
+import { CreditCardFormModalComponent } from '../cards/credit-card-form/credit-card-form-modal/credit-card-form-modal.component';
 
 interface ChartDataWrapper {
   chartData: { labels: string[]; datasets: { data: number[] }[] };
@@ -152,5 +153,27 @@ export class DashboardComponent {
       chartData: { labels: [], datasets: [{ data: [] }] },
       chartOptions: {} as ChartConfiguration['options'],
     };
+  }
+
+  openCardDialog(mode: 'create') {
+    let component: any;
+    let data: any = {};
+
+    if (mode === 'create') {
+      component = CreditCardFormModalComponent;
+    }
+
+    const dialogRef = this.dialog.open(component, {
+      width: '600px',
+      maxWidth: '90vw',
+      disableClose: false,
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.reloadDashboard();
+      }
+    });
   }
 }
