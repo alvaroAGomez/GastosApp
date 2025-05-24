@@ -310,7 +310,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.loadExpenses();
+          this.loadHeaderAndExpenses();
           this.loadMovimientos();
         }
       });
