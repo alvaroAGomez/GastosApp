@@ -3,7 +3,7 @@
     <ng-container *ngFor="let row of allExpenses; let i = index">
       <div class="summary-dashboard-card"
         [ngClass]="{'high': isHigh(row.amount), 'low': isLow(row.amount), 'alt-bg': i % 2 === 1}">
-        <div class="summary-dashboard-row summary-dashboard-row-top">
+        <div class="summary-dashboard-row">
           <mat-icon class="summary-dashboard-icon" [ngClass]="{
               'icon-green': row.amount <= getMobilePromedio(),
               'icon-red': row.amount > getMobilePromedio()

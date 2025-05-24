@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { CreditCardAnnualGeneralSummary } from '../../../../models/card.model';
-import { CreditCardSummary, GastoTarjeta } from '../interfaces';
+import { GastoTarjeta } from '../interfaces';
 import { CustomCurrencyPipe } from '../../../../shared/pipes/custom-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';

@@ -59,7 +59,7 @@ $color-title: #1976d2;
   &-grid {
     @include box-reset;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax($grid-min, $grid-max));
+    grid-template-columns: repeat(auto-fit, minmax($grid-min, 1fr));
     gap: $grid-gap-desktop;
     width: 100%;
     margin-bottom: 0;
@@ -75,88 +75,144 @@ $color-title: #1976d2;
   //─────────────────────────────────────────────────────────────
   .summary-dashboard-card {
     @include flex(column, flex-start, center);
-    background: $color-bg-web;
-    border-left: 8px solid $color-border-low;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    padding: 16px;
-    min-height: 80px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08);
+    padding: 28px 32px 22px 32px;
+    min-height: 90px;
     color: $color-text;
-    transition: background 0.2s, box-shadow 0.2s;
-
+    position: relative;
+    border: 1.5px solid #e3e8f0;
+    transition: box-shadow 0.18s, border-color 0.18s;
+    margin-bottom: 0;
     &:hover {
-      background: $color-bg-hover;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13);
+      border-color: $color-title;
     }
-
-    &.low {
-      border-left-color: $color-border-low;
-    }
-    &.high {
-      border-left-color: $color-border-high;
-    }
-
-    &.alt-bg {
-     background: color.adjust($color-bg-web, $lightness: 4%);
-
-
-    }
-
-    &.total-card {
-      background: $color-total-bg !important;
-      border-left: none !important;
-      color: #fff;
-
-      .summary-dashboard-month {
-        color: #fff;
-      }
-      .summary-dashboard-row {
-        gap: 8px;
-      }
-      .summary-dashboard-amount {
-        font-size: 1.4rem;
-        color: #fff;
+    .summary-dashboard-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      gap: 0;
+      position: relative;
+      min-height: 40px;
+      &.summary-dashboard-row-bottom {
+        justify-content: center;
+        margin-top: 8px;
       }
     }
-
-    &-month {
-      flex-shrink: 0;
-      margin-bottom: 8px;
-      font-size: clamp(0.8rem, 1.5vw, 1rem);
+    .summary-dashboard-icon {
+      font-size: 2em;
+      margin-right: 18px;
+      margin-left: 0;
+      color: #222;
+      min-width: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+    .icon-green {
+      color: $color-border-low !important;
+      fill: $color-border-low !important;
+    }
+    .icon-red {
+      color: $color-border-high !important;
+      fill: $color-border-high !important;
+    }
+    .summary-dashboard-month {
+      flex: 1;
+      text-align: center;
+      font-size: 1.12rem;
       font-weight: 600;
-      text-transform: uppercase;
       color: $color-title;
+      letter-spacing: 0.5px;
+      margin: 0;
+      display: block;
+    }
+    .summary-dashboard-amount {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-align: center;
+      width: 100%;
+      display: block;
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #222;
+    }
+    &.empty {
+      background: transparent;
+      box-shadow: none;
+      border: none;
+    }
+    &.total-card {
+      background: $color-total-bg !important;
+      color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(25, 118, 210, 0.1);
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 18px;
+      .summary-dashboard-row {
+        width: 100%;
+        min-height: unset;
+        @include flex(row, space-between, center);
+        gap: 0;
+        font-size: 1.12rem;
+        font-weight: 600;
+        padding: 0 24px;
+      }
+      .summary-dashboard-total-icon {
+        font-size: 1.3em;
+        color: #fff;
+      }
+      .summary-dashboard-total-amount {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #fff;
+        text-align: right;
+      }
+      .summary-dashboard-month {
+        color: #fff;
+        font-size: 1.08rem;
+        font-weight: 500;
+        text-align: center;
+        flex: 1;
+      }
     }
 
-    &-row {
-      @include flex(row, center, center);
-      gap: 6px;
+    // Centrado vertical y horizontal de mes y monto en cards
+    .summary-dashboard-row.summary-dashboard-row-bottom {
+      justify-content: center;
+      align-items: center;
+      min-height: 36px;
+      margin-top: 0;
+    }
+    .summary-dashboard-amount {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      flex-shrink: 1;
-      min-width: 0; // para que text-overflow funcione
-
-      &-top {
-        @include flex(row, center, center);
-        gap: 6px;
-        margin-bottom: 4px;
-      }
-      &-bottom {
-        @include flex(row, center, center);
-        font-size: 1.25rem;
-        font-weight: bold;
-      }
-
-      .summary-dashboard-icon {
-        font-size: 1.2em;
-      }
-      .summary-dashboard-amount {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #222;
+      text-align: center;
+    }
+    .summary-dashboard-month {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: $color-title;
+      letter-spacing: 0.5px;
+      margin: 0;
     }
   }
 
