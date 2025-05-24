@@ -3,7 +3,7 @@
 <!-- Mobile header: + y filtro en la misma fila -->
 <div class="mobile-header-btns" *ngIf="grid?.isMobile">
     <button mat-fab color="primary" class="mobile-add-btn custom-button" (click)="onNewExpense()"
-        matTooltip="Nuevo Gasto">
+        matTooltip="Nuevo Gasto" [disabled]="!hasCards">
         <mat-icon>add</mat-icon>
     </button>
 
@@ -16,9 +16,9 @@
 
 <!-- Desktop header: botón "Nuevo Gasto" -->
 <div class="historico-header" *ngIf="!grid?.isMobile">
-    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto">
+    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto" [disabled]="!hasCards">
         <mat-icon>add</mat-icon>Nuevo Gasto
     </button>
 </div>
 
-<app-grid #grid></app-grid>
+<app-grid #grid (hasCardsChange)="onHasCardsChange($event)"></app-grid>

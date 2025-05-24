@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CardService } from '../../../services/card.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -24,6 +24,7 @@ export interface CreditCardDetailHeader {
   styleUrl: './cards.component.scss',
 })
 export class CardsComponent implements OnInit {
+  @Output() cardsCount = new EventEmitter<number>();
   cardSummaries: CreditCardSummary[] = [];
 
   constructor(private creditCardService: CardService, private router: Router) {}
@@ -37,6 +38,7 @@ export class CardsComponent implements OnInit {
       this.cardSummaries = summaries.sort(
         (a, b) => b.gastoActualMensual - a.gastoActualMensual
       );
+      this.cardsCount.emit(this.cardSummaries.length);
     });
   }
 

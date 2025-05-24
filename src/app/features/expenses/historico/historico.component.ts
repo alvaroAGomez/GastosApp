@@ -21,7 +21,12 @@ import { UpcomingExpensesComponent } from '../upcoming-expenses/upcoming-expense
 })
 export class HistoricoComponent {
   @ViewChild('grid') gridComponent!: GridComponent;
+  hasCards = false;
   constructor(private dialog: MatDialog) {}
+
+  onHasCardsChange(value: boolean) {
+    this.hasCards = value;
+  }
 
   onNewExpense() {
     const dialogRef = this.dialog.open(UpcomingExpensesComponent, {

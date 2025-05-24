@@ -59,6 +59,7 @@ export class GridComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @Output() expenseAdded = new EventEmitter<void>();
+  @Output() hasCardsChange = new EventEmitter<boolean>();
 
   displayedColumns: string[] = [
     'tarjeta',
@@ -222,7 +223,10 @@ export class GridComponent implements OnInit, AfterViewInit {
 
   loadTarjetas() {
     this.cardService.getCards().subscribe({
-      next: (res) => (this.tarjetas = res),
+      next: (res) => {
+        this.tarjetas = res;
+        this.hasCardsChange.emit(Array.isArray(res) && res.length > 0);
+      },
       error: () => this.toastr.error('Error al cargar tarjetas'),
     });
   }

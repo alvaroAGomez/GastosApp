@@ -42,3 +42,12 @@
   justify-content: center;
   align-items: center;
 }
+
+.custom-button[disabled],
+.custom-button[disabled]:hover {
+  background: #bdbdbd !important;
+  color: #fff !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}

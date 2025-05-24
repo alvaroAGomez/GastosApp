@@ -3,7 +3,6 @@ import { DashboardExpenseService } from '../../services/dashboard-expense.servic
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { NgChartsModule } from 'ng2-charts';
@@ -48,6 +47,7 @@ interface ChartDataWrapper {
 export class DashboardComponent {
   isMobile = false;
   cardsExpanded = false;
+  hasCards = false;
 
   @ViewChild('cards') cardsComponent?: CardsComponent;
 
@@ -90,8 +90,13 @@ export class DashboardComponent {
     this.reloadDashboard();
   }
 
+  onCardsCountChange(count: number) {
+    this.hasCards = count > 0;
+  }
+
   private reloadDashboard() {
     this.cardsComponent?.reload();
+
     this.loadCharts();
   }
 

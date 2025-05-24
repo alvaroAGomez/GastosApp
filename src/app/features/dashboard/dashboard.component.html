@@ -9,7 +9,7 @@
             Tarjetas de Crédito
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <app-cards #cards></app-cards>
+        <app-cards #cards (cardsCount)="onCardsCountChange($event)"></app-cards>
       </mat-expansion-panel>
     </mat-accordion>
   </ng-container>
@@ -19,11 +19,12 @@
     </div>
   </ng-container> -->
   <ng-template #desktopCards>
-    <app-cards #cards></app-cards>
+    <app-cards #cards (cardsCount)="onCardsCountChange($event)"></app-cards>
   </ng-template>
 
   <div class="dashboard-toolbar-row mobile-toolbar">
-    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto">
+    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto"
+      [disabled]="!hasCards">
       <mat-icon>add</mat-icon>Nuevo Gasto
     </button>
     <button mat-mini-fab color="primary" class="custom-button" (click)="openCardDialog('create')">
