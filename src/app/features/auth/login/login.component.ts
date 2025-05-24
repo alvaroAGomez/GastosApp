@@ -8,6 +8,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   standalone: true,
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
   authService = inject(AuthService);
   router = inject(Router);
   breakpointObserver = inject(BreakpointObserver);
+  toast = inject(ToastService);
 
   isMobile = false;
 
@@ -55,6 +57,12 @@ export class LoginComponent implements OnInit {
           next: (res) => {
             localStorage.setItem('token', res.access_token);
             this.router.navigate(['/']);
+          },
+          error: (err) => {
+            this.toast.error(
+              err?.error?.message ||
+                'Error al iniciar sesión. Verifica tus credenciales.'
+            );
           },
         });
     }

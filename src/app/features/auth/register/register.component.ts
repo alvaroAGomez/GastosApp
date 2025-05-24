@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { passwordMatchValidator } from '../../../shared/validators/password-match.validator';
 import { CommonModule } from '@angular/common';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   standalone: true,
@@ -25,6 +26,7 @@ export class RegisterComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private toast = inject(ToastService);
   breakpointObserver = inject(BreakpointObserver);
   isMobile = false;
 
@@ -32,7 +34,16 @@ export class RegisterComponent implements OnInit {
     {
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+          ),
+        ],
+      ],
       confirmPassword: ['', Validators.required],
     },
     { validators: passwordMatchValidator }
@@ -44,6 +55,14 @@ export class RegisterComponent implements OnInit {
       .subscribe((result) => {
         this.isMobile = result.matches;
       });
+
+    // Forzar validación de passwordMismatch al cambiar confirmPassword
+    this.registerForm.get('confirmPassword')?.valueChanges.subscribe(() => {
+      this.registerForm.updateValueAndValidity({
+        onlySelf: false,
+        emitEvent: false,
+      });
+    });
   }
 
   onSubmit() {
@@ -62,7 +81,12 @@ export class RegisterComponent implements OnInit {
         })
         .subscribe({
           next: () => this.router.navigate(['/login']),
-          error: (error) => console.error(error),
+          error: (error) => {
+            this.toast.error(
+              error?.error?.message ||
+                'Error al registrar. Verifica los datos ingresados.'
+            );
+          },
         });
     }
   }

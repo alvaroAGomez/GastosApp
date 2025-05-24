@@ -10,21 +10,42 @@
       <mat-form-field appearance="fill">
         <mat-label>Nombre</mat-label>
         <input matInput formControlName="nombre" required />
+        <mat-error *ngIf="registerForm.get('nombre')?.hasError('required')">
+          El nombre es obligatorio.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" required type="email" />
+        <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+          El email es obligatorio.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Contraseña</mat-label>
         <input matInput formControlName="password" required type="password" />
+        <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
+          La contraseña es obligatoria.
+        </mat-error>
+        <mat-error
+          *ngIf="registerForm.get('password')?.hasError('pattern') || registerForm.get('password')?.hasError('minlength')">
+          La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter
+          especial
+          (&#64;$!%*?&amp;).
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Confirmar Contraseña</mat-label>
         <input matInput formControlName="confirmPassword" required type="password" />
+        <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">
+          Debes confirmar la contraseña.
+        </mat-error>
+        <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch')">
+          Las contraseñas no coinciden.
+        </mat-error>
       </mat-form-field>
 
       <button mat-raised-button color="primary" type="submit" class="custom-button">
@@ -55,21 +76,46 @@
         <mat-form-field>
           <mat-label>Nombre</mat-label>
           <input matInput formControlName="nombre" required />
+          <mat-error *ngIf="registerForm.get('nombre')?.hasError('required')">
+            El nombre es obligatorio.
+          </mat-error>
+
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" required type="email" />
+          <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+            El email es obligatorio.
+          </mat-error>
+
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Contraseña</mat-label>
           <input matInput formControlName="password" required type="password" />
+          <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
+            La contraseña es obligatoria.
+          </mat-error>
+
+          <mat-error
+            *ngIf="registerForm.get('password')?.hasError('pattern') || registerForm.get('password')?.hasError('minlength')">
+            La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter
+            especial
+            (&#64;$!%*?&amp;).
+          </mat-error>
+
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Confirmar Contraseña</mat-label>
           <input matInput formControlName="confirmPassword" required type="password" />
+          <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">
+            Debes confirmar la contraseña.
+          </mat-error>
+          <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch')">
+            Las contraseñas no coinciden.
+          </mat-error>
         </mat-form-field>
 
         <button mat-raised-button color="primary" type="submit" class="custom-button">
