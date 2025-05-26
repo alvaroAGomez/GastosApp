@@ -19,6 +19,8 @@ import {
 } from './charts/chart-config';
 import { ChartConfiguration } from 'chart.js';
 import { CreditCardFormModalComponent } from '../cards/credit-card-form/credit-card-form-modal/credit-card-form-modal.component';
+import { SpinnerService } from '../../shared/services/spinner.service';
+import { finalize, forkJoin } from 'rxjs';
 
 interface ChartDataWrapper {
   chartData: { labels: string[]; datasets: { data: number[] }[] };
@@ -57,10 +59,12 @@ export class DashboardComponent {
 
   constructor(
     private dashboardExpenseService: DashboardExpenseService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private spinnerService: SpinnerService
   ) {}
 
   ngOnInit() {
+    this.spinnerService.show();
     this.loadCharts();
     this.updateIsMobile();
   }
@@ -105,44 +109,45 @@ export class DashboardComponent {
   // ============================
 
   private loadCharts() {
-    this.loadDoughnutChartData();
-    this.loadBarChartData();
-    this.loadPieChartData();
-  }
-
-  private loadDoughnutChartData() {
-    this.dashboardExpenseService.getDoughnutCategoryChart().subscribe((res) => {
-      const total = this.sumArray(res.chartData.datasets[0]?.data ?? []);
-      this.doughnutData = {
-        chartData: res.chartData,
-        total,
-        chartOptions: getDoughnutChartOptions(total),
-      };
-    });
-  }
-
-  private loadBarChartData() {
-    this.dashboardExpenseService
-      .getBarMonthlyEvolutionChart()
-      .subscribe((res) => {
-        this.barData = {
-          chartData: res.chartData,
-          chartOptions: getBarChartOptions(),
-        };
+    //  ForkJoin con claves
+    forkJoin({
+      doughnut: this.dashboardExpenseService.getDoughnutCategoryChart(),
+      bar: this.dashboardExpenseService.getBarMonthlyEvolutionChart(),
+      pie: this.dashboardExpenseService.getPieCardDistributionChart(),
+    })
+      .pipe(
+        //  Ocultar spinner al terminar (éxito o error)
+        finalize(() => this.spinnerService.hide())
+      )
+      .subscribe({
+        next: ({ doughnut, bar, pie }) => {
+          //  Asignar todo usando un helper
+          this.doughnutData = this.toChartData(
+            doughnut,
+            getDoughnutChartOptions
+          );
+          this.barData = this.toChartData(bar, getBarChartOptions);
+          this.pieData = this.toChartData(pie, getPieChartOptions);
+        },
+        error: (err) => {
+          // aquí ya se ocultó el spinner por finalize()
+          console.error('Error cargando charts', err);
+        },
       });
   }
 
-  private loadPieChartData() {
-    this.dashboardExpenseService
-      .getPieCardDistributionChart()
-      .subscribe((res) => {
-        const total = this.sumArray(res.chartData.datasets[0]?.data ?? []);
-        this.pieData = {
-          chartData: res.chartData,
-          total,
-          chartOptions: getPieChartOptions(),
-        };
-      });
+  /** Helper genérico para transformar la respuesta */
+  private toChartData(
+    res: { chartData: any },
+    optionsFactory: (total: number) => any
+  ) {
+    // Saco los datos del primer dataset
+    const data = (res.chartData.datasets[0]?.data as number[]) ?? [];
+    // Sumo el array
+    const total = data.reduce((sum, v) => sum + (v ?? 0), 0);
+    // Genero options (aquí pasamos total aunque el factory lo ignore si no lo usa)
+    const options = optionsFactory(total);
+    return { chartData: res.chartData, total, chartOptions: options };
   }
 
   // ============================

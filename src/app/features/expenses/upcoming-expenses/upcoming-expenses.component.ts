@@ -29,6 +29,7 @@ import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter } from '@angular/material/core';
 import { NgxCurrencyDirective } from 'ngx-currency';
+import { SpinnerService } from '../../../shared/services/spinner.service';
 
 // Definir los formatos de fecha si es necesario
 const MY_DATE_FORMAT = {
@@ -82,13 +83,15 @@ export class UpcomingExpensesComponent implements OnInit {
     private categoryService: CategoryService,
     private cardService: CardService,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private spinnerService: SpinnerService
   ) {}
 
   ngOnInit() {
     this.createForm();
     this.loadCombos();
     this.initializeFormIfEdit();
+    console.log(this.data);
 
     // Si viene tarjetaCreditoId y NO es edición, setear y deshabilitar el campo
     if (!this.data?.isEdit && this.data?.tarjetaCreditoId) {
@@ -141,6 +144,7 @@ export class UpcomingExpensesComponent implements OnInit {
 
   private initializeFormIfEdit() {
     if (!this.data?.isEdit) return;
+    console.log(this.data);
 
     this.upcomingExpenseForm.patchValue({
       monto: Number(this.data.monto),
@@ -151,7 +155,9 @@ export class UpcomingExpensesComponent implements OnInit {
       tarjetaDebitoId: this.data.tarjetaDebitoId ?? '',
       esEnCuotas:
         this.data.esEnCuotas ??
-        (this.data.cuotas && Number(this.data.cuotas) > 1),
+        (this.data.totalCuotas && Number(this.data.totalCuotas) > 1
+          ? true
+          : false),
       numeroCuotas: this.data.cuotas ?? '',
     });
 
@@ -161,7 +167,7 @@ export class UpcomingExpensesComponent implements OnInit {
 
     if (
       this.data.esEnCuotas ||
-      (this.data.cuotas && Number(this.data.cuotas) > 1)
+      (this.data.totalCuotas && Number(this.data.totalCuotas) > 1)
     ) {
       this.upcomingExpenseForm.get('esEnCuotas')?.setValue(true);
       this.upcomingExpenseForm.get('numeroCuotas')?.enable();
@@ -177,15 +183,17 @@ export class UpcomingExpensesComponent implements OnInit {
         if (confirmed !== true) return;
 
         const gasto = this.buildExpenseFromForm();
-
+        this.spinnerService.show();
         if (this.data?.isEdit && this.data?.id) {
           this.expenseService.actualizarGasto(this.data.id, gasto).subscribe({
             next: () => {
               this.toastr.success('Gasto actualizado con éxito', 'Éxito');
               this.dialogRef.close({ updated: true });
             },
-            error: () =>
-              this.toastr.error('Error al actualizar gasto', 'Error'),
+            error: () => {
+              this.toastr.error('Error al actualizar gasto', 'Error');
+              this.spinnerService.hide();
+            },
           });
         } else {
           this.expenseService.crearGasto(gasto).subscribe({
@@ -193,7 +201,10 @@ export class UpcomingExpensesComponent implements OnInit {
               this.toastr.success('Gasto guardado con éxito', 'Éxito');
               this.dialogRef.close({ created: true });
             },
-            error: () => this.toastr.error('Error al crear gasto', 'Error'),
+            error: () => {
+              this.toastr.error('Error al crear gasto', 'Error');
+              this.spinnerService.hide();
+            },
           });
         }
       });

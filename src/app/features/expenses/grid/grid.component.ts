@@ -32,6 +32,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from '../../../services/category.service';
 import { CardService } from '../../../services/card.service';
 import { MatNativeDateModule } from '@angular/material/core';
+import { SpinnerService } from '../../../shared/services/spinner.service';
 @Component({
   selector: 'app-grid',
   standalone: true,
@@ -98,7 +99,8 @@ export class GridComponent implements OnInit, AfterViewInit {
     private toastr: ToastrService,
     private expenseService: ExpenseService,
     private categoriaService: CategoryService,
-    private cardService: CardService
+    private cardService: CardService,
+    private spinnerService: SpinnerService
   ) {}
 
   // Inicialización
@@ -150,16 +152,19 @@ export class GridComponent implements OnInit, AfterViewInit {
   }
 
   loadTableExpenses() {
+    this.spinnerService.show();
     this.dashboardExpenseService
       .getDashboardExpenses(this.getFiltrosFormateados())
       .subscribe((expenses) => {
         this.dataSource = new MatTableDataSource(expenses);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.spinnerService.hide();
       });
   }
 
   loadMoreMobileExpenses() {
+    this.spinnerService.show();
     if (this.mobileLoading || this.mobileAllLoaded) return;
     this.mobileLoading = true;
 
@@ -185,6 +190,8 @@ export class GridComponent implements OnInit, AfterViewInit {
         this.mobileAllLoaded = start + this.mobilePageSize >= filtered.length;
         this.mobilePage++;
         this.mobileLoading = false;
+
+        this.spinnerService.hide();
       });
   }
 
@@ -288,13 +295,17 @@ export class GridComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .subscribe((confirmed) => {
         if (confirmed) {
+          this.spinnerService.show();
           this.expenseService.eliminarGasto(expense.id).subscribe({
             next: () => {
               this.toastr.success('Gasto eliminado con éxito', 'Éxito');
               this.expenseAdded.emit();
               this.reloadData();
             },
-            error: () => this.toastr.error('Error al eliminar gasto', 'Error'),
+            error: () => {
+              this.toastr.error('Error al eliminar gasto', 'Error');
+              this.spinnerService.hide();
+            },
           });
         }
       });

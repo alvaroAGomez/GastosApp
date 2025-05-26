@@ -20,6 +20,7 @@ import {
   ChartType,
 } from 'chart.js';
 import { CustomCurrencyPipe } from '../../pipes/custom-currency.pipe';
+import { SpinnerService } from '../../services/spinner.service';
 
 // Extiende la interfaz para los filtros locales del componente
 interface LocalExpenseChartFilters extends ExpenseChartFilters {
@@ -145,7 +146,8 @@ export class ExpenseChartsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private chartsService: ExpenseChartsService,
-    private cdr: ChangeDetectorRef // <-- agrega ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private spinnerService: SpinnerService
   ) {
     const now = new Date();
     this.filterForm = this.fb.group({
@@ -226,7 +228,7 @@ export class ExpenseChartsComponent implements OnInit {
     delete filters.anioTotal;
 
     const chartTypeToRequest = this.allowedCharts[0] as ChartType;
-
+    this.spinnerService.show();
     this.chartsService
       .getChartData(filters, chartTypeToRequest)
       .subscribe((data: ExpenseChartData) => {
@@ -297,6 +299,7 @@ export class ExpenseChartsComponent implements OnInit {
           // Fuerza la actualización del gráfico para que el centro se redibuje
           this.cdr.detectChanges();
         }
+        this.spinnerService.hide();
       });
   }
 }

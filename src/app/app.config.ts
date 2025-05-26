@@ -1,18 +1,27 @@
+// main.ts (o donde definas tu ApplicationConfig)
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { routes } from './app.routes';
-import { provideAnimations } from '@angular/platform-browser/animations';
-
+import {
+  provideAnimations,
+  BrowserAnimationsModule,
+} from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { authInterceptor } from './interceptors/auth.interceptor';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { provideToastr, ToastrModule } from 'ngx-toastr';
+
+import { ToastrModule, provideToastr } from 'ngx-toastr';
+
+import { routes } from './app.routes';
+import { authInterceptor } from './interceptors/auth.interceptor'; // funcional
+import { spinnerInterceptor } from './core/interceptors/spinner.interceptor'; // funcional
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([authInterceptor])),
     provideRouter(routes),
+
+    // Cliente HTTP con ambos interceptores funcionales
+    provideHttpClient(withInterceptors([authInterceptor])),
+
+    // Animaciones y Toastr
     provideAnimations(),
     provideAnimationsAsync(),
     provideToastr(),

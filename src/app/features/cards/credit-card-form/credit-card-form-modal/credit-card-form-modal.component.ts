@@ -26,6 +26,7 @@ import { CardService } from '../../../../services/card.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog.component';
+import { SpinnerService } from '../../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-credit-card-form-modal',
@@ -59,7 +60,8 @@ export class CreditCardFormModalComponent {
     private bancosService: BancosService,
     private cardService: CardService,
     private toast: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private spinnerService: SpinnerService
   ) {
     this.mode = data?.mode || 'create';
     this.cards = data?.cards || [];
@@ -140,6 +142,7 @@ export class CreditCardFormModalComponent {
       .afterClosed()
       .subscribe((confirmed) => {
         if (confirmed) {
+          this.spinnerService.show();
           this.cardService
             .updateCreditCard(this.selectedCardId!, dto)
             .subscribe({
@@ -149,6 +152,7 @@ export class CreditCardFormModalComponent {
               },
               error: () => {
                 this.toast.error('Error al actualizar tarjeta', 'Error');
+                this.spinnerService.hide();
               },
             });
         }
@@ -156,6 +160,7 @@ export class CreditCardFormModalComponent {
   }
 
   private createCard(dto: CreateCreditCardDTO) {
+    this.spinnerService.show();
     this.cardService.createCreditCard(dto).subscribe({
       next: (createdCard) => {
         this.toast.success('Tarjeta creada exitosamente', 'Éxito');
@@ -163,6 +168,7 @@ export class CreditCardFormModalComponent {
       },
       error: () => {
         this.toast.error('Error al crear tarjeta', 'Error');
+        this.spinnerService.hide();
       },
     });
   }

@@ -27,6 +27,8 @@ export interface GastoMensual {
   categoria: string;
   monto: number;
   cuota: string;
+  categoriaGastoId: number;
+  esEnCuotas: boolean;
 }
 
 export interface GastoTarjeta {

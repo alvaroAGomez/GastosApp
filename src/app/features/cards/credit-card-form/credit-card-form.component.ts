@@ -15,7 +15,16 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { CardService } from '../../../services/card.service';
-import { forkJoin, Subscription } from 'rxjs';
+import {
+  finalize,
+  forkJoin,
+  Observable,
+  Subject,
+  Subscription,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { DeleteCardModalComponent } from './delete-card-modal/delete-card-modal.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CustomCurrencyPipe } from '../../../shared/pipes/custom-currency.pipe';
@@ -23,6 +32,7 @@ import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CuotaService } from '../../../services/cuota.service';
 import { CARD_COLORS } from '../../../shared/constants/theme.constants';
+import { SpinnerService } from '../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-credit-card-form',
@@ -48,68 +58,87 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
   cardMonthlyDetails: CreditCardMonthlyDetailSummary[] = [];
   annualGeneralSummary?: CreditCardAnnualGeneralSummary;
   selectedYear = new Date().getFullYear();
-  availableYears: number[] = [];
-
+  availableYears = Array.from(
+    { length: 8 },
+    (_, i) => this.selectedYear + 2 - i
+  );
   showGeneralSummary = true;
-  private subscriptions = new Subscription();
-
   readonly cardColors = CARD_COLORS;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private dialog: MatDialog,
     private cardService: CardService,
     private cuotaService: CuotaService,
-    private router: Router
-  ) {
-    this.availableYears = Array.from(
-      { length: 8 },
-      (_, i) => this.selectedYear + 2 - i
-    );
-  }
+    private router: Router,
+    private spinnerService: SpinnerService
+  ) {}
 
   ngOnInit() {
-    this.loadData();
+    this.loadCardsAndSummaries(this.selectedYear);
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  private loadData() {
-    this.subscriptions.add(
-      this.cardService.getCards().subscribe((cards) => {
-        this.creditCards = cards;
-        this.loadMonthlyDetails(this.selectedYear);
-      })
-    );
-    this.loadAnnualSummary(this.selectedYear);
-  }
+  /** Centraliza la carga de tarjetas + detalles anuales/mensuales */
+  private loadCardsAndSummaries(year: number) {
+    this.spinnerService.show();
 
-  private loadAnnualSummary(year: number) {
-    this.subscriptions.add(
-      this.cuotaService.getAnnualGeneralSummary(year).subscribe((res) => {
-        this.annualGeneralSummary = res;
-      })
-    );
-  }
-
-  private loadMonthlyDetails(year: number) {
-    const requests = this.creditCards.map((card) =>
-      this.cuotaService.getMonthlyDetailByCard(card.id, year)
-    );
-    this.subscriptions.add(
-      forkJoin(requests).subscribe((results) => {
-        this.cardMonthlyDetails = results.sort(
+    this.cardService
+      .getCards()
+      .pipe(
+        tap((cards) => (this.creditCards = cards)),
+        switchMap(() => this.fetchSummaries(year)),
+        finalize(() => this.spinnerService.hide()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(({ monthlyDetails, annualSummary }) => {
+        this.cardMonthlyDetails = monthlyDetails.sort(
           (a, b) => b.totalAnual - a.totalAnual
         );
-      })
-    );
+        this.annualGeneralSummary = annualSummary;
+      });
   }
 
+  /** Carga sólo los summaries (para cambios de año u otros flujos) */
+  private fetchSummaries(year: number): Observable<{
+    monthlyDetails: CreditCardMonthlyDetailSummary[];
+    annualSummary: CreditCardAnnualGeneralSummary;
+  }> {
+    const monthly$ = forkJoin(
+      this.creditCards.map((c) =>
+        this.cuotaService.getMonthlyDetailByCard(c.id, year)
+      )
+    );
+    const annual$ = this.cuotaService.getAnnualGeneralSummary(year);
+
+    // devuelve un objeto etiquetado en lugar de un arreglo
+    return forkJoin({
+      monthlyDetails: monthly$,
+      annualSummary: annual$,
+    });
+  }
+
+  /** Handler para el select de año */
   onYearChange(event: any) {
     this.selectedYear = event.value;
-    this.loadAnnualSummary(this.selectedYear);
-    this.loadMonthlyDetails(this.selectedYear);
+    this.spinnerService.show();
+
+    this.fetchSummaries(this.selectedYear)
+      .pipe(
+        finalize(() => this.spinnerService.hide()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(({ monthlyDetails, annualSummary }) => {
+        this.annualGeneralSummary = annualSummary;
+        this.cardMonthlyDetails = monthlyDetails.sort(
+          (a, b) => b.totalAnual - a.totalAnual
+        );
+      });
   }
 
   openCardDialog(mode: 'create' | 'edit' | 'delete') {
@@ -135,7 +164,7 @@ export class CreditCardFormComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.loadData();
+        this.loadCardsAndSummaries(this.selectedYear);
       }
     });
   }

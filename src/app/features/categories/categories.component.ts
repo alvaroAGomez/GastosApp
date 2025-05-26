@@ -11,12 +11,8 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.c
 import { CategoryService } from '../../services/category.service';
 import { ToastrService } from 'ngx-toastr';
 import { Categoria } from './ICategoria';
+import { SpinnerService } from '../../shared/services/spinner.service';
 
-/* interface Category {
-  id?: number;
-  name: string;
-  usuarioId?: number | null;
-} */
 @Component({
   selector: 'app-categories',
   standalone: true,
@@ -42,12 +38,14 @@ export class CategoriesComponent {
   constructor(
     private categoryService: CategoryService,
     private toast: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private spinnerService: SpinnerService
   ) {
     this.loadCategories();
   }
 
   loadCategories() {
+    this.spinnerService.show();
     this.categoryService.getCategoriesforUser().subscribe((cats) => {
       this.categories = cats.map((c) => ({
         id: c.id,
@@ -55,6 +53,7 @@ export class CategoriesComponent {
         usuarioId: c.usuarioId,
       }));
       this.dataSource.data = this.categories;
+      this.spinnerService.hide();
     });
   }
 
@@ -66,7 +65,7 @@ export class CategoriesComponent {
       this.toast.info('Ya existe una categoría con ese nombre');
       return;
     }
-
+    this.spinnerService.show();
     if (this.editingCategory) {
       this.updateCategory(name, form);
     } else {
@@ -80,7 +79,10 @@ export class CategoriesComponent {
         this.toast.success('Categoría creada con éxito', 'Éxito');
         this.afterSuccess(form);
       },
-      error: (err) => this.showError(err, 'crear categoría'),
+      error: (err) => {
+        this.showError(err, 'crear categoría');
+        this.spinnerService.hide();
+      },
     });
   }
 
@@ -92,7 +94,10 @@ export class CategoriesComponent {
           this.toast.success('Categoría actualizada con éxito', 'Éxito');
           this.afterSuccess(form);
         },
-        error: (err) => this.showError(err, 'editar categoría'),
+        error: (err) => {
+          this.showError(err, 'editar categoría');
+          this.spinnerService.hide();
+        },
       });
   }
 
@@ -140,12 +145,17 @@ export class CategoriesComponent {
       .afterClosed()
       .subscribe((confirmed) => {
         if (confirmed) {
+          this.spinnerService.show();
           this.categoryService.deleteCategory(categoria.id!).subscribe({
             next: () => {
               this.loadCategories();
               this.toast.success('Categoría eliminada con éxito', 'Éxito');
+              this.spinnerService.hide();
             },
-            error: (err) => this.showError(err, 'eliminar categoría'),
+            error: (err) => {
+              this.showError(err, 'eliminar categoría'),
+                this.spinnerService.hide();
+            },
           });
         }
       });

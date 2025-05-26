@@ -1,3 +1,4 @@
+import { SpinnerService } from './../../../../shared/services/spinner.service';
 import { Component, Inject } from '@angular/core';
 import {
   MatDialogRef,
@@ -37,7 +38,8 @@ export class DeleteCardModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private cardService: CardService,
     private toast: ToastService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private spinnerService: SpinnerService
   ) {
     this.cards = data?.cards || [];
   }
@@ -57,8 +59,10 @@ export class DeleteCardModalComponent {
         },
       });
       const cardToDelete = this.selectedCardId;
+
       dialogRef.afterClosed().subscribe((result) => {
         if (result === true) {
+          this.spinnerService.show();
           this.cardService.deleteCreditCard(cardToDelete).subscribe({
             next: () => {
               this.toast.success('Tarjeta eliminada exitosamente', 'Éxito');
@@ -67,7 +71,7 @@ export class DeleteCardModalComponent {
             error: (err) => {
               this.toast.error('Error al eliminar tarjeta', 'Error');
               this.confirmDelete = false;
-              console.error('Error al eliminar tarjeta', err);
+              this.spinnerService.hide();
             },
           });
         }

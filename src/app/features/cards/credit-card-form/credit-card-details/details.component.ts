@@ -38,6 +38,7 @@ import { PendingInstallmentsModalComponent } from './pending-installments-modal.
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CuotaService } from '../../../../services/cuota.service';
 import { GastoMensual } from '../interfaces';
+import { SpinnerService } from '../../../../shared/services/spinner.service';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -140,7 +141,8 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private toastr: ToastrService,
     private expenseService: ExpenseService,
-    private cuotaService: CuotaService
+    private cuotaService: CuotaService,
+    private sipinnerService: SpinnerService
   ) {
     this.filterForm = this.fb.group({
       fechaDesde: [''],
@@ -224,6 +226,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   loadExpenses() {
+    this.sipinnerService.show();
     this.expenseService
       .getGastosMensualesPorTarjeta(this.selectedCardId)
       .subscribe((res) => {
@@ -231,6 +234,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
         this.dataSource.data = res;
         // Si quieres mostrar el total de gastos:
         this.totalExpenses = res.length;
+        this.sipinnerService.hide();
       });
   }
 
@@ -246,14 +250,6 @@ export class DetailsComponent implements OnInit, AfterViewInit {
         0
       );
     });
-  }
-
-  onPaginate(event: any) {
-    // No necesitas recargar datos, el paginador funciona en memoria
-  }
-
-  onSort(event: any) {
-    // No necesitas recargar datos, el sort funciona en memoria
   }
 
   applyFilter(event: Event) {
@@ -317,13 +313,15 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   editExpense(expense: any) {
+    console.log(expense);
+
     this.dialog
       .open(UpcomingExpensesComponent, {
         disableClose: false,
         data: {
           ...expense,
           isEdit: true,
-          id: expense.id,
+          id: expense.gastoId,
           categoriaGastoId: expense.categoriaGastoId || expense.categoria,
           tarjetaCreditoId: this.selectedCardId,
           tarjetaCreditoDisabled: true,
@@ -331,7 +329,8 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       })
       .afterClosed()
       .subscribe((result) => {
-        if (result && result.updated) {
+        console.log(result);
+        if (result) {
           this.toastr.success('Gasto actualizado con éxito', 'Éxito');
           this.loadHeaderAndExpenses();
           this.loadMovimientos();
@@ -352,6 +351,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .subscribe((confirmed) => {
         if (confirmed) {
+          this.sipinnerService.show();
           this.expenseService.eliminarGasto(expense.gastoId).subscribe({
             next: () => {
               this.toastr.success('Gasto eliminado con éxito', 'Éxito');
@@ -385,11 +385,10 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   openPendingInstallmentsModal() {
+    this.sipinnerService.show();
     this.cuotaService
       .getCuotasPendientesFuturasPorTarjeta(this.selectedCardId)
       .subscribe((res) => {
-        console.log(res);
-
         this.dialog.open(PendingInstallmentsModalComponent, {
           width: '900px',
           maxWidth: '98vw',
@@ -399,6 +398,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
             totalCuotasPendientes: res.totalGeneral,
           },
         });
+        this.sipinnerService.hide();
       });
   }
 }

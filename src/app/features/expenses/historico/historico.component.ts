@@ -5,6 +5,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { GridComponent } from '../grid/grid.component';
 import { UpcomingExpensesComponent } from '../upcoming-expenses/upcoming-expenses.component';
+import { SpinnerService } from '../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-historico',
