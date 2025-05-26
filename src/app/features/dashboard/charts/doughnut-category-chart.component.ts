@@ -67,6 +67,19 @@ export class DoughnutCategoryChartComponent implements OnInit, AfterViewInit {
         const chartArea = chart.chartArea;
         const centerX = (chartArea.left + chartArea.right) / 2;
         const centerY = (chartArea.top + chartArea.bottom) / 2;
+        // Limpia el área central antes de dibujar el texto
+        const radius =
+          Math.min(
+            chartArea.right - chartArea.left,
+            chartArea.bottom - chartArea.top
+          ) / 4;
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.restore();
+
         ctx.save();
 
         const fontSize = window.innerWidth < 700 ? '0.7rem' : '0.9rem';
