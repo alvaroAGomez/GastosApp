@@ -313,7 +313,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   editExpense(expense: any) {
-    console.log(expense);
+    console.log('EXPEENSEE', expense);
 
     this.dialog
       .open(UpcomingExpensesComponent, {
@@ -325,6 +325,8 @@ export class DetailsComponent implements OnInit, AfterViewInit {
           categoriaGastoId: expense.categoriaGastoId || expense.categoria,
           tarjetaCreditoId: this.selectedCardId,
           tarjetaCreditoDisabled: true,
+          cuotas: expense.totalCuotas ?? null,
+          esEnCuotas: expense.totalCuotas && Number(expense.totalCuotas) > 1,
         },
       })
       .afterClosed()

@@ -153,11 +153,7 @@ export class UpcomingExpensesComponent implements OnInit {
       categoriaGastoId: this.data.categoriaGastoId ?? this.data.categoria ?? '',
       tarjetaCreditoId: this.data.tarjetaCreditoId ?? '',
       tarjetaDebitoId: this.data.tarjetaDebitoId ?? '',
-      esEnCuotas:
-        this.data.esEnCuotas ??
-        (this.data.totalCuotas && Number(this.data.totalCuotas) > 1
-          ? true
-          : false),
+      esEnCuotas: this.data.esEnCuotas,
       numeroCuotas: this.data.cuotas ?? '',
     });
 
@@ -167,10 +163,12 @@ export class UpcomingExpensesComponent implements OnInit {
 
     if (
       this.data.esEnCuotas ||
-      (this.data.totalCuotas && Number(this.data.totalCuotas) > 1)
+      (this.data.cuotas && Number(this.data.cuotas) > 1)
     ) {
       this.upcomingExpenseForm.get('esEnCuotas')?.setValue(true);
       this.upcomingExpenseForm.get('numeroCuotas')?.enable();
+    } else {
+      this.upcomingExpenseForm.get('numeroCuotas')?.setValue(null);
     }
   }
 
