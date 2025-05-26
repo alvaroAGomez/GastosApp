@@ -90,24 +90,20 @@ $color-title: #1976d2;
       border-color: $color-title;
     }
     .summary-dashboard-row {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
+      @include flex(row, center, flex-end);
       width: 100%;
-      gap: 0;
-      position: relative;
       min-height: 40px;
       &.summary-dashboard-row-bottom {
-        justify-content: center;
-        margin-top: 8px;
+        @include flex(row, center, center);
+        min-height: 36px;
+        margin-top: 0;
       }
     }
     .summary-dashboard-icon {
       font-size: 2em;
-      margin-left: 0;
       color: #222;
       min-width: 36px;
-      width: 36px; // Fijar ancho para reservar espacio
+      width: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -123,28 +119,30 @@ $color-title: #1976d2;
     }
     .summary-dashboard-month {
       flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 21px;
+      margin-left: -36px !important;
       text-align: center;
       font-size: 1.12rem;
       font-weight: 600;
       color: $color-title;
       letter-spacing: 0.5px;
       margin: 0;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      height: 21px;
-      margin-left: -36px !important; // Corrección para compensar el espacio del icono
     }
     .summary-dashboard-amount {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      display: block;
       font-size: 1.35rem;
       font-weight: bold;
       color: #222;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     &.empty {
       background: transparent;
@@ -162,9 +160,9 @@ $color-title: #1976d2;
       justify-content: center;
       margin-top: 12px;
       .summary-dashboard-row {
+        @include flex(row, space-between, center);
         width: 100%;
         min-height: unset;
-        @include flex(row, space-between, center);
         gap: 0;
         font-size: 1.12rem;
         font-weight: 600;
@@ -188,36 +186,6 @@ $color-title: #1976d2;
         flex: 1;
       }
     }
-
-    // Centrado vertical y horizontal de mes y monto en cards
-    .summary-dashboard-row.summary-dashboard-row-bottom {
-      justify-content: center;
-      align-items: center;
-      min-height: 36px;
-      margin-top: 0;
-    }
-    .summary-dashboard-amount {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      font-size: 1.35rem;
-      font-weight: bold;
-      color: #222;
-      text-align: center;
-    }
-    .summary-dashboard-month {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      text-align: center;
-      font-size: 1.12rem;
-      font-weight: 600;
-      color: $color-title;
-      letter-spacing: 0.5px;
-      margin: 0;
-    }
   }
 
   //─────────────────────────────────────────────────────────────
@@ -225,7 +193,6 @@ $color-title: #1976d2;
   //─────────────────────────────────────────────────────────────
   &-mobile {
     display: none;
-
     @media (max-width: $break-mobile) {
       @include box-reset;
       background: $color-bg-mobile;
@@ -233,20 +200,17 @@ $color-title: #1976d2;
       padding: 16px 0 24px;
       display: flex;
       flex-direction: column;
-
       .mobile-summary-card {
         @include box-reset;
-        width: 100%; // Cambiado de 90% a 100%
-        margin: 0 0 14px 0; // Sin margen a los costados
+        width: 100%;
+        margin: 0 0 14px 0;
         border-radius: 12px;
         background: $color-bg-mobile;
         padding: 14px 12px;
         @include flex(row, space-between, center);
-
         &.alt-bg {
           background: $color-bg-mobile;
         }
-
         .mobile-summary-row {
           @include flex(row, space-between, center);
           gap: 10px;
@@ -254,12 +218,10 @@ $color-title: #1976d2;
           font-weight: 500;
           color: #333;
           width: 100%;
-
           .mobile-summary-info {
             @include flex(row, flex-start, center);
             gap: 10px;
           }
-
           .mobile-summary-icon {
             font-size: 1.3em;
           }
@@ -269,7 +231,6 @@ $color-title: #1976d2;
           .icon-red {
             color: $color-border-high;
           }
-
           .mobile-summary-month {
             white-space: nowrap;
             overflow: hidden;
@@ -290,11 +251,10 @@ $color-title: #1976d2;
           }
         }
       }
-
       .mobile-summary-total-card {
         @include box-reset;
-        width: 100%; // Cambiado de 90% a 100%
-        margin: 0 0 14px 0; // Sin margen a los costados
+        width: 100%;
+        margin: 0 0 14px 0;
         border-radius: 12px;
         background: $color-total-bg;
         color: #fff;
@@ -302,7 +262,6 @@ $color-title: #1976d2;
         @include flex(column, center, center);
         font-size: 1.4rem;
         font-weight: bold;
-
         .mobile-summary-total-label {
           font-size: 1.1rem;
           font-weight: 500;
@@ -318,7 +277,6 @@ $color-title: #1976d2;
           font-size: 1.3em;
         }
       }
-
       // Ocultamos el grid desktop
       .summary-dashboard-grid {
         display: none;
