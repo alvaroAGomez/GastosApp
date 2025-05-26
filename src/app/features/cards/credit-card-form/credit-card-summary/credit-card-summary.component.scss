@@ -232,8 +232,8 @@ $color-title: #1976d2;
 
       .mobile-summary-card {
         @include box-reset;
-        width: calc(100% - 32px);
-        margin: 0 auto 14px;
+        width: 100%; // Cambiado de 90% a 100%
+        margin: 0 0 14px 0; // Sin margen a los costados
         border-radius: 12px;
         background: $color-bg-mobile;
         padding: 14px 12px;
@@ -249,6 +249,12 @@ $color-title: #1976d2;
           font-size: 1.08rem;
           font-weight: 500;
           color: #333;
+          width: 100%;
+
+          .mobile-summary-info {
+            @include flex(row, flex-start, center);
+            gap: 10px;
+          }
 
           .mobile-summary-icon {
             font-size: 1.3em;
@@ -260,19 +266,31 @@ $color-title: #1976d2;
             color: $color-border-high;
           }
 
-          .mobile-summary-month,
+          .mobile-summary-month {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
           .mobile-summary-amount {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-weight: bold;
+            font-size: 1.15rem;
+            margin-left: 12px;
+            text-align: right;
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
           }
         }
       }
 
       .mobile-summary-total-card {
         @include box-reset;
-        width: calc(100% - 32px);
-        margin: 24px auto 0;
+        width: 100%; // Cambiado de 90% a 100%
+        margin: 0 0 14px 0; // Sin margen a los costados
         border-radius: 12px;
         background: $color-total-bg;
         color: #fff;

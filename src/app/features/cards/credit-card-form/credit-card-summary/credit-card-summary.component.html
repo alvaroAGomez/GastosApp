@@ -33,13 +33,15 @@
     <ng-container *ngFor="let row of allExpenses; let i = index">
       <mat-card class="mobile-summary-card" [ngClass]="{'alt-bg': i % 2 === 1}">
         <div class="mobile-summary-row">
-          <mat-icon class="mobile-summary-icon" [ngClass]="{
-              'icon-green': row.amount <= getMobilePromedio(),
-              'icon-red': row.amount > getMobilePromedio()
-            }">
-            {{ row.amount > getMobilePromedio() ? 'trending_up' : 'trending_down' }}
-          </mat-icon>
-          <span class="mobile-summary-month">{{ row.month | uppercase }}</span>
+          <div class="mobile-summary-info">
+            <mat-icon class="mobile-summary-icon" [ngClass]="{
+                'icon-green': row.amount <= getMobilePromedio(),
+                'icon-red': row.amount > getMobilePromedio()
+              }">
+              {{ row.amount > getMobilePromedio() ? 'trending_up' : 'trending_down' }}
+            </mat-icon>
+            <span class="mobile-summary-month">{{ row.month | uppercase }}</span>
+          </div>
           <span class="mobile-summary-amount">{{ row.amount | customCurrency:0 }}</span>
         </div>
       </mat-card>
