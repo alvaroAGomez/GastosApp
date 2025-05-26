@@ -16,7 +16,8 @@
 
 <!-- Desktop header: botón "Nuevo Gasto" -->
 <div class="historico-header" *ngIf="!grid?.isMobile">
-    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto" [disabled]="!hasCards">
+    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto"
+        [disabled]="!hasCards">
         <mat-icon>add</mat-icon>Nuevo Gasto
     </button>
 </div>

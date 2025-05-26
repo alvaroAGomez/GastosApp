@@ -54,6 +54,15 @@ export class DoughnutCategoryChartComponent implements OnInit, AfterViewInit {
       afterDraw: (chart: any) => {
         if (chart.config.type !== 'doughnut') return;
 
+        const dataset = chart.data.datasets[0];
+        if (
+          !dataset ||
+          !dataset.data ||
+          dataset.data.length === 0 ||
+          dataset.data.every((v: any) => !v)
+        )
+          return;
+
         const ctx = chart.ctx;
         const chartArea = chart.chartArea;
         const centerX = (chartArea.left + chartArea.right) / 2;
