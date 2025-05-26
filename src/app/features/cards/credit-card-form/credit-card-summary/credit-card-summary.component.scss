@@ -79,7 +79,7 @@ $color-title: #1976d2;
     border-radius: 16px;
     box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08);
     padding: 28px 32px 22px 32px;
-    min-height: 90px;
+    min-height: 70px;
     color: $color-text;
     position: relative;
     border: 1.5px solid #e3e8f0;
@@ -91,8 +91,8 @@ $color-title: #1976d2;
     }
     .summary-dashboard-row {
       display: flex;
-      align-items: center;
-      justify-content: flex-start;
+      align-items: flex-end;
+      justify-content: center;
       width: 100%;
       gap: 0;
       position: relative;
@@ -104,10 +104,10 @@ $color-title: #1976d2;
     }
     .summary-dashboard-icon {
       font-size: 2em;
-      margin-right: 18px;
       margin-left: 0;
       color: #222;
       min-width: 36px;
+      width: 36px; // Fijar ancho para reservar espacio
       display: flex;
       align-items: center;
       justify-content: center;
@@ -129,7 +129,11 @@ $color-title: #1976d2;
       color: $color-title;
       letter-spacing: 0.5px;
       margin: 0;
-      display: block;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 21px;
+      margin-left: -36px !important; // Corrección para compensar el espacio del icono
     }
     .summary-dashboard-amount {
       white-space: nowrap;
@@ -152,11 +156,11 @@ $color-title: #1976d2;
       color: #fff;
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba(25, 118, 210, 0.1);
-      min-height: 56px;
+      min-height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 18px;
+      margin-top: 12px;
       .summary-dashboard-row {
         width: 100%;
         min-height: unset;
@@ -171,14 +175,14 @@ $color-title: #1976d2;
         color: #fff;
       }
       .summary-dashboard-total-amount {
-        font-size: 1.3rem;
+        font-size: 1.8rem;
         font-weight: bold;
         color: #fff;
         text-align: right;
       }
       .summary-dashboard-month {
         color: #fff;
-        font-size: 1.08rem;
+        font-size: 1.8rem;
         font-weight: 500;
         text-align: center;
         flex: 1;
