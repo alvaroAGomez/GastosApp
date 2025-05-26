@@ -2,9 +2,9 @@
 
 <!-- Mobile header: + y filtro en la misma fila -->
 <div class="mobile-header-btns" *ngIf="grid?.isMobile">
-    <button mat-fab color="primary" class="mobile-add-btn custom-button" (click)="onNewExpense()"
-        matTooltip="Nuevo Gasto" [disabled]="!hasCards">
-        <mat-icon>add</mat-icon>
+    <button mat-mini-fab color="primary" class="custom-button" (click)="onNewExpense()" matTooltip="Nuevo Gasto"
+        [disabled]="!hasCards">
+        <mat-icon>add</mat-icon>Nuevo Gasto
     </button>
 
     <button mat-icon-button color="primary" class="mobile-filter-btn" (click)="grid.toggleFiltrosMobile()"

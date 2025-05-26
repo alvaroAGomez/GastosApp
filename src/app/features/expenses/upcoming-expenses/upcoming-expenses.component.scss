@@ -1,38 +1,54 @@
 .modal-title {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.expense-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+@media (max-width: 600px) {
+  :host,
+  :host ::ng-deep .mat-dialog-content,
+  :host ::ng-deep mat-dialog-content,
+  :host > div,
   .expense-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    background: #fff !important;
+    box-sizing: border-box;
+    overflow-y: auto !important;
   }
-  
-  .form-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
+  .modal-title {
+    border-radius: 0 !important;
+    margin-top: 16px;
   }
-  
   .form-row mat-form-field {
-    flex: 1;
-    min-width: 200px;
+    flex: 1 1 100%;
   }
-  
-  .full-width {
-    width: 100%;
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 24px;
-  }
-  
-  @media (max-width: 600px) {
-    .form-row mat-form-field {
-      flex: 1 1 100%;
-    }
-  }
-  
+}
