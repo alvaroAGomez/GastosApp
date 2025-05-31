@@ -1,18 +1,18 @@
 .modal-title {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .expense-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px; // Reducido de 16px a 12px para ser más uniforme
 }
 
 .form-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px; // Ajustado para coincidir con el gap del form
 }
 
 .form-row mat-form-field {
@@ -23,7 +23,7 @@
 .modal-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 @media (max-width: 600px) {
@@ -40,20 +40,38 @@
     box-sizing: border-box;
     overflow-y: auto !important;
   }
+
   .modal-title {
     border-radius: 0 !important;
     margin-top: 16px;
+    margin-bottom: 16px;
   }
-  .form-row mat-form-field {
-    flex: 1 1 100%;
+
+  .expense-form {
+    gap: 8px;
   }
+
+  .form-row {
+    gap: 8px;
+
+    &.installments-row {
+      flex-wrap: nowrap;
+
+      mat-form-field {
+        min-width: unset;
+        width: 50%;
+      }
+    }
+  }
+
   .modal-actions {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
-    margin-top: 0;
+    margin-top: 12px;
   }
 }
+
 .custom-button {
   margin: 0;
 }
