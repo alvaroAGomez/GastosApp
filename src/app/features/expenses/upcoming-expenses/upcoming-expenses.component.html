@@ -1,60 +1,110 @@
 <mat-dialog-content>
-  <h2 class="modal-title">Nuevo Gasto</h2>
+  <h2 class="modal-title">
+    {{ data?.isEdit ? 'Editar Gasto' : 'Nuevo Gasto' }}
+  </h2>
   <form [formGroup]="upcomingExpenseForm" (ngSubmit)="onSubmit()" class="expense-form">
     <div class="form-row">
-      <mat-form-field appearance="fill" class="full-width">
+      <mat-form-field appearance="fill">
         <mat-label>Monto</mat-label>
         <input matInput formControlName="monto" currencyMask
-          [options]="{ prefix: '$ ', thousands: ',', decimal: '.', align: 'left', allowNegative: false }" required>
-
+          [options]="{ prefix: '$ ', thousands: ',', decimal: '.', align: 'left', allowNegative: false }" required />
+        <mat-error *ngIf="upcomingExpenseForm.get('monto')?.hasError('required')">
+          El monto es obligatorio
+        </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="fill" class="full-width">
+
+      <mat-form-field appearance="fill">
         <mat-label>Fecha</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="fecha" [value]="todayDate" required>
+        <input matInput [matDatepicker]="picker" formControlName="fecha" [value]="todayDate" placeholder="DD/MM/YYYY"
+          required />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+        <mat-datepicker #picker startView="month"></mat-datepicker>
+        <mat-error *ngIf="upcomingExpenseForm.get('fecha')?.hasError('required')">
+          Debes elegir una fecha
+        </mat-error>
       </mat-form-field>
     </div>
+
     <div class="form-row">
-      <mat-form-field appearance="fill" class="full-width">
+      <mat-form-field appearance="fill">
         <mat-label>Descripción</mat-label>
-        <input matInput formControlName="descripcion" required>
+        <input matInput formControlName="descripcion" required />
+        <mat-error *ngIf="upcomingExpenseForm.get('descripcion')?.hasError('required')">
+          La descripción es obligatoria
+        </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="fill" class="full-width">
+
+      <mat-form-field appearance="fill">
         <mat-label>Categoría</mat-label>
         <mat-select formControlName="categoriaGastoId" required>
-          <mat-option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</mat-option>
+          <mat-option *ngFor="let cat of categorias" [value]="cat.id">
+            {{ cat.nombre }}
+          </mat-option>
         </mat-select>
+        <mat-error *ngIf="upcomingExpenseForm.get('categoriaGastoId')?.hasError('required')">
+          Debes seleccionar una categoría
+        </mat-error>
       </mat-form-field>
     </div>
+
     <div class="form-row">
-      <mat-form-field appearance="fill" class="full-width">
+      <mat-form-field appearance="fill">
         <mat-label>Tarjeta de Crédito</mat-label>
         <mat-select formControlName="tarjetaCreditoId">
           <mat-option [value]="''">Ninguna</mat-option>
-          <mat-option *ngFor="let card of tarjetas" [value]="card.id">{{ card.nombreTarjeta || card.nombre
-            }}</mat-option>
+          <mat-option *ngFor="let card of tarjetas" [value]="card.id">
+            {{ card.nombreTarjeta || card.nombre }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
+
     <div class="form-row">
-      <mat-form-field appearance="fill" class="full-width">
+      <mat-form-field appearance="fill">
         <mat-label>¿Es en cuotas?</mat-label>
         <mat-select formControlName="esEnCuotas">
           <mat-option [value]="true">Sí</mat-option>
           <mat-option [value]="false">No</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="fill" class="full-width">
+
+      <mat-form-field appearance="fill">
         <mat-label>Número de cuotas</mat-label>
-        <input matInput formControlName="numeroCuotas" type="number">
+        <input matInput formControlName="numeroCuotas" type="number" />
+        <mat-error *ngIf="upcomingExpenseForm.get('numeroCuotas')?.hasError('required')">
+          Debes indicar cuántas cuotas
+        </mat-error>
+        <mat-error *ngIf="upcomingExpenseForm.get('numeroCuotas')?.hasError('min')">
+          El mínimo es 1
+        </mat-error>
       </mat-form-field>
     </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Mes del primer pago</mat-label>
+        <input matInput #monthPickerInput formControlName="mesPrimerPago" [matDatepicker]="monthPicker"
+          placeholder="MM/YYYY" readonly required
+          [value]="upcomingExpenseForm.get('mesPrimerPago')?.value ? (upcomingExpenseForm.get('mesPrimerPago')?.value | date: 'MM/yyyy') : ''" />
+        <mat-datepicker-toggle matSuffix [for]="monthPicker"></mat-datepicker-toggle>
+        <mat-datepicker #monthPicker startView="multi-year" (yearSelected)="chosenYearHandler($event, monthPicker)"
+          (monthSelected)="chosenMonthHandler($event, monthPicker)" panelClass="month-picker"
+          [startAt]="currentMonthYear">
+        </mat-datepicker>
+        <mat-error *ngIf="upcomingExpenseForm.get('mesPrimerPago')?.hasError('required')">
+          Debes seleccionar mes y año
+        </mat-error>
+      </mat-form-field>
+    </div>
+
     <div class="modal-actions">
-      <button mat-raised-button color="primary" class="custom-button-cancelar" type="button"
-        (click)="onClose()">Cancelar</button>
+      <button mat-raised-button color="primary" class="custom-button-cancelar" type="button" (click)="onClose()">
+        Cancelar
+      </button>
       <button mat-raised-button color="primary" type="submit" class="custom-button"
-        [disabled]="upcomingExpenseForm.invalid">Guardar</button>
+        [disabled]="upcomingExpenseForm.invalid">
+        Guardar
+      </button>
     </div>
   </form>
 </mat-dialog-content>

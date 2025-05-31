@@ -272,6 +272,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         tarjetaDebitoId: expense.tarjetaDebitoId ?? null,
         cuotas: expense.cuotas ?? null,
         esEnCuotas: expense.cuotas && Number(expense.cuotas) > 1,
+        mesPrimerPago: expense.mesPrimerPago,
       },
     });
 

@@ -9,4 +9,5 @@ export interface Expense {
   tarjetaDebitoId?: number;
   esEnCuotas: boolean;
   numeroCuotas?: number;
+  mesPrimerPago: Date | undefined;
 }
