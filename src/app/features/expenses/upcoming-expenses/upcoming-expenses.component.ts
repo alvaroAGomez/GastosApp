@@ -1,4 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import {
   ReactiveFormsModule,
   FormGroup,
@@ -25,14 +31,21 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
-import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  DateAdapter,
+} from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter } from '@angular/material/core';
 import { NgxCurrencyDirective } from 'ngx-currency';
 import { SpinnerService } from '../../../shared/services/spinner.service';
+import moment from 'moment';
+import { Moment } from 'moment';
 
-// Definir los formatos de fecha si es necesario
-const MY_DATE_FORMAT = {
+// ───────────────────────────────────────────────────────────
+// 1) FORMATO GLOBAL PARA FECHA COMPLETA (donde porte “DD/MM/YYYY”)
+// ───────────────────────────────────────────────────────────
+export const MY_DATE_FORMAT: any = {
   parse: {
     dateInput: 'DD/MM/YYYY',
   },
@@ -43,6 +56,7 @@ const MY_DATE_FORMAT = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
 @Component({
   selector: 'app-upcoming-expenses',
   standalone: true,
@@ -67,6 +81,7 @@ const MY_DATE_FORMAT = {
       deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: 'es-AR' },
   ],
 })
 export class UpcomingExpensesComponent implements OnInit {
@@ -74,6 +89,13 @@ export class UpcomingExpensesComponent implements OnInit {
   categorias: any[] = [];
   tarjetas: any[] = [];
   todayDate: Date = new Date();
+
+  // • Con @ViewChild accedemos directamente al input en HTML para sobreescribir su valor manual
+  @ViewChild('monthPickerInput', { read: ElementRef })
+  monthPickerInput!: ElementRef<HTMLInputElement>;
+
+  // • Valor inicial (Moment) para “Mes/Año actual”
+  currentMonthYear: Moment = moment();
 
   constructor(
     private fb: FormBuilder,
@@ -91,14 +113,32 @@ export class UpcomingExpensesComponent implements OnInit {
     this.createForm();
     this.loadCombos();
     this.initializeFormIfEdit();
-    console.log(this.data);
 
-    // Si viene tarjetaCreditoId y NO es edición, setear y deshabilitar el campo
+    // Si hay tarjetaCreditoId y NO es edición, setea y deshabilita
     if (!this.data?.isEdit && this.data?.tarjetaCreditoId) {
       this.upcomingExpenseForm.patchValue({
         tarjetaCreditoId: this.data.tarjetaCreditoId,
       });
       this.upcomingExpenseForm.get('tarjetaCreditoId')?.disable();
+    }
+
+    // Después de iniciada la vista, “pintamos” el input mesPrimerPago con MM/YYYY
+    // porque Angular Material por defecto lo habría dejado en “DD/MM/YYYY”
+    setTimeout(() => {
+      this.actualizarInputMesPrimerPagoDesdeControl();
+    });
+  }
+
+  ngAfterViewInit() {
+    // Siempre que el input esté presente, forzamos el formato MM/YYYY
+    setTimeout(() => {
+      this.actualizarInputMesPrimerPagoDesdeControl();
+    });
+    // Si el usuario sale del input (blur), forzamos el formato MM/YYYY
+    if (this.monthPickerInput) {
+      this.monthPickerInput.nativeElement.addEventListener('blur', () => {
+        this.actualizarInputMesPrimerPagoDesdeControl();
+      });
     }
   }
 
@@ -112,6 +152,7 @@ export class UpcomingExpensesComponent implements OnInit {
       tarjetaDebitoId: [''],
       esEnCuotas: [false],
       numeroCuotas: [{ value: '', disabled: true }],
+      mesPrimerPago: [this.currentMonthYear, Validators.required],
     });
 
     this.upcomingExpenseForm
@@ -128,6 +169,15 @@ export class UpcomingExpensesComponent implements OnInit {
         }
         cuotasCtrl?.updateValueAndValidity();
       });
+
+    // Si cambia “fecha” (día/mes/año), reseteamos mesPrimerPago
+    this.upcomingExpenseForm.get('fecha')?.valueChanges.subscribe(() => {
+      this.upcomingExpenseForm.get('mesPrimerPago')?.reset();
+      // Limpiar el texto en el input
+      if (this.monthPickerInput) {
+        this.monthPickerInput.nativeElement.value = '';
+      }
+    });
   }
 
   private loadCombos() {
@@ -144,7 +194,6 @@ export class UpcomingExpensesComponent implements OnInit {
 
   private initializeFormIfEdit() {
     if (!this.data?.isEdit) return;
-    console.log(this.data);
 
     this.upcomingExpenseForm.patchValue({
       monto: Number(this.data.monto),
@@ -155,20 +204,16 @@ export class UpcomingExpensesComponent implements OnInit {
       tarjetaDebitoId: this.data.tarjetaDebitoId ?? '',
       esEnCuotas: this.data.esEnCuotas,
       numeroCuotas: this.data.cuotas ?? '',
+      // • Si viene mesPrimerPago en data, lo convertimos a Moment;
+      //   si no viene, dejamos “Mes/Año actual”
+      mesPrimerPago: this.data.mesPrimerPago
+        ? moment(this.data.mesPrimerPago)
+        : this.currentMonthYear,
     });
 
+    // Si estaba en modo “editar” y la tarjeta venía deshabilitada:
     if (this.data?.tarjetaCreditoDisabled) {
       this.upcomingExpenseForm.get('tarjetaCreditoId')?.disable();
-    }
-
-    if (
-      this.data.esEnCuotas ||
-      (this.data.cuotas && Number(this.data.cuotas) > 1)
-    ) {
-      this.upcomingExpenseForm.get('esEnCuotas')?.setValue(true);
-      this.upcomingExpenseForm.get('numeroCuotas')?.enable();
-    } else {
-      this.upcomingExpenseForm.get('numeroCuotas')?.setValue(null);
     }
   }
 
@@ -211,6 +256,13 @@ export class UpcomingExpensesComponent implements OnInit {
   private buildExpenseFromForm(): Expense {
     const raw = this.upcomingExpenseForm.getRawValue();
 
+    // • Extraigo el Moment de mesPrimerPago y lo convierto a Date
+    let mesPrimerPagoValue: Date | undefined = undefined;
+    if (raw.mesPrimerPago) {
+      const m: Moment = raw.mesPrimerPago;
+      mesPrimerPagoValue = m.toDate(); // p. ej. 2025-05-01T...
+    }
+
     return {
       monto: Number(raw.monto),
       fecha: raw.fecha,
@@ -220,6 +272,7 @@ export class UpcomingExpensesComponent implements OnInit {
       tarjetaDebitoId: raw.tarjetaDebitoId || undefined,
       esEnCuotas: !!raw.tarjetaCreditoId,
       numeroCuotas: raw.numeroCuotas ? Number(raw.numeroCuotas) : undefined,
+      mesPrimerPago: mesPrimerPagoValue,
     };
   }
 
@@ -236,5 +289,56 @@ export class UpcomingExpensesComponent implements OnInit {
 
   onClose() {
     this.dialogRef.close();
+  }
+
+  // ───────────────────────────────────────────────────────────
+  // 2) HANDLERS PARA SELECCIONAR AÑO Y MES (Mes/Año)
+  // ───────────────────────────────────────────────────────────
+
+  chosenYearHandler(normalizedYear: Date | Moment, datepicker: any) {
+    const yearMoment: Moment =
+      normalizedYear instanceof Date ? moment(normalizedYear) : normalizedYear;
+
+    const control = this.upcomingExpenseForm.get('mesPrimerPago');
+    let current: Moment = moment();
+    if (control?.value && moment(control.value).isValid()) {
+      current = moment(control.value);
+    }
+    current.year(yearMoment.year());
+    control?.setValue(current);
+    // Forzar actualización visual
+    setTimeout(() => this.actualizarInputMesPrimerPagoDesdeControl());
+    datepicker.open();
+  }
+
+  chosenMonthHandler(normalizedMonth: Date | Moment, datepicker: any) {
+    const monthMoment: Moment =
+      normalizedMonth instanceof Date
+        ? moment(normalizedMonth)
+        : normalizedMonth;
+
+    const control = this.upcomingExpenseForm.get('mesPrimerPago');
+    let current: Moment = moment();
+    if (control?.value && moment(control.value).isValid()) {
+      current = moment(control.value);
+    }
+    current.month(monthMoment.month());
+    control?.setValue(current);
+    setTimeout(() => this.actualizarInputMesPrimerPagoDesdeControl());
+    datepicker.close();
+  }
+
+  private actualizarInputMesPrimerPagoDesdeControl() {
+    if (
+      this.monthPickerInput &&
+      this.upcomingExpenseForm.get('mesPrimerPago')?.value
+    ) {
+      const m = moment(this.upcomingExpenseForm.get('mesPrimerPago')?.value);
+      if (m.isValid()) {
+        this.monthPickerInput.nativeElement.value = m.format('MM/YYYY');
+      } else {
+        this.monthPickerInput.nativeElement.value = '';
+      }
+    }
   }
 }
