@@ -89,6 +89,8 @@ export class UpcomingExpensesComponent implements OnInit {
   categorias: any[] = [];
   tarjetas: any[] = [];
   todayDate: Date = new Date();
+  minDate: Date = new Date();
+  maxDate: Date = new Date();
 
   // • Con @ViewChild accedemos directamente al input en HTML para sobreescribir su valor manual
   @ViewChild('monthPickerInput', { read: ElementRef })
@@ -107,7 +109,11 @@ export class UpcomingExpensesComponent implements OnInit {
     private toastr: ToastrService,
     private dialog: MatDialog,
     private spinnerService: SpinnerService
-  ) {}
+  ) {
+    const today = new Date();
+    this.minDate = new Date(today.getFullYear() - 1, today.getMonth(), 1);
+    this.maxDate = new Date(today.getFullYear() + 1, today.getMonth(), 0);
+  }
 
   ngOnInit() {
     this.createForm();
@@ -141,11 +147,26 @@ export class UpcomingExpensesComponent implements OnInit {
       });
     }
   }
+  get fechaControl() {
+    return this.upcomingExpenseForm.get('fecha');
+  }
 
   private createForm() {
     this.upcomingExpenseForm = this.fb.group({
       monto: ['', Validators.required],
-      fecha: [this.todayDate, Validators.required],
+      fecha: [
+        this.todayDate,
+        [
+          Validators.required,
+          (control: any) => {
+            const fecha = control.value;
+            if (fecha && moment(fecha).isAfter(moment(), 'day')) {
+              return { futureDate: true };
+            }
+            return null;
+          },
+        ],
+      ],
       descripcion: ['', Validators.required],
       categoriaGastoId: ['', Validators.required],
       tarjetaCreditoId: [''],

@@ -16,7 +16,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Fecha</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="fecha" [value]="todayDate" placeholder="DD/MM/YYYY"
-          required />
+          [max]="todayDate" required />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker startView="month"></mat-datepicker>
         <mat-error *ngIf="upcomingExpenseForm.get('fecha')?.hasError('required')">
@@ -81,7 +81,7 @@
 
     <div class="form-row">
       <mat-form-field appearance="fill">
-        <mat-label>Mes del primer pago</mat-label>
+        <mat-label>Mes del Resumen</mat-label>
         <input matInput #monthPickerInput formControlName="mesPrimerPago" [matDatepicker]="monthPicker"
           placeholder="MM/YYYY" readonly required
           [value]="upcomingExpenseForm.get('mesPrimerPago')?.value ? (upcomingExpenseForm.get('mesPrimerPago')?.value | date: 'MM/yyyy') : ''" />
