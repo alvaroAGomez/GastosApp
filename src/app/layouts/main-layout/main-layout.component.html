@@ -6,10 +6,31 @@
         <mat-icon>dashboard</mat-icon>
         <span>Dashboard</span>
       </a>
-      <a mat-list-item routerLink="/credit-cards" routerLinkActive="active-link" (click)="closeMenuIfMobile()">
-        <mat-icon>credit_card</mat-icon>
-        <span>Tarjetas de Crédito</span>
-      </a>
+      <!-- Menú desplegable de tarjetas de crédito -->
+      <mat-expansion-panel class="mat-elevation-z0">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>credit_card</mat-icon>
+            <span>Tarjetas de Crédito</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <!-- Opción para ver todas las tarjetas -->
+        <mat-nav-list>
+          <a mat-list-item routerLink="/credit-cards" routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}" (click)="closeMenuIfMobile()">
+            <mat-icon>view_list</mat-icon>
+            <span>Todas las TC</span>
+          </a>
+
+          <!-- Lista dinámica de tarjetas -->
+          <a mat-list-item *ngFor="let card of creditCards$ | async" [routerLink]="['/credit-cards', card.id]"
+            routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenuIfMobile()">
+            <mat-icon>credit_card</mat-icon>
+            <span>{{card.nombreTarjeta}}</span>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
       <!--       <a mat-list-item routerLink="/debit-cards" routerLinkActive="active-link" (click)="closeMenuIfMobile()">
         <mat-icon>account_balance</mat-icon>
         <span>Tarjetas de Débito</span>

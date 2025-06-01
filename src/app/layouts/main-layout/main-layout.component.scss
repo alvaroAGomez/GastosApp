@@ -8,9 +8,10 @@ mat-sidenav {
   background-color: var(--secondary-color-1, #2e6769);
   color: #fff !important;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
-  margin-top: 64px; // Hace que el sidenav arranque debajo del toolbar
-  height: calc(100vh - 64px); // Ajusta el alto para no tapar el toolbar
-  z-index: 1200; // Asegura que el sidenav esté por encima del contenido
+  margin-top: 64px; /* Hace que el sidenav arranque debajo del toolbar */
+  height: calc(100vh - 64px); /* Ajusta el alto para no tapar el toolbar */
+  z-index: 1200; /* Asegura que el sidenav esté por encima del contenido */
+
   .sidenav-toolbar {
     height: 64px;
     display: flex;
@@ -19,24 +20,24 @@ mat-sidenav {
     font-weight: bold;
     background: var(--primary-color, #3b8386);
   }
+
   mat-icon {
     margin-right: 8px;
     color: #fff !important;
     fill: #fff !important;
   }
 
-  // Fuerza texto e íconos blancos en todo el sidenav (Angular Material v15+)
+  /*===============================================
+    Fuerza texto e íconos blancos en todo el sidenav
+    (cubre Angular Material v15+ y versiones anteriores)
+  ===============================================*/
   ::ng-deep .mat-list-base .mat-list-item,
   ::ng-deep .mat-list-base .mat-list-item .mat-icon,
   ::ng-deep .mat-list-base .mat-list-item .mat-line,
   ::ng-deep .mat-list-base .mat-list-item span,
   ::ng-deep .mat-list-base .mat-list-item .menu-label,
-  ::ng-deep .mat-list-base .mat-list-item mat-icon {
-    color: #fff !important;
-    fill: #fff !important;
-  }
-
-  // Para versiones anteriores
+  ::ng-deep .mat-list-base .mat-list-item mat-icon,
+  ::ng-deep .mat-list-base .mat-list-item .mat-expansion-panel,
   ::ng-deep .mat-list-item,
   ::ng-deep .mat-list-item .mat-icon,
   ::ng-deep .mat-list-item .mat-line,
@@ -47,18 +48,67 @@ mat-sidenav {
     fill: #fff !important;
   }
 
-  // Fuerza texto e íconos blancos en todo el sidenav
-  .mat-list-item,
-  .mat-list-item .mat-icon,
-  .mat-list-item .mat-line,
-  .mat-list-item span,
-  .mat-list-item .menu-label,
-  .mat-list-item mat-icon {
-    color: #fff !important;
-    fill: #fff !important;
+  /*===============================================
+    Ajustes para los sub-menús (expansion panels)
+  ===============================================*/
+  ::ng-deep .mat-expansion-panel {
+    background-color: transparent !important;
+
+    .mat-expansion-panel-header {
+      /* Reducir padding vertical para que la flechita quede centrada */
+      padding: 0 16px !important;
+      height: 40px !important;
+      background-color: transparent !important;
+    }
+
+    .mat-expansion-panel-header-title {
+      color: #fff !important;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mat-expansion-indicator::after {
+      color: #fff !important;
+      border-color: #fff !important;
+    }
+
+    /* El <mat-nav-list> interno: quitar padding superior e inferior */
+    mat-nav-list {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+
+  /*===============================================
+    Estilos para los items dentro de mat-nav-list
+    (subítems de “Tarjetas de Crédito”)
+  ===============================================*/
+  :host ::ng-deep .mat-expansion-panel mat-nav-list a.mat-list-item {
+    /* Reducir padding vertical para achicar el espacio entre filas */
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+
+    /* Alinear icono + texto en una línea */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Quitar márgenes extra entre el primer y segundo elemento */
+  :host
+    ::ng-deep
+    .mat-expansion-panel
+    mat-nav-list
+    a.mat-list-item
+    + a.mat-list-item {
+    margin-top: 0 !important;
   }
 }
 
+/*===============================================
+  Ajustes de la lista principal
+===============================================*/
 mat-nav-list {
   padding: 16px 0 0 0;
 }
@@ -71,10 +121,11 @@ mat-sidenav-content {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: var(--background-color, #f5f5f6);
 }
 
-// Toolbar: fuerza íconos y texto blancos
+/*===============================================
+  Estilos del toolbar superior
+===============================================*/
 .main-toolbar {
   position: fixed;
   top: 0;
@@ -86,12 +137,14 @@ mat-sidenav-content {
   align-items: center;
   background: var(--primary-color, #3b8386);
   color: #fff !important;
+
   .logo {
     font-size: 1.2rem;
     font-weight: bold;
     margin-left: 16px;
     color: #fff !important;
   }
+
   button,
   button mat-icon,
   mat-icon {
@@ -126,6 +179,8 @@ mat-sidenav-content {
 
 mat-icon {
   padding-right: 5px;
+  color: #fff !important;
+  fill: #fff !important;
 }
 
 span {
@@ -160,8 +215,26 @@ span {
   vertical-align: middle;
 }
 
-// Puedes agregar reglas para ocultar el sidenav en mobile si lo deseas, pero el *ngIf ya lo maneja.
-
 .spacer {
   flex: 1 1 auto;
+}
+
+// ==============================
+// Reglas para que la flechita se vea en blanco
+// ==============================
+:host ::ng-deep .mat-expansion-indicator {
+  color: #fff !important;
+  fill: #fff !important;
+
+  svg {
+    fill: #fff !important;
+  }
+}
+
+:host ::ng-deep .mat-expansion-indicator::after {
+  border-color: #fff !important;
+}
+
+:host ::ng-deep .mat-expansion-panel-header {
+  color: #fff !important;
 }

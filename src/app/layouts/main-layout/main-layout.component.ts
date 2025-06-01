@@ -18,6 +18,8 @@ import { map, shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
+import { CardService } from '../../services/card.service';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   standalone: true,
@@ -30,6 +32,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.c
     MatListModule,
     RouterOutlet,
     RouterModule,
+    MatExpansionModule,
   ],
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss'],
@@ -40,13 +43,17 @@ export class MainLayoutComponent implements AfterViewInit {
 
   isMobile$: Observable<boolean>;
   authService = inject(AuthService);
+  creditCards$: Observable<any[]>;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private creditCardService: CardService
   ) {
+    this.creditCards$ = this.creditCardService.getCards();
+
     this.isMobile$ = this.breakpointObserver
       .observe([Breakpoints.Handset])
       .pipe(

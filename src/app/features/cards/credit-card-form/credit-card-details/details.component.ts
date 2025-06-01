@@ -14,10 +14,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Expense } from '../../../../models/expense.model';
 import { CardService } from '../../../../services/card.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CategoryService } from '../../../../services/category.service';
@@ -39,6 +37,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CuotaService } from '../../../../services/cuota.service';
 import { GastoMensual } from '../interfaces';
 import { SpinnerService } from '../../../../shared/services/spinner.service';
+import { Subscription } from 'rxjs';
 
 export interface CreditCardDetailHeader {
   tarjetaId: number;
@@ -83,7 +82,7 @@ export interface CreditCardDetailHeader {
 export class DetailsComponent implements OnInit, AfterViewInit {
   cardDetails: any;
   cardHeaderDetail?: CreditCardDetailHeader;
-
+  private routeSub?: Subscription;
   // Datos de la tarjeta
   cardName = 'Visa Gold';
   cardType = 'Crédito';
@@ -153,29 +152,25 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.cardDetails = history.state.cardDetails;
-    const cardId = this.route.snapshot.paramMap.get('id');
-    if (cardId) {
-      this.selectedCardId = +cardId;
-      this.cardService
-        .getCreditCardHeaderDetail(+cardId)
-        .subscribe((header) => {
-          this.cardHeaderDetail = header;
-          this.cardName = header.nombreTarjeta;
-          this.cardLimit = header.limiteTotal;
-          this.currentExpense = header.gastoActualMensual;
-          this.banco = header.banco;
-          // Cargar gastos y movimientos solo después de obtener el header (y selectedCardId)
-          this.loadExpenses();
-          this.loadMovimientos(); // <-- Mover aquí
-        });
-    } else {
-      // Si no hay cardId, igual intentar cargar gastos (no debería pasar)
-      this.loadExpenses();
-    }
+    this.routeSub = this.route.params.subscribe((params) => {
+      const cardId = params['id'];
+      if (cardId) {
+        this.selectedCardId = +cardId;
+        this.cardService
+          .getCreditCardHeaderDetail(+cardId)
+          .subscribe((header) => {
+            this.cardHeaderDetail = header;
+            this.cardName = header.nombreTarjeta;
+            this.cardLimit = header.limiteTotal;
+            this.currentExpense = header.gastoActualMensual;
+            this.banco = header.banco;
+            this.loadExpenses();
+            this.loadMovimientos();
+          });
+      }
+    });
 
     this.loadCategories();
-
     this.checkMobile();
   }
 
