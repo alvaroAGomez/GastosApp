@@ -196,7 +196,7 @@ export class UpcomingExpensesComponent implements OnInit {
     if (!this.data?.isEdit) return;
 
     this.upcomingExpenseForm.patchValue({
-      monto: Number(this.data.monto),
+      monto: Number(this.data.montoTotal) || Number(this.data.monto),
       fecha: this.data.fecha ? new Date(this.data.fecha) : this.todayDate,
       descripcion: this.data.descripcion,
       categoriaGastoId: this.data.categoriaGastoId ?? this.data.categoria ?? '',

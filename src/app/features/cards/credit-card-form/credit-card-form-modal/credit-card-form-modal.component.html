@@ -2,7 +2,7 @@
 <form [formGroup]="cardForm" (ngSubmit)="save()">
   <mat-dialog-content class="dialog-content">
     <div *ngIf="mode === 'edit'" class="form-row">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Selecciona la Tarjeta</mat-label>
         <mat-select [(value)]="selectedCardId" (selectionChange)="onCardSelect($event.value)">
           <mat-option *ngFor="let card of cards" [value]="card.id">
@@ -13,7 +13,7 @@
     </div>
     <!-- Nombre de la tarjeta -->
     <div class="form-row">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Nombre</mat-label>
         <input matInput formControlName="nombreTarjeta" required>
       </mat-form-field>
@@ -21,7 +21,7 @@
 
     <!-- Número de tarjeta -->
     <div class="form-row">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Últimos 4 dígitos de la Tarjeta</mat-label>
         <input matInput formControlName="numeroTarjeta" maxlength="4" required pattern="\d{4}">
       </mat-form-field>
@@ -29,7 +29,7 @@
 
     <!-- Banco -->
     <div class="form-row">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Banco</mat-label>
         <mat-select formControlName="bancoId" required>
           <mat-option *ngFor="let banco of bancos" [value]="banco.id">
@@ -41,7 +41,7 @@
 
     <!-- Límite de Crédito -->
     <div class="form-row">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Límite de Crédito</mat-label>
         <input matInput formControlName="limiteCredito" currencyMask
           [options]="{ prefix: '$ ', thousands: ',', decimal: '.', align: 'left', allowNegative: false }" required>
@@ -49,20 +49,20 @@
     </div>
 
     <!-- Día de Cierre -->
-    <div class="form-row">
-      <mat-form-field appearance="outline">
+    <!--     <div class="form-row">
+      <mat-form-field appearance="fill">
         <mat-label>Día de Cierre</mat-label>
         <input matInput formControlName="cierreCiclo" type="date">
       </mat-form-field>
-    </div>
+    </div> -->
 
     <!-- Día de Vencimiento -->
-    <div class="form-row">
-      <mat-form-field appearance="outline">
+    <!--     <div class="form-row">
+      <mat-form-field appearance="fill">
         <mat-label>Día de Vencimiento</mat-label>
         <input matInput formControlName="fechaVencimiento" type="date">
       </mat-form-field>
-    </div>
+    </div> -->
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

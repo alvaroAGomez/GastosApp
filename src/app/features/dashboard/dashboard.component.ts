@@ -174,7 +174,7 @@ export class DashboardComponent {
     }
 
     const dialogRef = this.dialog.open(component, {
-      width: '600px',
+      width: '450px',
       maxWidth: '90vw',
       disableClose: false,
       data,

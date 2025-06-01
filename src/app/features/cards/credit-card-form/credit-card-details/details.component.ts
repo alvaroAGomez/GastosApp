@@ -314,7 +314,11 @@ export class DetailsComponent implements OnInit, AfterViewInit {
 
   editExpense(expense: any) {
     console.log('EXPEENSEE', expense);
-
+    debugger;
+    const montoTotal =
+      expense.totalCuotas && Number(expense.totalCuotas) > 1
+        ? expense.monto * Number(expense.totalCuotas)
+        : expense.monto;
     this.dialog
       .open(UpcomingExpensesComponent, {
         disableClose: false,
@@ -322,6 +326,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
           ...expense,
           isEdit: true,
           id: expense.gastoId,
+          montoTotal: montoTotal,
           categoriaGastoId: expense.categoriaGastoId || expense.categoria,
           tarjetaCreditoId: this.selectedCardId,
           tarjetaCreditoDisabled: true,

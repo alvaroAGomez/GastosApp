@@ -260,6 +260,8 @@ export class GridComponent implements OnInit, AfterViewInit {
   }
 
   editExpense(expense: any) {
+    console.log('expense', expense);
+
     const dialogRef = this.dialog.open(UpcomingExpensesComponent, {
       disableClose: false,
       data: {
