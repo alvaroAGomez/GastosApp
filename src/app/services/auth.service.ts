@@ -42,8 +42,14 @@ export class AuthService {
   }
 
   logout() {
+    // Limpiar el token
     localStorage.removeItem('token');
+
+    // Resetear el estado de autenticación
     this.isAuthenticated.next(false);
+
+    // Limpiar la información del usuario
+    this.currentUserSubject.next(null);
   }
 
   private checkAuthStatus() {
